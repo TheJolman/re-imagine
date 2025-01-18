@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
+
+if (WIN32)
+  if(NOT DEFINED CMAKE_C_COMPILER)
+    set(CMAKE_C_COMPILER "gcc")
+    set(CMAKE_CXX_COMPILER "g++")
+  endif()
+endif()
+
 project(raylib-game C)
 
 set(CMAKE_C_STANDARD 11)
