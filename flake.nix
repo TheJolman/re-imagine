@@ -20,17 +20,8 @@
             cmake
             clang
             clang-tools
-            valgrind
+            # valgrind  # appears to be marked as broken on darwin
             raylib
-            # ninja
-            # xorg.libX11
-            # xorg.libXrandr
-            # xorg.libXi
-            # xorg.libXcursor
-            # xorg.libXinerama
-            # libGL
-            # libGLU
-            # alsa-lib
           ];
 
           shellHook = ''
