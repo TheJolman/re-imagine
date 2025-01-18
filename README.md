@@ -22,10 +22,10 @@ brew install direnv
 ```
 * hook direnv into your shell
 ```bash
-# for bash users
+# for bash users (put in ~/.bashrc)
 eval "$(direnv hook bash)"
 
-# for zsh users
+# for zsh users (put in ~/.zshrc)
 eval "$(direnv hook zsh)"
 ```
 * Restart your shell or `source` your shell rc file
