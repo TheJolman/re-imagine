@@ -18,6 +18,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             cmake
+            ninja
             clang
             clang-tools
             # valgrind  # appears to be marked as broken on darwin
@@ -27,6 +28,7 @@
           shellHook = ''
             export CC=clang
             export CXX=clang++
+            export CMAKE_GENERATOR=Ninja
           '';
         };
       }

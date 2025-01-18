@@ -2,7 +2,9 @@
 
 A cross-platform game using Raylib, CMake, and Nix.
 
-## Quick Start (Linux/macOS)
+## Quick Start
+
+### Linux/macOS
 
 1. Install Nix (if you haven't already):
 ```bash
@@ -54,10 +56,10 @@ cmake --build build
 ./build/raylib-game
 ```
 
-## Without Nix
+#### Without Nix
 
 This can be run without installing Nix, but you will need to download and compile raylib 5.5 along with any other dependencies yourself.
 
-## For Windows Users
+## Windows
 
-Try using Visual Studio. If not, make sure you have `clang` (or an equivalent C/C++ compiler) installed and `raylib` should automatically install and compile when you run CMake for the first time.
+Visual Studio should work out of the box
