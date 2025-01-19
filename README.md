@@ -62,4 +62,19 @@ This can be run without installing Nix, but you will need to download and compil
 
 ## Windows
 
-Visual Studio should work out of the box
+Visual Studio should work out of the box, I have not tried it however.  
+
+### Without Visual Studio
+For an editor/ide agnostic setup:
+
+1. Install `gcc`, `g++`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
+
+```powershell
+choco install mingw cmake ninja
+```
+To build and run:
+```powershell
+cmake -B build -G Ninja
+cmake --build build
+```
+
