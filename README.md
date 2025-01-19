@@ -14,18 +14,18 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 2. Install [direnv](https://direnv.net/) (optional but recommended)
 * direnv can be obtained from various [package managers](https://direnv.net/docs/installation.html).
 ```bash
-# for Debian/Ubuntu
+# For Debian/Ubuntu
 sudo apt-get install direnv
 
-# for macOS
+# For macOS
 brew install direnv
 ```
 * Put to following into your shell rc file to hook direnv into your shell
 ```bash
-# for bash users (put in ~/.bashrc)
+# For bash users (put in ~/.bashrc)
 eval "$(direnv hook bash)"
 
-# for zsh users (put in ~/.zshrc)
+# For zsh users (put in ~/.zshrc)
 eval "$(direnv hook zsh)"
 ```
 * You will need to restart your shell or `source` your shell rc file
@@ -40,7 +40,7 @@ cd raylib-game
 ```bash
 # If you have direnv:
 direnv allow
-# whenever you cd into the directory all dependencies will now be loaded automatically
+# Whenever you cd into the directory all dependencies will now be loaded automatically
 
 # If you don't have direnv you will need to run this each time:
 nix develop
@@ -66,7 +66,7 @@ This can be run without installing Nix, but you will need to download and compil
 # Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-# Restart you shell before running this
+# Restart your shell before running this
 choco install mingw cmake ninja git
 ```
 
