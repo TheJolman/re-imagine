@@ -2,9 +2,7 @@
 
 A cross-platform game using Raylib, CMake, and Nix.
 
-## Quick Start
-
-### Linux/macOS
+## Quick Start - Linux/MacOS
 
 1. Install Nix (if you haven't already):
 ```bash
@@ -22,7 +20,7 @@ sudo apt-get install direnv
 # for macOS
 brew install direnv
 ```
-* hook direnv into your shell
+* Put to following into your shell rc file to hook direnv into your shell
 ```bash
 # for bash users (put in ~/.bashrc)
 eval "$(direnv hook bash)"
@@ -30,7 +28,7 @@ eval "$(direnv hook bash)"
 # for zsh users (put in ~/.zshrc)
 eval "$(direnv hook zsh)"
 ```
-* Restart your shell or `source` your shell rc file
+* You will need to restart your shell or `source` your shell rc file
 
 3. Clone and enter the project:
 ```bash
@@ -42,10 +40,9 @@ cd raylib-game
 ```bash
 # If you have direnv:
 direnv allow
-# then whenever you cd into the directory, all dependencies
-# will be loaded automatically
+# whenever you cd into the directory all dependencies will now be loaded automatically
 
-# If you don't have direnv:
+# If you don't have direnv you will need to run this each time:
 nix develop
 ```
 
@@ -56,24 +53,31 @@ cmake --build build
 ./build/raylib-game
 ```
 
-#### Without Nix
+### Without Nix
 
-This can be run without installing Nix, but you will need to download and compile raylib 5.5 along with any other dependencies yourself.
+This can be run without installing Nix, but you will need to download and compile raylib 5.5 and obtain all other dependencies (`cmake`, `ninja`, C compiler) yourself.
 
-## Windows
-
-Visual Studio should work out of the box, I have not tried it however.  
-
-### Without Visual Studio
-For an editor/ide agnostic setup:
+## Quick Start - Windows
 
 1. Install `gcc`, `g++`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
 
+
 ```powershell
-choco install mingw cmake ninja
+# Install Chocolatey
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# Restart you shell before running this
+choco install mingw cmake ninja git
 ```
-To build and run (this likely won't work without specifying `Ninja` as the build system!):
-```powershell
+
+2. Clone and enter the project:
+```shell
+git clone https://github.com/TheJolman/raylib-game.git
+cd raylib-game
+```
+
+3. Build and run:
+```shell
 cmake -B build -G Ninja
 cmake --build build
 .\build\raylib-game
