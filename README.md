@@ -72,9 +72,10 @@ For an editor/ide agnostic setup:
 ```powershell
 choco install mingw cmake ninja
 ```
-To build and run:
+To build and run (this likely won't work without specifying `Ninja` as the build system!):
 ```powershell
 cmake -B build -G Ninja
 cmake --build build
+.\build\raylib-game
 ```
 
