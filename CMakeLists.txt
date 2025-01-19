@@ -30,7 +30,7 @@ if (WIN32)
 
   FetchContent_MakeAvailable(raylib)
   set(RAYLIB_LIBRARY raylib)
-  set(PLATFORM_LIBS winm opengl32 gdi32)
+  set(PLATFORM_LIBS winmm opengl32 gdi32 glu32)
 else()
   # Unix
   find_package(raylib 5.5 REQUIRED)
