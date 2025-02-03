@@ -20,7 +20,7 @@ sudo apt-get install direnv
 # For macOS
 brew install direnv
 ```
-* Put to following into your shell rc file to hook direnv into your shell
+* Hook direnv into your shell
 ```bash
 # For bash users (put in ~/.bashrc)
 eval "$(direnv hook bash)"
@@ -38,7 +38,7 @@ cd raylib-game
 
 4. Start developing:
 ```bash
-# If you have direnv:
+# If you have direnv, run this once:
 direnv allow
 # Whenever you cd into the directory all dependencies will now be loaded automatically
 
@@ -48,8 +48,11 @@ nix develop
 
 5. Build and run:
 ```bash
+# Setup build files (only needs to be re-run if build config is changed)
 cmake -B build
+# Build project
 cmake --build build
+# Run
 ./build/raylib-game
 ```
 
@@ -61,13 +64,13 @@ This can be run without installing Nix, but you will need to download and compil
 
 1. Install `gcc`, `g++`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
 
-
+Install Chocolately (if you haven't already):
 ```powershell
-# Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-# Restart your shell before running this
-choco install mingw cmake ninja git
+```
+Restart your shell and install the dependencies:
+```
+choco install mingw cmake ninja
 ```
 
 2. Clone and enter the project:
@@ -78,8 +81,11 @@ cd raylib-game
 
 3. Build and run:
 ```shell
+# Setup build files (only needs to be re-run if build config is changed)
 cmake -B build -G Ninja
+# Build project
 cmake --build build
+# Run project
 .\build\raylib-game
 ```
 
