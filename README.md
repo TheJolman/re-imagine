@@ -48,7 +48,7 @@ nix develop
 
 5. Build and run:
 ```bash
-# Setup build files (only needs to be re-run if build config is changed)
+# First time setup only (or when CMakeLists.txt changes)
 cmake -B build
 # Build project
 cmake --build build
@@ -56,7 +56,7 @@ cmake --build build
 ./build/raylib-game
 ```
 
-### Without Nix
+### Developing Without Nix
 
 This can be run without installing Nix, but you will need to download and compile raylib 5.5 and obtain all other dependencies (`cmake`, `ninja`, C compiler) yourself.
 
@@ -65,23 +65,25 @@ This can be run without installing Nix, but you will need to download and compil
 1. Install `gcc`, `g++`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
 
 Install Chocolately (if you haven't already):
-```powershell
+```ps1
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 Restart your shell and install the dependencies:
-```
+```ps1
 choco install mingw cmake ninja
 ```
 
 2. Clone and enter the project:
-```shell
+```ps1
 git clone https://github.com/TheJolman/raylib-game.git
 cd raylib-game
 ```
 
-3. Build and run:
-```shell
-# Setup build files (only needs to be re-run if build config is changed)
+3. Build and run:  
+*Note: The initial build on Windows will likely take a few minutes as CMake downloads and compiles Raylib from source.
+Subsequent builds will be much faster.*
+```ps1
+# First time setup only (or when CMakeLists.txt changes)
 cmake -B build -G Ninja
 # Build project
 cmake --build build
