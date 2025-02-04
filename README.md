@@ -58,11 +58,12 @@ cmake --build build
 
 ### Developing Without Nix
 
-This can be run without installing Nix, but you will need to download and compile raylib 5.5 and obtain all other dependencies (`cmake`, `ninja`, C compiler) yourself.
+This can be built without using Nix, but you will need to source raylib 5.5 and all other dependencies (`cmake`, `ninja`, C compiler) yourself.
 
 ## Quick Start - Windows
+You should be able to use Visual Studio for this project, but I have not tested it. Otherwise:
 
-1. Install `gcc`, `g++`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
+1. Install `mingw`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
 
 Install Chocolately (if you haven't already):
 ```ps1
