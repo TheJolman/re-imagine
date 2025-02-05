@@ -19,15 +19,16 @@
           packages = with pkgs; [
             cmake
             ninja
-            clang
+            gcc
+            gdb
             clang-tools
             # valgrind  # appears to be marked as broken on darwin
             raylib
           ];
 
           shellHook = ''
-            export CC=clang
-            export CXX=clang++
+            export CC=gcc
+            export CXX=g++
             export CMAKE_GENERATOR=Ninja
           '';
         };

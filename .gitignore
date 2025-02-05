@@ -1,6 +1,6 @@
 .direnv/
 build/
-.vscode/
 .DS_Store
 *.o
 *.exe
+.cache/
