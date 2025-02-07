@@ -83,7 +83,7 @@ cmake --build build
 
 ### Nix
 
-Alternatively, you can use the Nix dev shell: (this will prevent you from having to compile raylib from source)
+Alternatively, you can use the Nix dev shell (this will prevent you from having to compile raylib from source):
 
 1. Install Nix (if you haven't already):
 ```bash
@@ -93,12 +93,11 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 ```
 
 2. Install [direnv](https://direnv.net/) (optional but recommended)
-* direnv can be obtained from various [package managers](https://direnv.net/docs/installation.html).
 ```bash
-# For Debian/Ubuntu
+# Ubuntu/Debian-based
 sudo apt-get install direnv
 
-# For macOS
+# macOS
 brew install direnv
 ```
 
