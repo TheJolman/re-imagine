@@ -16,21 +16,22 @@ Idea: Pokemon-like top down rpg with a small story.
 ### Using Visual Studio 2022
 
 This should work perfectly with Visual Studio 2022. Just ensure you have "Desktop development with C++" installed.
-1. Clone repo
-2. Open in VS 2022 and let CMake install raylib
+1. Clone repo:
+```ps1
+git clone https://github.com/TheJolman/raylib-game.git
+```
+2. Open in VS 2022 and wait for CMake to install/compile raylib
 3. Run
 
 ### Using MinGW
 
-1. Install `mingw`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/)
+1. Install `mingw`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/) or [Scoop](https://scoop.sh/):
+```ps1
+# Chocolatey (use admin shell)
+choco install -y mingw-w64 cmake ninja
 
-Install Chocolately (if you haven't already):
-```ps1
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-```
-Restart your shell and install the dependencies:
-```ps1
-choco install mingw cmake ninja
+# Scoop
+scoop install gcc cmake ninja
 ```
 
 2. Clone and enter the project:
@@ -45,9 +46,9 @@ Subsequent builds will be much faster.*
 ```ps1
 # First time setup only (or when CMakeLists.txt changes)
 cmake -B build -G Ninja
-# Build project
+# Build
 cmake --build build
-# Run project
+# Run
 .\build\raylib-game
 ```
 
@@ -77,7 +78,7 @@ Subsequent builds will be much faster.*
 ```bash
 # First time setup only (or when CMakeLists.txt changes)
 cmake -B build -G Ninja
-# Build project
+# Build
 cmake --build build
 # Run
 ./build/raylib-game
@@ -87,53 +88,30 @@ cmake --build build
 
 Alternatively, you can use the Nix dev shell (this will prevent you from having to compile raylib from source):
 
-1. Install Nix (if you haven't already):
-```bash
+1. Install Nix and direnv (optional) if you haven't already:
+https://determinate.systems/nix-installer/  
+https://direnv.net/docs/installation.html  
 
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
-  sh -s -- install
-```
-
-2. Install [direnv](https://direnv.net/) (optional but recommended):
-```bash
-# Ubuntu/Debian-based
-sudo apt-get install direnv
-
-# macOS
-brew install direnv
-```
-
-* Hook direnv into your shell:
-```bash
-# For bash users (put in ~/.bashrc)
-eval "$(direnv hook bash)"
-
-# For zsh users (put in ~/.zshrc)
-eval "$(direnv hook zsh)"
-```
-* You will need to restart your shell or `source` your shell rc file after this step
-
-3. Clone and enter the project:
+2. Clone and enter the project:
 ```bash
 git clone https://github.com/TheJolman/raylib-game.git
 cd raylib-game
 ```
 
-4. Start developing:
+3. Start developing:
 ```bash
 # If you have direnv, run this once:
 direnv allow
-# Whenever you cd into the directory all dependencies will now be loaded automatically
 
 # If you don't have direnv you will need to run this each time:
 nix develop
 ```
 
-5. Build and run:
+4. Build and run:
 ```bash
 # First time setup only (or when CMakeLists.txt changes)
 cmake -B build
-# Build project
+# Build
 cmake --build build
 # Run
 ./build/raylib-game
