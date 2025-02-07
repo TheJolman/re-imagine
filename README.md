@@ -51,7 +51,7 @@ cmake --build build
 
 ## Quick Start - Linux/MacOS
 
-1. install `CMake`, `Ninja`, and a C compiler (preferably gcc for consistency).
+1. install `CMake`, `Ninja`, and a C compiler (preferably gcc for consistency):
 ```bash
 # macOS
 brew install cmake ninja gcc
@@ -92,7 +92,7 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
   sh -s -- install
 ```
 
-2. Install [direnv](https://direnv.net/) (optional but recommended)
+2. Install [direnv](https://direnv.net/) (optional but recommended):
 ```bash
 # Ubuntu/Debian-based
 sudo apt-get install direnv
@@ -101,7 +101,7 @@ sudo apt-get install direnv
 brew install direnv
 ```
 
-* Hook direnv into your shell
+* Hook direnv into your shell:
 ```bash
 # For bash users (put in ~/.bashrc)
 eval "$(direnv hook bash)"
@@ -109,7 +109,7 @@ eval "$(direnv hook bash)"
 # For zsh users (put in ~/.zshrc)
 eval "$(direnv hook zsh)"
 ```
-* You will need to restart your shell or `source` your shell rc file
+* You will need to restart your shell or `source` your shell rc file after this step
 
 3. Clone and enter the project:
 ```bash
