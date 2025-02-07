@@ -1,7 +1,9 @@
 # Raylib Game Project
 
 A cross-platform game developed with Raylib, plain C, and CMake.  
-This game is being developed as a part of VGDC @ CSUF.
+This game is being developed as a part of VGDC @ CSUF.  
+  
+Idea: Pokemon-like top down rpg with a small story.  
 
 ## Requirements
 
