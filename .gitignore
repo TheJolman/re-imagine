@@ -4,3 +4,4 @@ build/
 *.o
 *.exe
 .cache/
+.pre-commit-config.yaml
