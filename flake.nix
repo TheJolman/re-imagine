@@ -18,6 +18,32 @@
         lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
       in {
+        packages.default = pkgs.stdenv.mkDerivation {
+          pname = "raylib-game";
+          version = "0.1.0";
+
+          src = ./.;
+
+          nativeBuildInputs = with pkgs; [
+            cmake
+            ninja
+          ];
+
+          buildInputs = with pkgs; [
+            raylib
+          ];
+
+          cmakeFlags = [
+            "-DCMAKE_BUILD_TYPE=Release"
+            "-G Ninja"
+          ];
+
+          installPhase = ''
+            mkdir -p $out/bin
+            cp raylib-game $out/bin/
+          '';
+        };
+
         checks = {
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./src;
@@ -39,6 +65,7 @@
             cmake
             ninja
             clang
+            gcc
             lldb
             gdb
             clang-tools
