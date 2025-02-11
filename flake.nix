@@ -15,19 +15,25 @@
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
+        lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
-        supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
-        forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
       in {
-        checks = forAllSystems (system: {
+        checks = {
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./src;
             hooks = {
-              clang-format.enable = true;
-              clang-tidy.enable = true;
+              clang-format = {
+                enable = true;
+                types_or = lib.mkForce ["c"];
+              };
+              clang-tidy = {
+                enable = true;
+                types_or = lib.mkForce ["c"];
+              };
             };
           };
-        });
+        };
+
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             cmake
@@ -36,12 +42,12 @@
             lldb
             gdb
             clang-tools
-            cppcheck
             valgrind # appears to be marked as broken on darwin
             raylib
           ];
 
           shellHook = ''
+            ${self.checks.${system}.pre-commit-check.shellHook}
             export CC=clang
             export CMAKE_GENERATOR=Ninja
           '';

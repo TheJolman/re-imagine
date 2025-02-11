@@ -1,15 +1,15 @@
 /*******************************************************************************************
-*
-*   VGDC Game Project
-*
-*   <Game title>
-*   <Game description>
-*
-*   This game has been created using raylib (www.raylib.com)
-*
-*   Copyright (c) 2025 Joshua Holman
-*
-********************************************************************************************/
+ *
+ *   VGDC Game Project
+ *
+ *   <Game title>
+ *   <Game description>
+ *
+ *   This game has been created using raylib (www.raylib.com)
+ *
+ *   Copyright (c) 2025 Joshua Holman
+ *
+ ********************************************************************************************/
 
 #include "raylib.h"
 
@@ -25,8 +25,7 @@ int main(void) {
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
-    DrawText("Hi mom", 190, 200, 20,
-             LIGHTGRAY);
+    DrawText("Hi mom", 190, 200, 20, RED);
 
     EndDrawing();
   }
