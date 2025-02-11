@@ -22,6 +22,11 @@ int main(void) {
 
   Vector2 playerPosition = {(float)screenWidth / 2, (float)screenHeight / 2};
   float baseMoveSpeed = 2.0f;
+  Camera2D camera = {0};
+  camera.target = playerPosition;
+  camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
+  camera.rotation = 0.0f;
+  camera.zoom = 1.0f;
 
   SetTargetFPS(60);
 
@@ -29,6 +34,7 @@ int main(void) {
   while (!WindowShouldClose()) {
     // Update
     // -------------------------------------------------------------------------
+    // Movement
     float moveSpeedModifier = 1.0f;
     if (IsKeyDown(KEY_LEFT_SHIFT)) {
       moveSpeedModifier = 2.0f;
@@ -55,6 +61,9 @@ int main(void) {
       playerPosition.x += moveDirection.x * moveSpeed;
       playerPosition.y += moveDirection.y * moveSpeed;
     }
+
+    // Camera
+    camera.target = playerPosition;
     // -------------------------------------------------------------------------
 
     // Draw
@@ -63,7 +72,10 @@ int main(void) {
 
     ClearBackground(RAYWHITE);
 
+    BeginMode2D(camera);
     DrawCircleV(playerPosition, 20, RED);
+    DrawRectangle(300, 150, 50, 50, GRAY);
+    EndMode2D();
 
     EndDrawing();
     // -------------------------------------------------------------------------
