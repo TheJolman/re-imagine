@@ -14,10 +14,14 @@
 #include "raylib.h"
 #include "raymath.h"
 
+/**
+ * Clamps a float between a min and max range
+ * @return float Original value if within range, or min/max otherwise
+ */
 float ClampFloat(float value, float min, float max) {
   const float res = value < min ? min : value;
   return res > max ? max : res;
-};
+}
 
 int main(void) {
 
