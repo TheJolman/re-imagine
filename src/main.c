@@ -14,19 +14,48 @@
 #include "raylib.h"
 #include "raymath.h"
 
+float ClampFloat(float value, float min, float max) {
+  const float res = value < min ? min : value;
+  return res > max ? max : res;
+};
+
 int main(void) {
-  const int screenWidth = 800;
-  const int screenHeight = 450;
+
+  int screenWidth = 1200;
+  int screenHeight = 900;
 
   InitWindow(screenWidth, screenHeight, "Game!");
 
-  Vector2 playerPosition = {(float)screenWidth / 2, (float)screenHeight / 2};
-  float baseMoveSpeed = 2.0f;
+  typedef struct {
+    Vector2 position;
+    float baseSpeed;
+    float speed;
+    float size;
+  } Player;
+
+  typedef struct {
+    Rectangle bounds;
+    Color color;
+  } Map;
+
+  Player player = {0};
+  player.position = (Vector2){(float)screenWidth / 2, (float)screenHeight / 2};
+  player.baseSpeed = 2.0f;
+  player.speed = player.baseSpeed;
+  player.size = 30;
+
   Camera2D camera = {0};
-  camera.target = playerPosition;
+  camera.target = player.position;
   camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
   camera.rotation = 0.0f;
   camera.zoom = 1.0f;
+
+  Map map = {0};
+  map.bounds.width = 750;
+  map.bounds.height = 750;
+  map.bounds.x = (screenWidth - map.bounds.width) / 2;
+  map.bounds.y = (screenHeight - map.bounds.height) / 2;
+  map.color = GRAY;
 
   SetTargetFPS(60);
 
@@ -40,30 +69,34 @@ int main(void) {
       moveSpeedModifier = 2.0f;
     }
 
-    float moveSpeed = baseMoveSpeed * moveSpeedModifier;
+    player.speed = player.baseSpeed * moveSpeedModifier;
     Vector2 moveDirection = {0.0f, 0.0f};
 
-    if (IsKeyDown(KEY_W)) {
+    if (IsKeyDown(KEY_W))
       moveDirection.y -= 1.0f;
-    }
-    if (IsKeyDown(KEY_S)) {
+    if (IsKeyDown(KEY_S))
       moveDirection.y += 1.0f;
-    }
-    if (IsKeyDown(KEY_A)) {
+    if (IsKeyDown(KEY_A))
       moveDirection.x -= 1.0f;
-    }
-    if (IsKeyDown(KEY_D)) {
+    if (IsKeyDown(KEY_D))
       moveDirection.x += 1.0f;
-    }
 
     if (moveDirection.x != 0.0f || moveDirection.y != 0.0f) {
       moveDirection = Vector2Normalize(moveDirection);
-      playerPosition.x += moveDirection.x * moveSpeed;
-      playerPosition.y += moveDirection.y * moveSpeed;
     }
 
+    player.position.x =
+        ClampFloat(player.position.x + moveDirection.x * player.speed,
+                   map.bounds.x + player.size / 2,
+                   map.bounds.x + map.bounds.width - player.size / 2);
+
+    player.position.y =
+        ClampFloat(player.position.y + moveDirection.y * player.speed,
+                   map.bounds.y + player.size / 2,
+                   map.bounds.y + map.bounds.height - player.size / 2);
+
     // Camera
-    camera.target = playerPosition;
+    camera.target = player.position;
     // -------------------------------------------------------------------------
 
     // Draw
@@ -73,8 +106,8 @@ int main(void) {
     ClearBackground(RAYWHITE);
 
     BeginMode2D(camera);
-    DrawCircleV(playerPosition, 20, RED);
-    DrawRectangle(300, 150, 50, 50, GRAY);
+    DrawRectangleRec(map.bounds, map.color);
+    DrawCircleV(player.position, player.size / 2, RED);
     EndMode2D();
 
     EndDrawing();
