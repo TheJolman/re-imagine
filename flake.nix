@@ -24,8 +24,8 @@
           src = pkgs.fetchFromGitHub {
             owner = "RobLoach";
             repo = "raylib-tileson";
-            rev = "v4.2.0";
-            sha256 = "sha256-oxRvqAVBzzOuXdBsYbx9ELZUhZ+ahfBlpGLJRWNAQZ8=";
+            rev = "3ad4416a4ced3ea9bbf7b6436ec0196b0d25b325";
+            sha256 = "sha256-FSVal/bIF2y+xFM2WP4zYaRenqOYCE98K1A3XQQYk0k=";
           };
 
           nativeBuildInputs = with pkgs; [
@@ -51,19 +51,9 @@
           # Patch CMakeLists.txt and source files
           prePatch = ''
             rm -f cmake/Findraylib.cmake
-
-            # Add missing algorithm header
-            sed -i '1i #include <algorithm>' src/tileson.hpp
-
-            # Fix type mismatch in raylib-tileson.cpp
-            substituteInPlace src/raylib-tileson.cpp \
-              --replace 'unsigned int bytesRead;' 'int bytesRead;'
           '';
 
           installPhase = ''
-            echo "Current directory contents:"
-            ls -R
-
             mkdir -p $out/{lib,include}
             find . -name "libraylib-tileson.a" -exec cp {} $out/lib/ \;
             cp ../include/raylib-tileson.h $out/include/
