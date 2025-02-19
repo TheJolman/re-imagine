@@ -44,6 +44,7 @@ static Player player = {0};
 static Camera2D camera = {0};
 static Map map = {0};
 static Obstacle obstacle = {0};
+static bool battleSceneActive = false;
 
 static void InitGame(void);
 static void UpdateGame(void);
@@ -100,6 +101,9 @@ void InitGame(void) {
  * Updates game variables before next frame is drawn
  */
 void UpdateGame(void) {
+  if (IsKeyPressed(KEY_B))
+    battleSceneActive = !battleSceneActive;
+
   // Movement
   float moveSpeedModifier = 1.0f;
   if (IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -152,21 +156,26 @@ void DrawGame(void) {
 
   BeginDrawing();
   ClearBackground(RAYWHITE);
-  BeginMode2D(camera);
+  if (battleSceneActive) {
+    DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
+  } else {
+    BeginMode2D(camera);
 
-  // Draw main map area
-  DrawRectangleRec(map.bounds, map.color);
+    // Draw main map area
+    DrawRectangleRec(map.bounds, map.color);
 
-  // Draw border
-  DrawRectangleLinesEx(map.bounds, map.borderThickness, BLACK);
+    // Draw border
+    DrawRectangleLinesEx(map.bounds, map.borderThickness, BLACK);
 
-  // Draw obstacle
-  DrawRectangleRec(obstacle.bounds, obstacle.color);
+    // Draw obstacle
+    DrawRectangleRec(obstacle.bounds, obstacle.color);
 
-  // Draw player
-  DrawCircleV(player.position, player.size / 2, RED);
+    // Draw player
+    DrawCircleV(player.position, player.size / 2, RED);
 
-  EndMode2D();
+    EndMode2D();
+    DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
+  }
   EndDrawing();
 }
 
