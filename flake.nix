@@ -17,6 +17,72 @@
       system: let
         lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
+
+        raylib-tileson = pkgs.stdenv.mkDerivation {
+          pname = "raylib-tileson";
+          version = "4.2.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "RobLoach";
+            repo = "raylib-tileson";
+            rev = "v4.2.0";
+            sha256 = "sha256-oxRvqAVBzzOuXdBsYbx9ELZUhZ+ahfBlpGLJRWNAQZ8=";
+          };
+
+          nativeBuildInputs = with pkgs; [
+            cmake
+            pkg-config
+          ];
+
+          buildInputs = with pkgs; [
+            raylib
+          ];
+
+          cmakeFlags = [
+            "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=lib"
+            "-DBUILD_RAYLIB_TILESON_EXAMPLE=OFF"
+            "-DBUILD_TESTING=OFF"
+            "-DUSE_SYSTEM_RAYLIB=ON"
+            "-DCMAKE_PREFIX_PATH=${pkgs.raylib}"
+            "-DCMAKE_CXX_STANDARD=17"
+            "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+            "-DCMAKE_CXX_EXTENSIONS=OFF"
+          ];
+
+          # Patch CMakeLists.txt and source files
+          prePatch = ''
+            rm -f cmake/Findraylib.cmake
+
+            # Add missing algorithm header
+            sed -i '1i #include <algorithm>' src/tileson.hpp
+
+            # Fix type mismatch in raylib-tileson.cpp
+            substituteInPlace src/raylib-tileson.cpp \
+              --replace 'unsigned int bytesRead;' 'int bytesRead;'
+          '';
+
+          installPhase = ''
+            echo "Current directory contents:"
+            ls -R
+
+            mkdir -p $out/{lib,include}
+            find . -name "libraylib-tileson.a" -exec cp {} $out/lib/ \;
+            cp ../include/raylib-tileson.h $out/include/
+            cp ../src/tileson.hpp $out/include/
+
+            mkdir -p $out/lib/pkgconfig
+            cat > $out/lib/pkgconfig/raylib-tileson.pc << EOF
+            prefix=$out
+            exec_prefix=\''${prefix}
+            libdir=\''${exec_prefix}/lib
+            includedir=\''${prefix}/include
+
+            Name: raylib-tileson
+            Description: Tileson wrapper for raylib
+            Libs: -L\''${libdir} -lraylib-tileson
+            Cflags: -I\''${includedir}
+            EOF
+          '';
+        };
       in {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "raylib-game";
@@ -36,6 +102,9 @@
           cmakeFlags = [
             "-DCMAKE_BUILD_TYPE=Release"
             "-G Ninja"
+            "-DCMAKE_CXX_STANDARD=17"
+            "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+            "-DCMAKE_CXX_EXTENSIONS=OFF"
           ];
 
           installPhase = ''
@@ -63,6 +132,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             cmake
+            pkg-config
             ninja
             clang
             gcc
@@ -71,12 +141,14 @@
             clang-tools
             valgrind # appears to be marked as broken on darwin
             raylib
+            raylib-tileson
           ];
 
           shellHook = ''
             ${self.checks.${system}.pre-commit-check.shellHook}
             export CC=clang
             export CMAKE_GENERATOR=Ninja
+            export PKG_CONFIG_PATH="${raylib-tileson}/lib/pkgconfig:$PKG_CONFIG_PATH"
           '';
         };
       }
