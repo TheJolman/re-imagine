@@ -14,31 +14,12 @@
 #include "raylib.h"
 #include "raymath.h"
 
-typedef struct Circle {
-  Vector2 center;
-  float radius;
-} Circle;
+#include "map.h"
+#include "player.h"
+#include "utils.h"
 
-typedef struct Player {
-  Vector2 position;
-  float baseSpeed;
-  float speed;
-  float size;
-} Player;
-
-typedef struct Map {
-  Rectangle bounds;
-  Color color;
-  float borderThickness;
-} Map;
-
-typedef struct Obstacle {
-  Rectangle bounds;
-  Color color;
-} Obstacle;
-
-static int screenWidth = 1200;
-static int screenHeight = 900;
+#define SCREEN_WIDTH 1200
+#define SCREEN_HEIGHT 900
 
 static Player player = {0};
 static Camera2D camera = {0};
@@ -49,11 +30,10 @@ static bool battleSceneActive = false;
 static void InitGame(void);
 static void UpdateGame(void);
 static void DrawGame(void);
-float ClampFloat(float value, float min, float max);
 
 int main(void) {
 
-  InitWindow(screenWidth, screenHeight, "Game!");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game!");
 
   SetTargetFPS(60);
   InitGame();
@@ -69,21 +49,24 @@ int main(void) {
   return 0;
 }
 
+/**
+ * Loads initial values on game startup
+ */
 void InitGame(void) {
-  player.position = (Vector2){(float)screenWidth / 2, (float)screenHeight / 2};
+  player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
   player.baseSpeed = 2.0f;
   player.speed = player.baseSpeed;
   player.size = 30;
 
   camera.target = player.position;
-  camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
+  camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
   camera.rotation = 0.0f;
   camera.zoom = 1.0f;
 
   map.bounds.width = 750;
   map.bounds.height = 750;
-  map.bounds.x = (screenWidth - map.bounds.width) / 2;
-  map.bounds.y = (screenHeight - map.bounds.height) / 2;
+  map.bounds.x = (SCREEN_WIDTH - map.bounds.width) / 2;
+  map.bounds.y = (SCREEN_HEIGHT - map.bounds.height) / 2;
   map.color = GRAY;
   map.borderThickness = 10.0f;
 
@@ -130,9 +113,6 @@ void UpdateGame(void) {
   Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
                          player.position.y + moveDirection.y * player.speed};
 
-  // Create player collision circle for this frame
-  Circle playerCircle = {.center = newPosition, .radius = player.size / 2};
-
   // Check collision with obstacle
   if (!CheckCollisionCircleRec(newPosition, player.size / 2, obstacle.bounds)) {
     // Only update position if there's no collision
@@ -177,13 +157,4 @@ void DrawGame(void) {
     DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
   }
   EndDrawing();
-}
-
-/**
- * Clamps a float between a min and max range
- * @return float Original value if within range, or min/max otherwise
- */
-float ClampFloat(float value, float min, float max) {
-  const float res = value < min ? min : value;
-  return res > max ? max : res;
 }
