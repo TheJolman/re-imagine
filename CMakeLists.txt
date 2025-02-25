@@ -5,6 +5,16 @@ project(raylib-game C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+set(SOURCES
+  src/main.c
+  src/utils.c
+)
+
+set(HEADERS
+  src/utils.h
+  src/player.h
+)
+
 find_package(raylib 5.5 QUIET)
 
 if(NOT raylib_FOUND)
@@ -38,7 +48,7 @@ if(WIN32)
 endif()
 
 # Target
-add_executable(${PROJECT_NAME} src/main.c)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${RAYLIB_LIBRARY})
 
