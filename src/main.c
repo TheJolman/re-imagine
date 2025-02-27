@@ -13,6 +13,7 @@
 
 #include "raylib.h"
 #include "raymath.h"
+#include "stdlib.h"
 
 #define RAYLIB_TILESON_IMPLEMENTATION
 #include "raylib-tileson.h"
@@ -57,7 +58,7 @@ int main(void) {
  * Loads initial values on game startup
  */
 void InitGame(void) {
-  tileMap = LoadTiled("../resources-test/desert.json");
+  tileMap = LoadTiled("resources-test/desert.json");
   player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
   player.baseSpeed = 2.0f;
   player.speed = player.baseSpeed;
@@ -146,6 +147,7 @@ void DrawGame(void) {
   } else {
     BeginMode2D(camera);
     DrawTiled(tileMap, 0, 0, WHITE);
+    // system("pwd");
 
     // Draw main map area
     // DrawRectangleRec(map.bounds, map.color);
