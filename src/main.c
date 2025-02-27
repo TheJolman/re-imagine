@@ -14,6 +14,9 @@
 #include "raylib.h"
 #include "raymath.h"
 
+#define RAYLIB_TILESON_IMPLEMENTATION
+#include "raylib-tileson.h"
+
 #include "map.h"
 #include "player.h"
 #include "utils.h"
@@ -23,7 +26,8 @@
 
 static Player player = {0};
 static Camera2D camera = {0};
-static Map map = {0};
+static Map tileMap = {0};
+static MyMap map = {0};
 static Obstacle obstacle = {0};
 static bool battleSceneActive = false;
 
@@ -53,6 +57,7 @@ int main(void) {
  * Loads initial values on game startup
  */
 void InitGame(void) {
+  tileMap = LoadTiled("../resources-test/desert.json");
   player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
   player.baseSpeed = 2.0f;
   player.speed = player.baseSpeed;
@@ -133,22 +138,23 @@ void UpdateGame(void) {
  * Draws a single frame
  */
 void DrawGame(void) {
-
   BeginDrawing();
   ClearBackground(RAYWHITE);
+
   if (battleSceneActive) {
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
   } else {
     BeginMode2D(camera);
+    DrawTiled(tileMap, 0, 0, WHITE);
 
     // Draw main map area
-    DrawRectangleRec(map.bounds, map.color);
+    // DrawRectangleRec(map.bounds, map.color);
 
     // Draw border
-    DrawRectangleLinesEx(map.bounds, map.borderThickness, BLACK);
+    // DrawRectangleLinesEx(map.bounds, map.borderThickness, BLACK);
 
     // Draw obstacle
-    DrawRectangleRec(obstacle.bounds, obstacle.color);
+    // DrawRectangleRec(obstacle.bounds, obstacle.color);
 
     // Draw player
     DrawCircleV(player.position, player.size / 2, RED);

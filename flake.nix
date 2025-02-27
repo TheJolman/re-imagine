@@ -30,7 +30,9 @@
 
           nativeBuildInputs = with pkgs; [
             cmake
+            ninja
             pkg-config
+            pkgconf
           ];
 
           buildInputs = with pkgs; [
@@ -132,6 +134,7 @@
             valgrind # appears to be marked as broken on darwin
             raylib
             raylib-tileson
+            gcc.cc.lib
           ];
 
           shellHook = ''
@@ -139,6 +142,9 @@
             export CC=clang
             export CMAKE_GENERATOR=Ninja
             export PKG_CONFIG_PATH="${raylib-tileson}/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+            export RAYLIB_TILESON_INCLUDE="${raylib-tileson}/include"
+            export RAYLIB_TILESON_LIB="${raylib-tileson}/lib"
           '';
         };
       }

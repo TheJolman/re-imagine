@@ -3,13 +3,13 @@
 
 #include "raylib.h"
 
-typedef struct Map {
+typedef struct {
   Rectangle bounds;
   Color color;
   float borderThickness;
-} Map;
+} MyMap;
 
-typedef struct Obstacle {
+typedef struct {
   Rectangle bounds;
   Color color;
 } Obstacle;
