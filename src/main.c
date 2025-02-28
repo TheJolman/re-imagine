@@ -119,6 +119,18 @@ void UpdateGame(void) {
   Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
                          player.position.y + moveDirection.y * player.speed};
 
+  // Check collision with obstacle
+  if (!CheckCollisionCircleRec(newPosition, player.size / 2, obstacle.bounds)) {
+    // Only update position if there's no collision
+    player.position.x =
+        ClampFloat(newPosition.x, map.bounds.x + map.borderThickness + player.size / 2,
+                   map.bounds.x + map.bounds.width - map.borderThickness - player.size / 2);
+
+    player.position.y =
+        ClampFloat(newPosition.y, map.bounds.y + map.borderThickness + player.size / 2,
+                   map.bounds.y + map.bounds.height - map.borderThickness - player.size / 2);
+  }
+
   // Camera
   camera.target = player.position;
 }
