@@ -28,13 +28,22 @@
 static Player player = {0};
 static Camera2D camera = {0};
 static Map tileMap = {0};
-static MyMap map = {0};
+static MapData mapData = {0};
 static Obstacle obstacle = {0};
-static bool battleSceneActive = false;
+// static bool battleSceneActive = false;
 
 static void InitGame(void);
 static void UpdateGame(void);
 static void DrawGame(void);
+
+typedef enum {
+  FREE_ROAM,
+  BATTLE_SCENE,
+  PAUSE,
+  TITLE,
+} GameState;
+
+static GameState state = {0};
 
 int main(void) {
 
@@ -58,40 +67,35 @@ int main(void) {
  * Loads initial values on game startup
  */
 void InitGame(void) {
+  state = FREE_ROAM;
   tileMap = LoadTiled("resources-test/desert.json");
   player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
-  player.baseSpeed = 2.0f;
+  player.baseSpeed = 5.0f;
   player.speed = player.baseSpeed;
   player.size = 30;
 
   camera.target = player.position;
   camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
-  camera.rotation = 0.0f;
   camera.zoom = 1.0f;
 
-  map.bounds.width = 750;
-  map.bounds.height = 750;
-  map.bounds.x = (SCREEN_WIDTH - map.bounds.width) / 2;
-  map.bounds.y = (SCREEN_HEIGHT - map.bounds.height) / 2;
-  map.color = GRAY;
-  map.borderThickness = 10.0f;
-
-  // Create an obstacle in the middle-right of the map
-  obstacle.bounds = (Rectangle){
-      map.bounds.x + map.bounds.width * 0.7f,  // x position
-      map.bounds.y + map.bounds.height * 0.5f, // y position
-      60,                                      // width
-      60                                       // height
-  };
-  obstacle.color = DARKGRAY;
+  mapData.bounds.width = 1280; // these were obtained via guessing
+  mapData.bounds.height = 1280;
+  mapData.bounds.x = 0;
+  mapData.bounds.y = 0;
 }
 
 /**
  * Updates game variables before next frame is drawn
  */
 void UpdateGame(void) {
-  if (IsKeyPressed(KEY_B))
-    battleSceneActive = !battleSceneActive;
+  if (IsKeyPressed(KEY_B)) {
+    if (state == FREE_ROAM) {
+      state = BATTLE_SCENE;
+    } else if (state == BATTLE_SCENE) {
+      state = FREE_ROAM;
+    }
+  }
+  // battleSceneActive = !battleSceneActive;
 
   // Movement
   float moveSpeedModifier = 1.0f;
@@ -119,17 +123,12 @@ void UpdateGame(void) {
   Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
                          player.position.y + moveDirection.y * player.speed};
 
-  // Check collision with obstacle
-  if (!CheckCollisionCircleRec(newPosition, player.size / 2, obstacle.bounds)) {
-    // Only update position if there's no collision
-    player.position.x =
-        ClampFloat(newPosition.x, map.bounds.x + map.borderThickness + player.size / 2,
-                   map.bounds.x + map.bounds.width - map.borderThickness - player.size / 2);
+  // Only update position if there's no collision
+  player.position.x = ClampFloat(newPosition.x, mapData.bounds.x + +player.size / 2,
+                                 mapData.bounds.x + mapData.bounds.width - player.size / 2);
 
-    player.position.y =
-        ClampFloat(newPosition.y, map.bounds.y + map.borderThickness + player.size / 2,
-                   map.bounds.y + map.bounds.height - map.borderThickness - player.size / 2);
-  }
+  player.position.y = ClampFloat(newPosition.y, mapData.bounds.y + player.size / 2,
+                                 mapData.bounds.y + mapData.bounds.height - player.size / 2);
 
   // Camera
   camera.target = player.position;
@@ -142,27 +141,25 @@ void DrawGame(void) {
   BeginDrawing();
   ClearBackground(RAYWHITE);
 
-  if (battleSceneActive) {
-    DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
-  } else {
+  switch (state) {
+  case FREE_ROAM:
     BeginMode2D(camera);
     DrawTiled(tileMap, 0, 0, WHITE);
-    // system("pwd");
-
-    // Draw main map area
-    // DrawRectangleRec(map.bounds, map.color);
-
-    // Draw border
-    // DrawRectangleLinesEx(map.bounds, map.borderThickness, BLACK);
-
-    // Draw obstacle
-    // DrawRectangleRec(obstacle.bounds, obstacle.color);
 
     // Draw player
     DrawCircleV(player.position, player.size / 2, RED);
 
     EndMode2D();
     DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
+    break;
+  case BATTLE_SCENE:
+    DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
+    break;
+  case PAUSE:
+    break;
+  case TITLE:
+    break;
   }
+
   EndDrawing();
 }

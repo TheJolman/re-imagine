@@ -5,9 +5,7 @@
 
 typedef struct {
   Rectangle bounds;
-  Color color;
-  float borderThickness;
-} MyMap;
+} MapData;
 
 typedef struct {
   Rectangle bounds;
