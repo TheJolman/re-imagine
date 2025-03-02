@@ -1,4 +1,5 @@
 #include "pause.h"
+#include "assert.h"
 #include "raylib.h"
 
 #define NUM_ITEMS 3
@@ -11,6 +12,8 @@ typedef struct {
   Color color;
 } PauseItem;
 
+typedef enum { OPTIONS, EXIT, CREDITS } MenuIndices;
+
 const PauseItem pause_options = {"OPTIONS", 50, 100, 20, DARKGRAY};
 const PauseItem pause_exit = {"EXIT", 50, 130, 20, DARKGRAY};
 const PauseItem pause_credits = {"CREDITS", 50, 160, 20, DARKGRAY};
@@ -19,22 +22,19 @@ const PauseItem pauseItems[NUM_ITEMS] = {pause_options, pause_exit, pause_credit
 
 int currentMenuIndex = 0;
 
-/**
- * adjusts current item without going out of bounds
- */
-void adjustPauseMenuItem(int *currentPos, KeyboardKey key) {
-  if (key == KEY_DOWN) {
-    if (*currentPos == NUM_ITEMS - 1) {
-      return;
-    } else {
-      *currentPos -= 1;
-    }
-  } else if (key == KEY_UP) {
-    if (*currentPos == 0) {
-      return;
-    } else {
-      *currentPos += 1;
-    }
+void nextMenuItem(int *currentPos) {
+  if (*currentPos == NUM_ITEMS - 1) {
+    *currentPos = 0;
+  } else {
+    *currentPos += 1;
+  }
+}
+
+void prevMenuItem(int *currentPos) {
+  if (*currentPos == 0) {
+    *currentPos = NUM_ITEMS - 1;
+  } else {
+    *currentPos -= 1;
   }
 }
 
@@ -46,7 +46,21 @@ void PauseMenu(void) {
     DrawText(item.name, item.posX, item.posY, item.fontSize, item.color);
   }
 
-  // DrawRectangleLines(40, 95, 300, 30, DARKGRAY);
+  assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
   PauseItem currentItem = pauseItems[currentMenuIndex];
   DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
+}
+
+void selectMenuItem(void) {
+  assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
+
+  switch (currentMenuIndex) {
+  case OPTIONS:
+    break;
+  case EXIT:
+    CloseWindow();
+    break;
+  case CREDITS:
+    break;
+  }
 }

@@ -16,57 +16,7 @@ MapData mapData = {0};
 Obstacle obstacle = {0};
 GameState state = {0};
 
-static void HandleInput(void) {
-  // TODO: Convert this all to a big switch statement
-
-  // Toggle battle scene (for testing)
-  if (IsKeyPressed(KEY_B)) {
-    if (state == FREE_ROAM) {
-      state = BATTLE_SCENE;
-    } else if (state == BATTLE_SCENE) {
-      state = FREE_ROAM;
-    }
-  }
-
-  // Toggle pause menu
-  if (IsKeyPressed(KEY_ESCAPE)) {
-    if (state == FREE_ROAM) {
-      state = PAUSED;
-    } else if (state == PAUSED) {
-      state = FREE_ROAM;
-    }
-  }
-
-  if (state == PAUSED) {
-    if (IsKeyPressed(KEY_DOWN)) {
-      adjustPauseMenuItem(&currentMenuIndex, KEY_DOWN);
-    } else if (IsKeyPressed(KEY_UP)) {
-      adjustPauseMenuItem(&currentMenuIndex, KEY_UP);
-    }
-  }
-}
-
-void InitGame(void) {
-  state = FREE_ROAM;
-  tileMap = LoadTiled("resources-test/desert.json");
-  player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
-  player.baseSpeed = 5.0f;
-  player.speed = player.baseSpeed;
-  player.size = 30;
-
-  camera.target = player.position;
-  camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
-  camera.zoom = 1.0f;
-
-  mapData.bounds.width = 1280; // these were obtained via guessing
-  mapData.bounds.height = 1280;
-  mapData.bounds.x = 0;
-  mapData.bounds.y = 0;
-}
-
-void UpdateGame(void) {
-  HandleInput();
-
+static void MovePlayer(void) {
   // Movement
   float moveSpeedModifier = 1.0f;
   if (IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -99,10 +49,67 @@ void UpdateGame(void) {
 
   player.position.y = ClampFloat(newPosition.y, mapData.bounds.y + player.size / 2,
                                  mapData.bounds.y + mapData.bounds.height - player.size / 2);
-
   // Camera
   camera.target = player.position;
 }
+
+static void HandleInput(void) {
+  switch (state) {
+  case FREE_ROAM:
+    MovePlayer();
+    if (IsKeyPressed(KEY_B))
+      state = BATTLE_SCENE;
+    if (IsKeyPressed(KEY_ESCAPE))
+      state = PAUSED;
+    break;
+
+  case BATTLE_SCENE:
+    if (IsKeyPressed(KEY_B))
+      state = FREE_ROAM;
+    break;
+
+  case PAUSED:
+    if (IsKeyPressed(KEY_ESCAPE))
+      state = FREE_ROAM;
+    if (IsKeyPressed(KEY_DOWN)) {
+      nextMenuItem(&currentMenuIndex);
+    } else if (IsKeyPressed(KEY_UP)) {
+      prevMenuItem(&currentMenuIndex);
+    } else if (IsKeyPressed(KEY_ENTER)) {
+      selectMenuItem();
+    }
+    break;
+
+  case TITLE_SCREEN:
+    break;
+  }
+
+  // Unconditional inputs
+  if (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)) {
+    if (IsKeyPressed(KEY_F4))
+      CloseWindow();
+  }
+}
+
+void InitGame(void) {
+  state = FREE_ROAM;
+  tileMap = LoadTiled("resources-test/desert.json");
+  player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
+  player.baseSpeed = 5.0f;
+  player.speed = player.baseSpeed;
+  player.size = 30;
+
+  camera.target = player.position;
+  camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  camera.zoom = 1.0f;
+
+  mapData.bounds.width = 1280; // these were obtained via guessing
+  mapData.bounds.height = 1280;
+  mapData.bounds.x = 0;
+  mapData.bounds.y = 0;
+}
+
+void UpdateGame(void) { HandleInput(); }
 
 void DrawGame(void) {
   BeginDrawing();
