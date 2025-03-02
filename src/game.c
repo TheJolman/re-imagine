@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "battle.h"
+#include "pause.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "utils.h"
@@ -13,6 +15,36 @@ Map tileMap = {0};
 MapData mapData = {0};
 Obstacle obstacle = {0};
 GameState state = {0};
+
+static void HandleInput(void) {
+  // TODO: Convert this all to a big switch statement
+
+  // Toggle battle scene (for testing)
+  if (IsKeyPressed(KEY_B)) {
+    if (state == FREE_ROAM) {
+      state = BATTLE_SCENE;
+    } else if (state == BATTLE_SCENE) {
+      state = FREE_ROAM;
+    }
+  }
+
+  // Toggle pause menu
+  if (IsKeyPressed(KEY_ESCAPE)) {
+    if (state == FREE_ROAM) {
+      state = PAUSED;
+    } else if (state == PAUSED) {
+      state = FREE_ROAM;
+    }
+  }
+
+  if (state == PAUSED) {
+    if (IsKeyPressed(KEY_DOWN)) {
+      adjustPauseMenuItem(&currentMenuIndex, KEY_DOWN);
+    } else if (IsKeyPressed(KEY_UP)) {
+      adjustPauseMenuItem(&currentMenuIndex, KEY_UP);
+    }
+  }
+}
 
 void InitGame(void) {
   state = FREE_ROAM;
@@ -33,13 +65,7 @@ void InitGame(void) {
 }
 
 void UpdateGame(void) {
-  if (IsKeyPressed(KEY_B)) {
-    if (state == FREE_ROAM) {
-      state = BATTLE_SCENE;
-    } else if (state == BATTLE_SCENE) {
-      state = FREE_ROAM;
-    }
-  }
+  HandleInput();
 
   // Movement
   float moveSpeedModifier = 1.0f;
@@ -94,11 +120,12 @@ void DrawGame(void) {
     DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
     break;
   case BATTLE_SCENE:
-    DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
+    BattleScene();
     break;
-  case PAUSE:
+  case PAUSED:
+    PauseMenu();
     break;
-  case TITLE:
+  case TITLE_SCREEN:
     break;
   }
 

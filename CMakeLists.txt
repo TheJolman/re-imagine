@@ -10,6 +10,8 @@ set(SOURCES
   src/main.c
   src/utils.c
   src/game.c
+  src/pause.c
+  src/battle.c
 )
 
 set(HEADERS
@@ -17,6 +19,8 @@ set(HEADERS
   src/utils.h
   src/player.h
   src/game.h
+  src/pause.h
+  src/battle.h
 )
 
 # Skip pkg-config and directly set paths for raylib-tileson

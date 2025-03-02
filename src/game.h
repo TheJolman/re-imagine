@@ -10,8 +10,8 @@
 typedef enum {
   FREE_ROAM,
   BATTLE_SCENE,
-  PAUSE,
-  TITLE,
+  PAUSED,
+  TITLE_SCREEN,
 } GameState;
 
 extern Player player;

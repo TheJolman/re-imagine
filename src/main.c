@@ -12,7 +12,6 @@
  ********************************************************************************************/
 
 #include "raylib.h"
-// #include "stdlib.h"
 
 #include "game.h"
 
@@ -26,7 +25,7 @@ int main(void) {
   InitGame();
 
   // Main game loop
-  while (!WindowShouldClose()) {
+  while (true) {
     UpdateGame();
     DrawGame();
   }
