@@ -71,9 +71,9 @@ static void HandleInput(void) {
   case PAUSED:
     if (IsKeyPressed(KEY_ESCAPE))
       state = FREE_ROAM;
-    if (IsKeyPressed(KEY_DOWN)) {
+    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
       nextMenuItem(&currentMenuIndex);
-    } else if (IsKeyPressed(KEY_UP)) {
+    } else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
       prevMenuItem(&currentMenuIndex);
     } else if (IsKeyPressed(KEY_ENTER)) {
       selectMenuItem();
