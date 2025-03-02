@@ -9,11 +9,14 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(SOURCES
   src/main.c
   src/utils.c
+  src/game.c
 )
 
 set(HEADERS
+  src/map.h
   src/utils.h
   src/player.h
+  src/game.h
 )
 
 # Skip pkg-config and directly set paths for raylib-tileson
