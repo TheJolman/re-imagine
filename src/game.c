@@ -12,8 +12,6 @@
 Player player = {0};
 Camera2D camera = {0};
 Map tileMap = {0};
-MapData mapData = {0};
-Obstacle obstacle = {0};
 GameState state = {0};
 
 static void MovePlayer(void) {
@@ -44,11 +42,11 @@ static void MovePlayer(void) {
                          player.position.y + moveDirection.y * player.speed};
 
   // Only update position if there's no collision
-  player.position.x = ClampFloat(newPosition.x, mapData.bounds.x + +player.size / 2,
-                                 mapData.bounds.x + mapData.bounds.width - player.size / 2);
+  player.position.x = ClampFloat(newPosition.x, player.size / 2,
+                                 tileMap.width * tileMap.tileHeight - player.size / 2);
 
-  player.position.y = ClampFloat(newPosition.y, mapData.bounds.y + player.size / 2,
-                                 mapData.bounds.y + mapData.bounds.height - player.size / 2);
+  player.position.y = ClampFloat(newPosition.y, player.size / 2,
+                                 tileMap.height * tileMap.tileWidth - player.size / 2);
   // Camera
   camera.target = player.position;
 }
@@ -102,11 +100,6 @@ void InitGame(void) {
   camera.target = player.position;
   camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
   camera.zoom = 1.0f;
-
-  mapData.bounds.width = 1280; // these were obtained via guessing
-  mapData.bounds.height = 1280;
-  mapData.bounds.x = 0;
-  mapData.bounds.y = 0;
 }
 
 void UpdateGame(void) { HandleInput(); }

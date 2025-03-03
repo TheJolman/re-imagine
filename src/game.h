@@ -17,8 +17,6 @@ typedef enum {
 extern Player player;
 extern Camera2D camera;
 extern Map tileMap;
-extern MapData mapData;
-extern Obstacle obstacle;
 extern GameState state;
 
 /**
