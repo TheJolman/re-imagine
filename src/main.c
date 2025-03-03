@@ -30,6 +30,7 @@ int main(void) {
     DrawGame();
   }
 
+  UnloadMap(tileMap);
   CloseWindow();
 
   return 0;
