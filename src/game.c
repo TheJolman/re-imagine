@@ -10,8 +10,8 @@ Player player = {0};
 Camera2D camera = {0};
 Map tileMap = {0};
 GameState state = {0};
-Image frogeFrontImage = {0};
-Texture2D frogeFrontTexture = {0};
+Image image = {0};
+MonTexture froge = {0};
 
 static void MovePlayer(void) {
   // Movement
@@ -91,9 +91,17 @@ static void HandleInput(void) {
 void InitGame(void) {
   state = FREE_ROAM;
   tileMap = LoadTiled("resources-test/desert.json");
-  frogeFrontImage = LoadImage("resources/froge-front-1.png");
-  frogeFrontTexture = LoadTextureFromImage(frogeFrontImage);
-  UnloadImage(frogeFrontImage);
+
+  // Load the one mon I got
+  image = LoadImage("resources/froge-front-1.png");
+  froge.frontTexture = LoadTextureFromImage(image);
+  UnloadImage(image);
+  image = LoadImage("resources/froge-back-1.png");
+  froge.backTexture = LoadTextureFromImage(image);
+  UnloadImage(image);
+  froge.scale = 0.4f;
+  froge.tint = WHITE;
+
   player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
   player.baseSpeed = 5.0f;
   player.speed = player.baseSpeed;
