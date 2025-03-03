@@ -6,9 +6,6 @@
 #include "raymath.h"
 #include "utils.h"
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 900
-
 Player player = {0};
 Camera2D camera = {0};
 Map tileMap = {0};
@@ -92,13 +89,13 @@ static void HandleInput(void) {
 void InitGame(void) {
   state = FREE_ROAM;
   tileMap = LoadTiled("resources-test/desert.json");
-  player.position = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
+  player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
   player.baseSpeed = 5.0f;
   player.speed = player.baseSpeed;
   player.size = 30;
 
   camera.target = player.position;
-  camera.offset = (Vector2){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
   camera.zoom = 1.0f;
 }
 

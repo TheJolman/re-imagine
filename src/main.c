@@ -14,13 +14,19 @@
 #include "raylib.h"
 
 #include "game.h"
+#include "map.h"
 
 #define SCREEN_WIDTH 1200
 #define SCREEN_HEIGHT 900
 
+Screen screen = {0};
+
 int main(void) {
 
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game!");
+  screen.width = SCREEN_WIDTH;
+  screen.height = SCREEN_HEIGHT;
+
+  InitWindow(screen.width, screen.height, "Game!");
   SetTargetFPS(60);
   InitGame();
 
