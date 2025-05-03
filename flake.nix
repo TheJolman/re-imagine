@@ -25,7 +25,7 @@
             lib
             stdenv
             cmake
-            fetchFromGithub
+            fetchFromGitHub
             ;
         };
         packages = import ./nix/packages.nix {

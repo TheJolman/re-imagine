@@ -4,7 +4,7 @@
   system,
   self,
   pre-commit-hooks,
-  raylib-tileson,
+  tileson,
 }: {
   checks = {
     pre-commit-check = pre-commit-hooks.lib.${system}.run {
@@ -34,7 +34,7 @@
       clang-tools
       valgrind # appears to be marked as broken on darwin
       raylib
-      raylib-tileson
+      tileson
       gcc.cc.lib
     ];
 

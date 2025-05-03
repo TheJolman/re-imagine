@@ -2,20 +2,25 @@
   lib,
   stdenv,
   cmake,
-  fetchFromGithub,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tileson";
-  version = "v1.4.0";
-  src = fetchFromGithub {
+  version = "1.4.0";
+  src = fetchFromGitHub {
     owner = "SSBMTonberry";
     repo = "tileson";
     rev = "ccc4a3d906fc6547141d4186cb99c8dace562f65";
-    sha256 = "";
+    sha256 = "sha256-PiH8QSGZwYUbH0FYP/y13HtDV0dohpVGeW+9w5TEK5U=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_EXAMPLES=OFF"
   ];
 
   meta = {
