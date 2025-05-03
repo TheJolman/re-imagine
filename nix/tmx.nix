@@ -1,0 +1,42 @@
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  zlib,
+  libxml2,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "tmx";
+  version = "1.10.0";
+  src = fetchFromGitHub {
+    owner = "baylej";
+    repo = "tmx";
+    rev = "11ffdcdc9bd65669f1a8dbd3a0362a324dda2e0c";
+    sha256 = "";
+  };
+
+  buildInputs = [
+    zlib
+    libxml2
+  ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  cmakeFlags = [
+    "-DWANT_ZLIB=ON"
+    "-DWANT_ZSTD=OFF"
+    "-DBUILD_SHARED_LIBS=OFF"
+  ];
+
+  meta = {
+    homepage = "https://github.com/baylej/tmx";
+    description = "C tmx map loader";
+    changelog = "https://github.com/baylej/tmx/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thejolman ];
+    platforms = lib.platforms.all;
+  };
+})

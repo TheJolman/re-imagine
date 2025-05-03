@@ -19,13 +19,16 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # raylib-tileson = import ./nix/raylib-tileson.nix {inherit pkgs;};
-        tileson = import ./nix/tileson.nix {
+        # tileson = import ./nix/tileson.nix {
+        tmx = import ./nix/tmx.nix {
           inherit
             (pkgs)
             lib
             stdenv
             cmake
             fetchFromGitHub
+            zlib
+            libxml2
             ;
         };
         packages = import ./nix/packages.nix {
@@ -33,7 +36,7 @@
           src = ./.;
         };
         devModules = import ./nix/devShell.nix {
-          inherit pkgs lib system self pre-commit-hooks tileson;
+          inherit pkgs lib system self pre-commit-hooks tmx;
         };
       in {
         packages = packages;
