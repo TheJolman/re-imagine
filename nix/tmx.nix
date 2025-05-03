@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "baylej";
     repo = "tmx";
     rev = "11ffdcdc9bd65669f1a8dbd3a0362a324dda2e0c";
-    sha256 = "";
+    sha256 = "sha256-RuQ3piUNLuCqXhf38QQzukeg/PcCVAAQmifym8fZ4vU=";
   };
 
   buildInputs = [
