@@ -27,20 +27,17 @@
       cmake
       pkg-config
       ninja
-      clang
       gcc
-      lldb
       gdb
       clang-tools
-      valgrind # appears to be marked as broken on darwin
       raylib
       tmx
       gcc.cc.lib
-    ];
+    ] ++ lib.optional (!stdenv.isDarwin) valgrind;
 
     shellHook = ''
       ${self.checks.${system}.pre-commit-check.shellHook}
-      export CC=clang
+      export CC=gcc
       export CMAKE_GENERATOR=Ninja
     '';
   };

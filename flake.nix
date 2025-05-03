@@ -18,8 +18,6 @@
         lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # raylib-tileson = import ./nix/raylib-tileson.nix {inherit pkgs;};
-        # tileson = import ./nix/tileson.nix {
         tmx = import ./nix/tmx.nix {
           inherit
             (pkgs)
