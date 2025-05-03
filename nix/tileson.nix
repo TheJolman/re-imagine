@@ -23,6 +23,21 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_EXAMPLES=OFF"
   ];
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/include/tileson
+    if [ -d include ]; then
+      find include -mindepth 1 -exec cp -r -t $out/include/tileson/ {} +
+    fi
+
+    if [ -f TilesonConfig.h ]; then
+      cp TilesonConfig.h $out/include/tileson/
+    fi
+
+    runHook postInstall
+  '';
+
   meta = {
     homepage = "https://github.com/SSBMTonberry/tileson";
     description = "A modern and helpful cross-platform json-parser for C++, used for parsing Tiled maps. ";
