@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  propogateBuildInputs = [
+    zlib
+    libxml2
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
