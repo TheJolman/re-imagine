@@ -36,15 +36,15 @@ if(NOT raylib_FOUND)
   FetchContent_MakeAvailable(raylib)
 endif()
 
-# Check for raylib tileson and install if it's not found
-find_package(raylib-tileson REQUIRED)
+# TMX library
+find_package(LibXml2 REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(tmx 1.10 REQUIRED)
 
 # Target
 add_executable(${PROJECT_NAME} ${SOURCES})
-
-target_link_libraries(${PROJECT_NAME} PRIVATE stdc++)
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib-tileson)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
+                                              ZLIB::ZLIB)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 if(WIN32)

@@ -22,23 +22,24 @@
 
 Screen screen = {0};
 
-int main(void) {
+int main(void)
+{
 
-  screen.width = SCREEN_WIDTH;
-  screen.height = SCREEN_HEIGHT;
+    screen.width = SCREEN_WIDTH;
+    screen.height = SCREEN_HEIGHT;
 
-  InitWindow(screen.width, screen.height, "Game!");
-  SetTargetFPS(60);
-  InitGame();
+    InitWindow(screen.width, screen.height, "Game!");
+    SetTargetFPS(60);
+    InitGame();
 
-  // Main game loop
-  while (true) {
-    UpdateGame();
-    DrawGame();
-  }
+    // Main game loop
+    while (true)
+    {
+        UpdateGame();
+        DrawGame();
+    }
 
-  UnloadMap(tileMap);
-  CloseWindow();
+    CloseWindow();
 
-  return 0;
+    return 0;
 }

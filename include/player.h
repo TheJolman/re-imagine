@@ -3,11 +3,12 @@
 
 #include "raylib.h"
 
-typedef struct Player {
-  Vector2 position;
-  float baseSpeed;
-  float speed;
-  float size;
+typedef struct Player
+{
+    Vector2 position;
+    float baseSpeed;
+    float speed;
+    float size;
 } Player;
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "game.h"
 #include <stddef.h>
 
-typedef struct {
-  void *elements;
-  size_t size;
-  size_t element_size;
+typedef struct
+{
+    void *elements;
+    size_t size;
+    size_t element_size;
 } Array;
 
 /**

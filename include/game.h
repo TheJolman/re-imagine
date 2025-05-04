@@ -7,16 +7,16 @@
 #define RAYLIB_TILESON_IMPLEMENTATION
 #include "raylib-tileson.h"
 
-typedef enum {
-  FREE_ROAM,
-  BATTLE_SCENE,
-  PAUSED,
-  TITLE_SCREEN,
+typedef enum
+{
+    FREE_ROAM,
+    BATTLE_SCENE,
+    PAUSED,
+    TITLE_SCREEN,
 } GameState;
 
 extern Player player;
 extern Camera2D camera;
-extern Map tileMap;
 extern GameState state;
 
 /**

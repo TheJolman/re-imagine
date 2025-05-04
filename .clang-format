@@ -1,2 +1,4 @@
 BasedOnStyle: LLVM
 ColumnLimit: 100
+BreakBeforeBraces: Allman
+IndentWidth: 4
