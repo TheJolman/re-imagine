@@ -3,6 +3,7 @@
 
 #include "battle.h"
 #include "game.h"
+#include "map.h"
 #include "pause.h"
 // #include "utils.h"
 
@@ -122,7 +123,7 @@ void DrawGame(tmx_map *map)
 {
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    render_map();
+    render_map(map);
 
     switch (state)
     {

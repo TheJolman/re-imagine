@@ -1,8 +1,6 @@
 #ifndef PAUSE
 #define PAUSE
 
-#include "raylib.h"
-
 extern int currentMenuIndex;
 
 /**

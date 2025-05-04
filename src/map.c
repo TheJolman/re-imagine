@@ -105,7 +105,7 @@ void draw_layer(tmx_map *map, tmx_layer *layer)
 void draw_tile(void *image, unsigned sx, unsigned sy, unsigned sw, unsigned sh, unsigned dx,
                unsigned dy, float opacity, unsigned flags)
 {
-    DrawTextureRec((Texture2D *)image, (Rectangle){sx, sy, sw, sh}, (Vector2){dx, dy},
+    DrawTextureRec(*(Texture2D *)image, (Rectangle){sx, sy, sw, sh}, (Vector2){dx, dy},
                    (Color){opacity, opacity, opacity, opacity});
 }
 

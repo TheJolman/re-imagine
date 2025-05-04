@@ -31,7 +31,7 @@ int main(void)
     tmx_img_load_func = raylib_tex_loader;
     tmx_img_free_func = raylib_free_tex;
 
-    char mapPath[] = "resources/map.tmx";
+    char mapPath[] = "resources/island.tmx";
     tmx_map *map = tmx_load(mapPath);
 
     InitWindow(screen.width, screen.height, "Game!");

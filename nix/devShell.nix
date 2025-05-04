@@ -24,23 +24,23 @@
   };
 
   default = pkgs.mkShell {
-    packages = with pkgs; [
-      cmake
-      pkg-config
-      ninja
-      gcc
-      gdb
-      clang-tools
-      # gcc.cc.lib
-      raylib
-      tmx
-      raylib-tileson
-    ] ++ lib.optional (!stdenv.isDarwin) valgrind;
+    packages = with pkgs;
+      [
+        cmake
+        pkg-config
+        ninja
+        gcc
+        gdb
+        clang-tools
+        raylib
+        tmx
+        raylib-tileson
+      ]
+      ++ lib.optional (!stdenv.isDarwin) valgrind;
 
     shellHook = ''
       ${self.checks.${system}.pre-commit-check.shellHook}
       export CC=gcc
-      export CMAKE_CXX_COMPILER=g++
       export CMAKE_GENERATOR=Ninja
     '';
   };

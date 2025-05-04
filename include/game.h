@@ -3,7 +3,6 @@
 
 #include <tmx.h>
 
-#include "map.h"
 #include "player.h"
 
 typedef enum
