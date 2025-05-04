@@ -37,6 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f cmake/Findraylib.cmake
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/include
+    mkdir -p $out/lib
+    cp $src/include/raylib-tileson.h $out/include/
+    find . -name "librarylib-tileson.a" -exec cp {} $out/lib \;
+
+    runHook postInstall
+  '';
+
   meta = {
     homepage = "https://github.com/RobLoach/raylib-tileson";
     description = "Use Tiled maps in raylib, through Tileson.";
