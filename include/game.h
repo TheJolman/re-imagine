@@ -1,11 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <tmx.h>
+
 #include "map.h"
 #include "player.h"
-
-#define RAYLIB_TILESON_IMPLEMENTATION
-#include "raylib-tileson.h"
 
 typedef enum
 {
@@ -32,6 +31,6 @@ void UpdateGame(void);
 /**
  * Draws a single frame
  */
-void DrawGame(void);
+void DrawGame(tmx_map *map);
 
 #endif // !GAME_H

@@ -1,13 +1,10 @@
-#include <stdlib.h>
-
 #include <raylib.h>
 #include <raymath.h>
-#include <tmx.h>
 
 #include "battle.h"
 #include "game.h"
 #include "pause.h"
-#include "utils.h"
+// #include "utils.h"
 
 Player player = {0};
 Camera2D camera = {0};
@@ -95,26 +92,9 @@ static void HandleInput(void)
     }
 }
 
-void *raylib_tex_loader(const char *path)
-{
-    Texture2D *returnValue = malloc(sizeof(Texture2D));
-    *returnValue = LoadTexture(path);
-    return returnValue;
-}
-
-void raylib_free_tex(void *ptr)
-{
-    UnloadTexture(*((Texture2D *)ptr));
-    free(ptr);
-}
-
 void InitGame(void)
 {
     state = FREE_ROAM;
-
-    tmx_img_load_func = raylib_tex_loader;
-    tmx_img_free_func = raylib_free_tex;
-    // render_map(map);
 
     // TODO: implement lazy loading
     image = LoadImage("resources/froge-front-1.png");
@@ -138,10 +118,11 @@ void InitGame(void)
 
 void UpdateGame(void) { HandleInput(); }
 
-void DrawGame(void)
+void DrawGame(tmx_map *map)
 {
     BeginDrawing();
     ClearBackground(RAYWHITE);
+    render_map();
 
     switch (state)
     {
