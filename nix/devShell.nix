@@ -31,7 +31,7 @@
       gcc
       gdb
       clang-tools
-      gcc.cc.lib
+      # gcc.cc.lib
       raylib
       tmx
       raylib-tileson
