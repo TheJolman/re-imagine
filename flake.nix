@@ -18,6 +18,18 @@
         lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
 
+        raylib-tileson = import ./nix/raylib-tileson.nix {
+          inherit
+            (pkgs)
+            lib
+            stdenv
+            fetchFromGitHub
+            cmake
+            raylib
+            xorg
+            ;
+        };
+
         tmx = import ./nix/tmx.nix {
           inherit
             (pkgs)
@@ -29,12 +41,22 @@
             libxml2
             ;
         };
+
+        devModules = import ./nix/devShell.nix {
+          inherit
+            pkgs
+            lib
+            system
+            self
+            pre-commit-hooks
+            tmx
+            raylib-tileson
+            ;
+        };
+
         packages = import ./nix/packages.nix {
           inherit pkgs;
           src = ./.;
-        };
-        devModules = import ./nix/devShell.nix {
-          inherit pkgs lib system self pre-commit-hooks tmx;
         };
       in {
         packages = packages;

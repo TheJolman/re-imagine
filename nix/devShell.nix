@@ -5,6 +5,7 @@
   self,
   pre-commit-hooks,
   tmx,
+  raylib-tileson,
 }: {
   checks = {
     pre-commit-check = pre-commit-hooks.lib.${system}.run {
@@ -30,14 +31,16 @@
       gcc
       gdb
       clang-tools
+      gcc.cc.lib
       raylib
       tmx
-      gcc.cc.lib
+      raylib-tileson
     ] ++ lib.optional (!stdenv.isDarwin) valgrind;
 
     shellHook = ''
       ${self.checks.${system}.pre-commit-check.shellHook}
       export CC=gcc
+      export CMAKE_CXX_COMPILER=g++
       export CMAKE_GENERATOR=Ninja
     '';
   };
