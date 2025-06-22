@@ -1,11 +1,12 @@
 {
-  mkDerivation,
+  stdenv,
   cmake,
   ninja,
   raylib,
+  tmx,
 }:
-mkDerivation {
-  pname = "raylib-game";
+stdenv.mkDerivation {
+  name = "raylib-game";
   version = "0.1.0";
   src = ../.;
 
@@ -16,6 +17,7 @@ mkDerivation {
 
   buildInputs = [
     raylib
+    tmx
   ];
 
   cmakeFlags = [

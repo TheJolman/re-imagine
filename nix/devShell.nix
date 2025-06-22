@@ -12,9 +12,9 @@
   raylib,
   tmx,
   valgrind,
-}: rec {
+}: let
   pre-commit-check = pre-commit-hooks {
-    src = ../src;
+    src = ../.;
     hooks = {
       clang-format = {
         enable = true;
@@ -26,8 +26,9 @@
       };
     };
   };
-
-  default = mkShell {
+in
+  mkShell {
+    buildInputs = pre-commit-check.enabledPackages;
     packages =
       [
         cmake
@@ -47,5 +48,4 @@
       export CC=gcc
       export CMAKE_GENERATOR=Ninja
     '';
-  };
-}
+  }

@@ -26,19 +26,8 @@ set(HEADERS
 
 # Skip pkg-config and directly set paths for raylib-tileson
 # These paths will be set from environment variables in the nix-shell
-set(RAYLIB_TILESON_INCLUDE_DIR "$ENV{RAYLIB_TILESON_INCLUDE}")
-set(RAYLIB_TILESON_LIB_DIR "$ENV{RAYLIB_TILESON_LIB}")
 
 # Check that paths are set
-if(NOT RAYLIB_TILESON_INCLUDE_DIR)
-  message(FATAL_ERROR "RAYLIB_TILESON_INCLUDE environment variable not set")
-endif()
-if(NOT RAYLIB_TILESON_LIB_DIR)
-  message(FATAL_ERROR "RAYLIB_TILESON_LIB environment variable not set")
-endif()
-
-message(STATUS "Using raylib-tileson include dir: ${RAYLIB_TILESON_INCLUDE_DIR}")
-message(STATUS "Using raylib-tileson lib dir: ${RAYLIB_TILESON_LIB_DIR}")
 
 # Check for raylib
 find_package(raylib 5.5 QUIET)

@@ -16,17 +16,14 @@
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        tmx = pkgs.callPackage ./nix/tmx.nix;
       in {
-        packages.default = pkgs.callPackage ./nix/package.nix {};
-        devShells.default =
-          (pkgs.callPackage ./nix/devShell.nix {
-            tmx = tmx;
-          }).default;
-        checks =
-          (pkgs.callPackage ./nix/devShell.nix {
-            pre-commit-hooks = pre-commit-hooks.${system}.run;
-          }).checks;
+        packages.default = pkgs.callPackage ./nix/package.nix {
+          tmx = pkgs.callPackage ./nix/package.nix {};
+        };
+        devShells.default = pkgs.callPackage ./nix/devShell.nix {
+          tmx = pkgs.callPackage ./nix/package.nix {};
+          pre-commit-hooks = pre-commit-hooks.lib.${system}.run;
+        };
       }
     );
 }
