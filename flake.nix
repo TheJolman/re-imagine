@@ -15,33 +15,18 @@
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
-        lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
-
-        tmx = import ./nix/tmx.nix {
-          inherit
-            (pkgs)
-            lib
-            stdenv
-            cmake
-            fetchFromGitHub
-            zlib
-            libxml2
-            ;
-        };
-        packages = import ./nix/packages.nix {
-          inherit pkgs;
-          src = ./.;
-        };
-        devModules = import ./nix/devShell.nix {
-          inherit pkgs lib system self pre-commit-hooks tmx;
-        };
+        tmx = pkgs.callPackage ./nix/tmx.nix;
       in {
-        packages = packages;
-        checks = devModules.checks;
-        devShells = {
-          default = devModules.default;
-        };
+        packages.default = pkgs.callPackage ./nix/package.nix {};
+        devShells.default =
+          (pkgs.callPackage ./nix/devShell.nix {
+            tmx = tmx;
+          }).default;
+        checks =
+          (pkgs.callPackage ./nix/devShell.nix {
+            pre-commit-hooks = pre-commit-hooks.${system}.run;
+          }).checks;
       }
     );
 }
