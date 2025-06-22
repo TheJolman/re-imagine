@@ -1,30 +1,35 @@
 {
-  pkgs,
+  mkShell,
   lib,
-  system,
-  self,
+  stdenv,
   pre-commit-hooks,
+  cmake,
+  pkg-config,
+  ninja,
+  gcc,
+  gdb,
+  clang-tools,
+  raylib,
   tmx,
-  raylib-tileson,
-}: {
-  checks = {
-    pre-commit-check = pre-commit-hooks.lib.${system}.run {
-      src = ../src;
-      hooks = {
-        clang-format = {
-          enable = true;
-          types_or = lib.mkForce ["c"];
-        };
-        # clang-tidy = {
-        #   enable = true;
-        #   types_or = lib.mkForce ["c"];
-        # };
+  valgrind,
+}: let
+  pre-commit-check = pre-commit-hooks {
+    src = ../.;
+    hooks = {
+      clang-format = {
+        enable = true;
+        types_or = lib.mkForce ["c"];
+      };
+      clang-tidy = {
+        enable = true;
+        types_or = lib.mkForce ["c"];
       };
     };
   };
-
-  default = pkgs.mkShell {
-    packages = with pkgs;
+in
+  mkShell {
+    buildInputs = pre-commit-check.enabledPackages;
+    packages =
       [
         cmake
         pkg-config
@@ -34,14 +39,13 @@
         clang-tools
         raylib
         tmx
-        raylib-tileson
+        gcc.cc.lib
       ]
-      ++ lib.optional (!stdenv.isDarwin) valgrind;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
     shellHook = ''
-      ${self.checks.${system}.pre-commit-check.shellHook}
+      ${pre-commit-check.shellHook}
       export CC=gcc
       export CMAKE_GENERATOR=Ninja
     '';
-  };
-}
+  }

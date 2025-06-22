@@ -6,7 +6,7 @@
   zlib,
   libxml2,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "tmx";
   version = "1.10.0";
   src = fetchFromGitHub {
@@ -39,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/baylej/tmx";
     description = "C tmx map loader";
-    changelog = "https://github.com/baylej/tmx/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/baylej/tmx/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ thejolman ];
     platforms = lib.platforms.all;
   };
-})
+}

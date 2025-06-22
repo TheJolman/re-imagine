@@ -15,54 +15,14 @@
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
-        lib = nixpkgs.lib;
         pkgs = nixpkgs.legacyPackages.${system};
-
-        raylib-tileson = import ./nix/raylib-tileson.nix {
-          inherit
-            (pkgs)
-            lib
-            stdenv
-            fetchFromGitHub
-            cmake
-            raylib
-            xorg
-            ;
-        };
-
-        tmx = import ./nix/tmx.nix {
-          inherit
-            (pkgs)
-            lib
-            stdenv
-            cmake
-            fetchFromGitHub
-            zlib
-            libxml2
-            ;
-        };
-
-        devModules = import ./nix/devShell.nix {
-          inherit
-            pkgs
-            lib
-            system
-            self
-            pre-commit-hooks
-            tmx
-            raylib-tileson
-            ;
-        };
-
-        packages = import ./nix/packages.nix {
-          inherit pkgs;
-          src = ./.;
-        };
       in {
-        packages = packages;
-        checks = devModules.checks;
-        devShells = {
-          default = devModules.default;
+        packages.default = pkgs.callPackage ./nix/package.nix {
+          tmx = pkgs.callPackage ./nix/package.nix {};
+        };
+        devShells.default = pkgs.callPackage ./nix/devShell.nix {
+          tmx = pkgs.callPackage ./nix/package.nix {};
+          pre-commit-hooks = pre-commit-hooks.lib.${system}.run;
         };
       }
     );
