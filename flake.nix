@@ -18,10 +18,10 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         packages.default = pkgs.callPackage ./nix/package.nix {
-          tmx = pkgs.callPackage ./nix/package.nix {};
+          tmx = pkgs.callPackage ./nix/tmx.nix {};
         };
         devShells.default = pkgs.callPackage ./nix/devShell.nix {
-          tmx = pkgs.callPackage ./nix/package.nix {};
+          tmx = pkgs.callPackage ./nix/tmx.nix {};
           pre-commit-hooks = pre-commit-hooks.lib.${system}.run;
         };
       }
