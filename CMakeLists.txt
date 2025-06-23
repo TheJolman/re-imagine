@@ -6,7 +6,8 @@ project(rpg-raylib C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(SOURCES src/main.c src/utils.c src/game.c src/pause.c src/battle.c src/map.c)
+set(SOURCES src/main.c src/utils.c src/game.c src/pause.c src/battle.c
+            src/map.c)
 
 # Check for raylib and install it if it's not found
 find_package(raylib 5.5 QUIET)
@@ -36,10 +37,21 @@ if(NOT raylib_FOUND)
   FetchContent_MakeAvailable(raylib)
 endif()
 
-# TMX library
+# required for TMX library
 find_package(LibXml2 REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(tmx 1.10 REQUIRED)
+
+find_package(tmx 1.10 QUIET)
+if(NOT tmx_FOUND)
+  include(FetchContent)
+  set(FETCHCONTENT_QUIET FALSE)
+
+  FetchContent_Declare(
+    tmx
+    GIT_REPOSITORY https://github.com/baylej/tmx
+    GIT_TAG tmx_1.10.0
+    GIT_PROGRESS TRUE)
+endif()
 
 # Target
 add_executable(${PROJECT_NAME} ${SOURCES})
