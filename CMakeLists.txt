@@ -68,7 +68,6 @@ elseif(APPLE)
                             "-framework OpenGL")
 endif()
 
-# install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INCLUDEDIR}/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 # Code quality targets
