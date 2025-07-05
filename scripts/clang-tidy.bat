@@ -6,12 +6,6 @@ if %errorlevel% == 0 (
     echo Running run-clang-tidy...
     run-clang-tidy %*
 ) else (
-    where clang-tidy >nul 2>&1
-    if %errorlevel% == 0 (
-        echo Running clang-tidy...
-        clang-tidy %*
-    ) else (
-        echo Error: Neither run-clang-tidy nor clang-tidy found in PATH
-        exit /b 1
-    )
+    echo Error: run-clang-tidy not found in PATH
+    exit /b 1
 )
