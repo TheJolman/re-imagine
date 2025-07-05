@@ -68,5 +68,29 @@ elseif(APPLE)
                             "-framework OpenGL")
 endif()
 
-# install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INCLUDEDIR}/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+# Code quality targets
+if(WIN32)
+  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.bat")
+  set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.bat")
+else()
+  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.sh")
+  set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.sh")
+endif()
+
+# Add clang-tidy target
+add_custom_target(tidy
+  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Running clang-tidy"
+  VERBATIM
+)
+
+# Add clang-format target
+add_custom_target(format
+  COMMAND ${CLANG_FORMAT_SCRIPT} -i ${SOURCES}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Running clang-format"
+  VERBATIM
+)
