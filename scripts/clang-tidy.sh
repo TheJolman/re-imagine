@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Check if run-clang-tidy is available first, then fallback to clang-tidy
-if command -v run-clang-tidy &> /dev/null; then
-    echo "Running run-clang-tidy..."
-    run-clang-tidy "$@"
+# Check if clang-tidy is available
+if command -v clang-tidy &> /dev/null; then
+    echo "Running clang-tidy..."
+    clang-tidy -p build "$@"
 else
-    echo "Error: run-clang-tidy found in PATH"
+    echo "Error: clang-tidy not found in PATH"
     exit 1
 fi

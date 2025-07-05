@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if clang-format is available
 if command -v clang-format &> /dev/null; then
