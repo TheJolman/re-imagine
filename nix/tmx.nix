@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  propogatedBuildInputs = [
+  propagatedBuildInputs = [
     zlib
     libxml2
   ];
