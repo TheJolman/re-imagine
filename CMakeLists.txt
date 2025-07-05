@@ -67,3 +67,6 @@ elseif(APPLE)
     ${PROJECT_NAME} PRIVATE "-framework IOKit" "-framework Cocoa"
                             "-framework OpenGL")
 endif()
+
+# install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INCLUDEDIR}/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)

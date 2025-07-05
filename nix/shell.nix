@@ -30,6 +30,7 @@ in
 
     CC = "gcc";
     CMAKE_GENERATOR = "Ninja";
+    CMAKE_BUILD_TYPE = "Debug";
 
     shellHook = ''
       echo "Dev shell activated."

@@ -25,8 +25,8 @@ stdenv.mkDerivation {
     "-G Ninja"
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp raylib-game $out/bin/
-  '';
+  # installPhase = ''
+  #   mkdir -p $out/bin
+  #   cp raylib-game $out/bin/
+  # '';
 }
