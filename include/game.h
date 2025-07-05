@@ -30,6 +30,6 @@ void UpdateGame(void);
 /**
  * Draws a single frame
  */
-void DrawGame(tmx_map *map);
+void DrawGame(/* tmx_map *map */);
 
 #endif // !GAME_H

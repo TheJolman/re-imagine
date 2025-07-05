@@ -28,11 +28,11 @@ int main(void)
     screen.width = SCREEN_WIDTH;
     screen.height = SCREEN_HEIGHT;
 
-    tmx_img_load_func = raylib_tex_loader;
-    tmx_img_free_func = raylib_free_tex;
-
-    char mapPath[] = "resources/island.tmx";
-    tmx_map *map = tmx_load(mapPath);
+    // tmx_img_load_func = raylib_tex_loader;
+    // tmx_img_free_func = raylib_free_tex;
+    //
+    // char mapPath[] = "resources/island.tmx";
+    // tmx_map *map = tmx_load(mapPath);
 
     InitWindow(screen.width, screen.height, "Game!");
     SetTargetFPS(60);
@@ -42,10 +42,10 @@ int main(void)
     while (true)
     {
         UpdateGame();
-        DrawGame(map);
+        DrawGame(/* map */);
     }
 
-    tmx_map_free(map);
+    // tmx_map_free(map);
     CloseWindow();
 
     return 0;
