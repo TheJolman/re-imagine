@@ -80,7 +80,7 @@ else()
 endif()
 
 # Add clang-tidy target
-add_custom_target(clang-tidy
+add_custom_target(tidy
   COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Running clang-tidy"
@@ -88,7 +88,7 @@ add_custom_target(clang-tidy
 )
 
 # Add clang-format target
-add_custom_target(clang-format
+add_custom_target(format
   COMMAND ${CLANG_FORMAT_SCRIPT} -i ${SOURCES}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Running clang-format"
