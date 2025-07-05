@@ -11,8 +11,9 @@
  *
  ********************************************************************************************/
 
-#include "raylib.h"
-#include "stdbool.h"
+#include <raylib.h>
+#include <stdbool.h>
+#include <tmx.h>
 
 #include "game.h"
 #include "map.h"
@@ -22,23 +23,30 @@
 
 Screen screen = {0};
 
-int main(void) {
+int main(void)
+{
+    screen.width = SCREEN_WIDTH;
+    screen.height = SCREEN_HEIGHT;
 
-  screen.width = SCREEN_WIDTH;
-  screen.height = SCREEN_HEIGHT;
+    // tmx_img_load_func = raylib_tex_loader;
+    // tmx_img_free_func = raylib_free_tex;
+    //
+    // char mapPath[] = "resources/island.tmx";
+    // tmx_map *map = tmx_load(mapPath);
 
-  InitWindow(screen.width, screen.height, "Game!");
-  SetTargetFPS(60);
-  InitGame();
+    InitWindow(screen.width, screen.height, "Game!");
+    SetTargetFPS(60);
+    InitGame();
 
-  // Main game loop
-  while (true) {
-    UpdateGame();
-    DrawGame();
-  }
+    // Main game loop
+    while (true)
+    {
+        UpdateGame();
+        DrawGame(/* map */);
+    }
 
-  UnloadMap(tileMap);
-  CloseWindow();
+    // tmx_map_free(map);
+    CloseWindow();
 
-  return 0;
+    return 0;
 }

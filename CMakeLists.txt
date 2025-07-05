@@ -1,35 +1,15 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
-set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-project(raylib-game C)
+project(rpg-raylib C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(SOURCES
-  src/main.c
-  src/utils.c
-  src/game.c
-  src/pause.c
-  src/battle.c
-)
+set(SOURCES src/main.c src/utils.c src/game.c src/pause.c src/battle.c
+            src/map.c)
 
-set(HEADERS
-  src/map.h
-  src/utils.h
-  src/player.h
-  src/game.h
-  src/pause.h
-  src/battle.h
-)
-
-# Skip pkg-config and directly set paths for raylib-tileson
-# These paths will be set from environment variables in the nix-shell
-
-# Check that paths are set
-
-# Check for raylib
+# Check for raylib and install it if it's not found
 find_package(raylib 5.5 QUIET)
 
 if(NOT raylib_FOUND)
@@ -42,9 +22,11 @@ if(NOT raylib_FOUND)
   set(BUILD_SHARED_LIBS
       OFF
       CACHE BOOL "" FORCE)
-  set(USE_MSVC_RUNTIME_LIBRARY_DLL
-      ON
-      CACHE BOOL "" FORCE)
+  if(WIN32)
+    set(USE_MSVC_RUNTIME_LIBRARY_DLL
+        ON
+        CACHE BOOL "" FORCE)
+  endif()
 
   FetchContent_Declare(
     raylib
@@ -53,30 +35,38 @@ if(NOT raylib_FOUND)
     GIT_PROGRESS TRUE)
 
   FetchContent_MakeAvailable(raylib)
-  set(RAYLIB_LIBRARY raylib)
-else()
-  set(RAYLIB_LIBRARY raylib)
 endif()
 
-if(WIN32)
-  set(PLATFORM_LIBS winmm opengl32 gdi32 glu32)
+# required for TMX library
+find_package(LibXml2 REQUIRED)
+find_package(ZLIB REQUIRED)
+
+find_package(tmx 1.10 QUIET)
+if(NOT tmx_FOUND)
+  include(FetchContent)
+  set(FETCHCONTENT_QUIET FALSE)
+
+  FetchContent_Declare(
+    tmx
+    GIT_REPOSITORY https://github.com/baylej/tmx
+    GIT_TAG tmx_1.10.0
+    GIT_PROGRESS TRUE)
 endif()
 
 # Target
 add_executable(${PROJECT_NAME} ${SOURCES})
-
-# Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE ${RAYLIB_TILESON_INCLUDE_DIR})
-
-# Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE stdc++)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${RAYLIB_LIBRARY})
-target_link_libraries(${PROJECT_NAME} PRIVATE "${RAYLIB_TILESON_LIB_DIR}/libraylib-tileson.a")
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
+                                              ZLIB::ZLIB)
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 if(WIN32)
+  set(PLATFORM_LIBS winmm opengl32 gdi32 glu32)
   target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
 elseif(APPLE)
   target_link_libraries(
     ${PROJECT_NAME} PRIVATE "-framework IOKit" "-framework Cocoa"
                             "-framework OpenGL")
 endif()
+
+# install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INCLUDEDIR}/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)

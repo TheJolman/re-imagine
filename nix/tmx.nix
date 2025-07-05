@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  propagatedBuildInputs = [
+    zlib
+    libxml2
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
