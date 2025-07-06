@@ -53,6 +53,10 @@ if(NOT tmx_FOUND)
     GIT_PROGRESS TRUE)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_definitions(DEBUG)
+endif()
+
 # Target
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
