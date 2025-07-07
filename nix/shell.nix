@@ -11,7 +11,6 @@
   raylib,
   tmx,
   valgrind,
-  pname,
 }:
 mkShell {
   packages =
@@ -32,7 +31,7 @@ mkShell {
   CMAKE_GENERATOR = "Ninja";
 
   shellHook = ''
-    alias ${pname}="./build/${pname}"
+    export PATH="$PWD/build:$PATH"
     echo "Dev shell activated."
   '';
 }
