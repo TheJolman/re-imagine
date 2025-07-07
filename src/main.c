@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <tmx.h>
 
+#include "debug.h"
 #include "game.h"
 #include "map.h"
 
@@ -27,6 +28,8 @@ int main(void)
 {
     screen.width = SCREEN_WIDTH;
     screen.height = SCREEN_HEIGHT;
+
+    debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
 
     // tmx_img_load_func = raylib_tex_loader;
     // tmx_img_free_func = raylib_free_tex;
