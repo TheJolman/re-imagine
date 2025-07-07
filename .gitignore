@@ -6,3 +6,4 @@ build/
 .cache/
 .pre-commit-config.yaml
 result
+CMakeFiles/

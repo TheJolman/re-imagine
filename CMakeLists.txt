@@ -53,6 +53,14 @@ if(NOT tmx_FOUND)
     GIT_PROGRESS TRUE)
 endif()
 
+# Use debug build by default
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_definitions(DEBUG)
+endif()
+
 # Target
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
@@ -80,17 +88,17 @@ else()
 endif()
 
 # Add clang-tidy target
-add_custom_target(tidy
+add_custom_target(
+  tidy
   COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Running clang-tidy"
-  VERBATIM
-)
+  VERBATIM)
 
 # Add clang-format target
-add_custom_target(format
+add_custom_target(
+  format
   COMMAND ${CLANG_FORMAT_SCRIPT} -i ${SOURCES}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Running clang-format"
-  VERBATIM
-)
+  VERBATIM)
