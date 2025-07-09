@@ -11,6 +11,7 @@
   raylib,
   tmx,
   valgrind,
+  glfw
 }:
 mkShell {
   packages =
@@ -24,6 +25,7 @@ mkShell {
       raylib
       tmx
       gcc.cc.lib
+      glfw
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
