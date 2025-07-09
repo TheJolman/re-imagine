@@ -21,7 +21,6 @@
         };
         devShells.default = pkgs.callPackage ./nix/shell.nix {
           tmx = pkgs.callPackage ./nix/tmx.nix {};
-          pname = pname;
         };
       }
     );
