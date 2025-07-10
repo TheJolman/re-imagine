@@ -19,17 +19,19 @@ void BattleScene(void)
 
     // TODO:: get rid of magic numbers
 
+    Mon mon = createMon("froge");
+
     //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
                        screen.width - windowMargin * 2, textHeight, BLACK);
 
     // Render art for enemy mon
-    DrawTextureEx(froge.frontTexture, enemyPosition, 0.0f, froge.scale, WHITE);
+    DrawTextureEx(mon.textures.frontTexture, enemyPosition, 0.0f, mon.textures.scale, WHITE);
     // Draw hp bar for enemy mon
 
 
     // Render art for players mon
-    DrawTextureEx(froge.backTexture, playerPosition, 0.0f, froge.scale, WHITE);
+    DrawTextureEx(mon.textures.backTexture, playerPosition, 0.0f, mon.textures.scale, WHITE);
     // Draw hp bar for players mon
 
     // Draw experience bar for players mon

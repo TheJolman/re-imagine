@@ -11,7 +11,7 @@ Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
 Image image = {0};
-MonTexture froge = {0};
+MonTextures froge = {0};
 
 static void MovePlayer(void)
 {

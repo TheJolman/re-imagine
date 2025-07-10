@@ -12,13 +12,16 @@ typedef struct
 
 typedef struct
 {
-    char *name;
-    unsigned damage;
+    const char *name;
+    const unsigned damage;
 } Move;
 
 typedef struct
 {
+    const char *name;
     MonTextures textures;
     Move moves[4];
     unsigned hp;
 } Mon;
+
+Mon createMon(char *name);
