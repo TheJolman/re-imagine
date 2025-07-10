@@ -98,10 +98,10 @@ void InitGame(void)
     state = FREE_ROAM;
 
     // TODO: implement lazy loading
-    image = LoadImage("resources/froge-front-1.png");
+    image = LoadImage("assets/froge-front.png");
     froge.frontTexture = LoadTextureFromImage(image);
     UnloadImage(image);
-    image = LoadImage("resources/froge-back-1.png");
+    image = LoadImage("assets/froge-back.png");
     froge.backTexture = LoadTextureFromImage(image);
     UnloadImage(image);
     froge.scale = 0.4f;
