@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tmx.h>
+#include <stdio.h>
 
 #include "debug.h"
 #include "game.h"
