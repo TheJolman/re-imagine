@@ -123,7 +123,7 @@ void UpdateGame(void) { HandleInput(); }
 void DrawGame(/* tmx_map *map */)
 {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
     // render_map(map);
 
     switch (state)
