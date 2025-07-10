@@ -10,8 +10,8 @@
 Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
-Image image = {0};
-MonTextures froge = {0};
+// Image image = {0};
+// MonTextures froge = {0};
 
 static void MovePlayer(void)
 {
@@ -98,12 +98,13 @@ void InitGame(void)
     state = FREE_ROAM;
 
     // TODO: implement lazy loading
-    image = LoadImage("assets/froge-front.png");
-    froge.frontTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
-    image = LoadImage("assets/froge-back.png");
-    froge.backTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
+
+    // image = LoadImage("assets/froge-front.png");
+    // froge.frontTexture = LoadTextureFromImage(image);
+    // UnloadImage(image);
+    // image = LoadImage("assets/froge-back.png");
+    // froge.backTexture = LoadTextureFromImage(image);
+    // UnloadImage(image);
     froge.scale = 0.4f;
     froge.tint = WHITE;
 

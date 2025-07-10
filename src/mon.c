@@ -1,4 +1,5 @@
 #include "mon.h"
+#include "debug.h"
 #include <string.h>
 
 static void loadMonTextures(Mon *mon)
@@ -10,14 +11,18 @@ static void loadMonTextures(Mon *mon)
     strcpy(frontTexturePath, basePath);
     strcpy(frontTexturePath, mon->name);
     strcat(frontTexturePath, "-front.png");
+    debug_log("Loading asset: %s", frontTexturePath);
     Image image = LoadImage(frontTexturePath);
+    UnloadImage(image);
     mon->textures.frontTexture = LoadTextureFromImage(image);
 
     char backTexturePath[256];
     strcpy(backTexturePath, basePath);
-    strcpy(frontTexturePath, mon->name);
+    strcpy(backTexturePath, mon->name);
     strcat(backTexturePath, "-back.png");
+    debug_log("Loading asset: %s", backTexturePath);
     image = LoadImage(backTexturePath);
+    UnloadImage(image);
     mon->textures.backTexture = LoadTextureFromImage(image);
 
     // Don't really have a use for these
