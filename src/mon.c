@@ -1,6 +1,8 @@
 #include "mon.h"
 #include "debug.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static void loadMonTextures(Mon *mon)
 {
@@ -9,6 +11,10 @@ static void loadMonTextures(Mon *mon)
     char frontTexturePath[256];
     auto basePath = "assets/";
     strcpy(frontTexturePath, basePath);
+    if (!mon->name) {
+        fprintf(stderr, "ERROR: Can not load texture of mon with no name");
+        exit(1);
+    }
     strcpy(frontTexturePath, mon->name);
     strcat(frontTexturePath, "-front.png");
     debug_log("Loading asset: %s", frontTexturePath);
@@ -32,7 +38,7 @@ static void loadMonTextures(Mon *mon)
 
 Mon createMon(char *name)
 {
-    Mon mon = {0};
+    Mon mon = {name = name};
     loadMonTextures(&mon);
 
     // TODO: Initialize other values
