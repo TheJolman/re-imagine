@@ -105,8 +105,8 @@ void InitGame(void)
     // image = LoadImage("assets/froge-back.png");
     // froge.backTexture = LoadTextureFromImage(image);
     // UnloadImage(image);
-    froge.scale = 0.4f;
-    froge.tint = WHITE;
+    // froge.scale = 0.4f;
+    // froge.tint = WHITE;
 
     player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
     player.baseSpeed = 5.0f;
