@@ -5,18 +5,18 @@ static void loadMonTextures(Mon *mon)
 {
     // NOTE: We could specialize this for players and enemies since players only see the back
     // and enemies only see the front.
+    char frontTexturePath[256];
     auto basePath = "assets/";
-    auto baseName = strcpy("", mon->name);
-
-    const char *frontTextureFileName = strcat(baseName, "-front.png");
-    const char *backTextureFileName = strcat(baseName, "-back.png");
-
-    auto frontTexturePath = strcat(basePath, frontTextureFileName);
-    auto backTexturePath = strcat(basePath, backTextureFileName);
-
+    strcpy(frontTexturePath, basePath);
+    strcpy(frontTexturePath, mon->name);
+    strcat(frontTexturePath, "-front.png");
     Image image = LoadImage(frontTexturePath);
     mon->textures.frontTexture = LoadTextureFromImage(image);
 
+    char backTexturePath[256];
+    strcpy(backTexturePath, basePath);
+    strcpy(frontTexturePath, mon->name);
+    strcat(backTexturePath, "-back.png");
     image = LoadImage(backTexturePath);
     mon->textures.backTexture = LoadTextureFromImage(image);
 
