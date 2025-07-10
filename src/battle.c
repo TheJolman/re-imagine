@@ -1,4 +1,5 @@
 #include "battle.h"
+#include "mon.h"
 #include "map.h"
 #include "raylib.h"
 
@@ -16,17 +17,18 @@ void BattleScene(void)
     const Vector2 enemyPosition = {40, 40};
     const Vector2 playerPosition = {screen.width - 500, screen.height - 500};
 
-    // Draw text box
+    // TODO:: get rid of magic numbers
+
+    //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
                        screen.width - windowMargin * 2, textHeight, BLACK);
 
-    // Draw square for enemy mon (art placeholder)
+    // Render art for enemy mon
     DrawTextureEx(froge.frontTexture, enemyPosition, 0.0f, froge.scale, WHITE);
-
     // Draw hp bar for enemy mon
 
-    // Draw square for players mon (art placeholder)
-    DrawRectangle(screen.width - 440, screen.height - 440, 400, 300, BLUE);
+
+    // Render art for players mon
     DrawTextureEx(froge.backTexture, playerPosition, 0.0f, froge.scale, WHITE);
     // Draw hp bar for players mon
 

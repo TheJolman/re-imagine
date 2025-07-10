@@ -1,17 +1,10 @@
 #ifndef BATTLE
 #define BATTLE
 
-#include "raylib.h"
+// #include "raylib.h"
+#include "mon.h"
 
-typedef struct
-{
-    Texture2D frontTexture;
-    Texture2D backTexture;
-    float scale;
-    Color tint;
-} MonTexture;
-
-extern MonTexture froge;
+extern MonTextures froge;
 
 void BattleScene(void);
 
