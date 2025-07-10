@@ -15,16 +15,17 @@ static void loadMonTextures(Mon *mon)
         fprintf(stderr, "ERROR: Can not load texture of mon with no name");
         exit(1);
     }
-    strcpy(frontTexturePath, mon->name);
+    strcat(frontTexturePath, mon->name);
     strcat(frontTexturePath, "-front.png");
     debug_log("Loading asset: %s", frontTexturePath);
+    printf("Loading asset: %s", frontTexturePath);
     Image image = LoadImage(frontTexturePath);
     mon->textures.frontTexture = LoadTextureFromImage(image);
     UnloadImage(image);
 
     char backTexturePath[256];
     strcpy(backTexturePath, basePath);
-    strcpy(backTexturePath, mon->name);
+    strcat(backTexturePath, mon->name);
     strcat(backTexturePath, "-back.png");
     debug_log("Loading asset: %s", backTexturePath);
     image = LoadImage(backTexturePath);
