@@ -13,8 +13,8 @@ static void loadMonTextures(Mon *mon)
     strcat(frontTexturePath, "-front.png");
     debug_log("Loading asset: %s", frontTexturePath);
     Image image = LoadImage(frontTexturePath);
-    UnloadImage(image);
     mon->textures.frontTexture = LoadTextureFromImage(image);
+    UnloadImage(image);
 
     char backTexturePath[256];
     strcpy(backTexturePath, basePath);
@@ -22,8 +22,8 @@ static void loadMonTextures(Mon *mon)
     strcat(backTexturePath, "-back.png");
     debug_log("Loading asset: %s", backTexturePath);
     image = LoadImage(backTexturePath);
-    UnloadImage(image);
     mon->textures.backTexture = LoadTextureFromImage(image);
+    UnloadImage(image);
 
     // Don't really have a use for these
     mon->textures.scale = 0.0f;
