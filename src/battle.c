@@ -3,8 +3,11 @@
 #include "mon.h"
 #include "raylib.h"
 
-const int windowMargin = 50;
-const int textHeight = 150;
+constexpr int windowMargin = 50;
+constexpr int textHeight = 150;
+constexpr Color TINT = WHITE;
+constexpr float ROTATION = 0.0;
+constexpr float SCALE = 0.0;
 
 Mon *playerMon = nullptr;
 Mon *enemyMon = nullptr;
@@ -12,15 +15,13 @@ Mon *enemyMon = nullptr;
 void renderPlayerMon(Mon *mon)
 {
     const Vector2 playerPosition = {screen.width - 500, screen.height - 500};
-    DrawTextureEx(playerMon->textures.backTexture, playerPosition, 0.0f, playerMon->textures.scale,
-                  playerMon->textures.tint);
+    DrawTextureEx(playerMon->textures.backTexture, playerPosition, ROTATION, SCALE, TINT);
 }
 
 void renderEnemyMon(Mon *mon)
 {
     const Vector2 enemyPosition = {40, 40};
-    DrawTextureEx(playerMon->textures.frontTexture, enemyPosition, 0.0f, playerMon->textures.scale,
-                  playerMon->textures.tint);
+    DrawTextureEx(playerMon->textures.frontTexture, enemyPosition, ROTATION, SCALE, TINT);
 }
 
 void BattleScene(void)

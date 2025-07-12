@@ -31,10 +31,6 @@ void loadMonTextures(Mon *mon)
     image = LoadImage(backTexturePath);
     mon->textures.backTexture = LoadTextureFromImage(image);
     UnloadImage(image);
-
-    // Don't really have a use for these
-    mon->textures.scale = 0.0f;
-    mon->textures.tint = WHITE;
 }
 
 Mon *createMon(char *name)

@@ -6,8 +6,6 @@ typedef struct
 {
     Texture2D frontTexture;
     Texture2D backTexture;
-    float scale;
-    Color tint;
 } MonTextures;
 
 typedef struct
