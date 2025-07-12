@@ -6,12 +6,8 @@
 const int windowMargin = 50;
 const int textHeight = 150;
 
-Mon playerMon = {0};
-Mon enemyMon = {0};
-
-// extern Image frogeFrontImage;
-// extern Texture2D frogeFrontTexture;
-// const float frogeScale = 0.4f;
+Mon *playerMon = nullptr;
+Mon *enemyMon = nullptr;
 
 void BattleScene(void)
 {
@@ -22,21 +18,29 @@ void BattleScene(void)
 
     // TODO:: get rid of magic numbers
 
-    if (!IsTextureValid(playerMon.textures.backTexture))
-        loadMonTextures(&playerMon);
+    // Hardcode only asset for now
+    if (!playerMon)
+        *playerMon = createMon("froge");
+    if (!IsTextureValid(playerMon->textures.backTexture))
+        loadMonTextures(playerMon);
+
+    if (!enemyMon)
+        *enemyMon = createMon("froge");
+    if (!IsTextureValid(enemyMon->textures.backTexture))
+        loadMonTextures(enemyMon);
 
     //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
                        screen.width - windowMargin * 2, textHeight, BLACK);
 
     // Render art for enemy mon
-    DrawTextureEx(playerMon.textures.frontTexture, enemyPosition, 0.0f, playerMon.textures.scale,
-                  playerMon.textures.tint);
+    DrawTextureEx(playerMon->textures.frontTexture, enemyPosition, 0.0f, playerMon->textures.scale,
+                  playerMon->textures.tint);
     // Draw hp bar for enemy mon
 
     // Render art for players mon
-    DrawTextureEx(playerMon.textures.backTexture, playerPosition, 0.0f, playerMon.textures.scale,
-                  playerMon.textures.tint);
+    DrawTextureEx(playerMon->textures.backTexture, playerPosition, 0.0f, playerMon->textures.scale,
+                  playerMon->textures.tint);
     // Draw hp bar for players mon
 
     // Draw experience bar for players mon

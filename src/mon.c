@@ -1,17 +1,17 @@
 #include "mon.h"
 #include "debug.h"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void loadMonTextures(Mon *mon)
 {
-    // NOTE: We could specialize this for players and enemies since players only see the back
-    // and enemies only see the front.
+    // NOTE: We don't need to load both images at once
     char frontTexturePath[256];
     auto basePath = "assets/";
     strcpy(frontTexturePath, basePath);
-    if (!mon->name) {
+    if (!mon->name)
+    {
         fprintf(stderr, "ERROR: Can not load texture of mon with no name");
         exit(1);
     }
@@ -40,7 +40,7 @@ void loadMonTextures(Mon *mon)
 Mon createMon(char *name)
 {
     Mon mon = {name = name};
-    loadMonTextures(&mon);
+    // loadMonTextures(&mon);
 
     // TODO: Initialize other values
 

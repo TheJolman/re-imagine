@@ -4,7 +4,8 @@
 // #include "raylib.h"
 #include "mon.h"
 
-extern MonTextures froge;
+// extern Mon enemyMon;
+// extern Mon playerMon;
 
 void BattleScene(void);
 
