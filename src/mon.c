@@ -37,12 +37,10 @@ void loadMonTextures(Mon *mon)
     mon->textures.tint = WHITE;
 }
 
-Mon createMon(char *name)
+Mon *createMon(char *name)
 {
-    Mon mon = {name = name};
-    // loadMonTextures(&mon);
-
+    Mon *mon = malloc(sizeof(Mon));
+    mon->name = name;
     // TODO: Initialize other values
-
     return mon;
 }

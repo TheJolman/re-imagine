@@ -24,5 +24,5 @@ typedef struct
     unsigned hp;
 } Mon;
 
-Mon createMon(char *name);
+Mon *createMon(char *name);
 void loadMonTextures(Mon *mon);
