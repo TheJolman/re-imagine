@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void loadMonTextures(Mon *mon)
+void loadMonTextures(Mon *mon)
 {
     // NOTE: We could specialize this for players and enemies since players only see the back
     // and enemies only see the front.

@@ -1,10 +1,13 @@
 #include "battle.h"
-#include "mon.h"
 #include "map.h"
+#include "mon.h"
 #include "raylib.h"
 
 const int windowMargin = 50;
 const int textHeight = 150;
+
+Mon playerMon = {0};
+Mon enemyMon = {0};
 
 // extern Image frogeFrontImage;
 // extern Texture2D frogeFrontTexture;
@@ -19,19 +22,21 @@ void BattleScene(void)
 
     // TODO:: get rid of magic numbers
 
-    Mon mon = createMon("froge");
+    if (!IsTextureValid(playerMon.textures.backTexture))
+        loadMonTextures(&playerMon);
 
     //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
                        screen.width - windowMargin * 2, textHeight, BLACK);
 
     // Render art for enemy mon
-    DrawTextureEx(mon.textures.frontTexture, enemyPosition, 0.0f, mon.textures.scale, WHITE);
+    DrawTextureEx(playerMon.textures.frontTexture, enemyPosition, 0.0f, playerMon.textures.scale,
+                  playerMon.textures.tint);
     // Draw hp bar for enemy mon
 
-
     // Render art for players mon
-    DrawTextureEx(mon.textures.backTexture, playerPosition, 0.0f, mon.textures.scale, WHITE);
+    DrawTextureEx(playerMon.textures.backTexture, playerPosition, 0.0f, playerMon.textures.scale,
+                  playerMon.textures.tint);
     // Draw hp bar for players mon
 
     // Draw experience bar for players mon

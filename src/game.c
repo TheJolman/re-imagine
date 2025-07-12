@@ -5,6 +5,7 @@
 #include "game.h"
 #include "map.h"
 #include "pause.h"
+#include "mon.h"
 // #include "utils.h"
 
 Player player = {0};
