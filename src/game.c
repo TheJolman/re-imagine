@@ -62,6 +62,7 @@ static void HandleInput(void)
 
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B))
+            EndBattleScene();
             state = FREE_ROAM;
         break;
 
@@ -149,4 +150,8 @@ void DrawGame(/* tmx_map *map */)
     }
 
     EndDrawing();
+}
+
+void CleanupGame(void) {
+
 }

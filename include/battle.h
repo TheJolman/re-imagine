@@ -8,5 +8,6 @@
 // extern Mon playerMon;
 
 void BattleScene(void);
+void EndBattleScene(void);
 
 #endif // !BATTLE
