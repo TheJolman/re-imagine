@@ -44,6 +44,8 @@ static void MovePlayer(void)
     Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
                            player.position.y + moveDirection.y * player.speed};
 
+    player.position = newPosition;
+
     // Camera
     camera.target = player.position;
 }
@@ -135,6 +137,7 @@ void DrawGame(/* tmx_map *map */)
     case FREE_ROAM:
         BeginMode2D(camera);
 
+        DrawRectangle(200, 200, 50, 50, BLUE);
         // Draw player
         DrawCircleV(player.position, player.size / 2, RED);
 
