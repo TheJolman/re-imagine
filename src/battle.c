@@ -8,7 +8,7 @@ constexpr int windowMargin = 50;
 constexpr int textHeight = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
-constexpr float SCALE = 0.0;
+constexpr float SCALE = 1.0;
 
 Mon *playerMon = nullptr;
 Mon *enemyMon = nullptr;
@@ -26,7 +26,7 @@ void renderMon(Mon *mon) {
 void renderEnemyMon(Mon *mon)
 {
     const Vector2 enemyPosition = {40, 40};
-    DrawTextureEx(*playerMon->texture, enemyPosition, ROTATION, SCALE, TINT);
+    DrawTextureEx(*enemyMon->texture, enemyPosition, ROTATION, SCALE, TINT);
 }
 
 void BattleScene(void)
@@ -58,4 +58,6 @@ void EndBattleScene(void)
 {
     destroyMon(playerMon);
     destroyMon(enemyMon);
+    playerMon = nullptr;
+    enemyMon = nullptr;
 }

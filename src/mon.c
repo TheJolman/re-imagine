@@ -44,14 +44,22 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
 Mon *createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
-    mon->name = name;
-    mon->name = name;
+    mon->name = malloc(strlen(name) + 1);
+    strcpy((char*)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
     // TODO: Initialize other values
     return mon;
 }
 
 void destroyMon(Mon *mon) {
-    UnloadTexture(*mon->texture);
-    free(mon);
+    if (mon) {
+        if (mon->texture) {
+            UnloadTexture(*mon->texture);
+            free(mon->texture);
+        }
+        if (mon->name) {
+            free((char*)mon->name);
+        }
+        free(mon);
+    }
 }
