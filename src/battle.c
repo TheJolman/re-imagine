@@ -54,3 +54,9 @@ void BattleScene(void)
 
     // Draw experience bar for players mon
 }
+
+void EndBattleScene(void)
+{
+    UnloadTexture(playerMon->backTexture);
+    UnloadTexture(playerMon->frontTexture);
+}
