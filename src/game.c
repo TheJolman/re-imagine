@@ -4,8 +4,8 @@
 #include "battle.h"
 #include "game.h"
 #include "map.h"
-#include "pause.h"
 #include "mon.h"
+#include "pause.h"
 // #include "utils.h"
 
 Player player = {0};
@@ -62,8 +62,10 @@ static void HandleInput(void)
 
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B))
+        {
             EndBattleScene();
             state = FREE_ROAM;
+        }
         break;
 
     case PAUSED:
@@ -152,6 +154,4 @@ void DrawGame(/* tmx_map *map */)
     EndDrawing();
 }
 
-void CleanupGame(void) {
-
-}
+void CleanupGame(void) {}
