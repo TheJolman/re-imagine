@@ -15,13 +15,13 @@ Mon *enemyMon = nullptr;
 void renderPlayerMon(Mon *mon)
 {
     const Vector2 playerPosition = {screen.width - 500, screen.height - 500};
-    DrawTextureEx(playerMon->textures.backTexture, playerPosition, ROTATION, SCALE, TINT);
+    DrawTextureEx(playerMon->backTexture, playerPosition, ROTATION, SCALE, TINT);
 }
 
 void renderEnemyMon(Mon *mon)
 {
     const Vector2 enemyPosition = {40, 40};
-    DrawTextureEx(playerMon->textures.frontTexture, enemyPosition, ROTATION, SCALE, TINT);
+    DrawTextureEx(playerMon->frontTexture, enemyPosition, ROTATION, SCALE, TINT);
 }
 
 void BattleScene(void)
@@ -33,12 +33,12 @@ void BattleScene(void)
     // Hardcode only asset for now
     if (!playerMon)
         playerMon = createMon("froge");
-    if (!IsTextureValid(playerMon->textures.backTexture))
+    if (!IsTextureValid(playerMon->backTexture))
         loadMonTextures(playerMon);
 
     if (!enemyMon)
         enemyMon = createMon("froge");
-    if (!IsTextureValid(enemyMon->textures.backTexture))
+    if (!IsTextureValid(enemyMon->backTexture))
         loadMonTextures(enemyMon);
 
     //  Draw text box

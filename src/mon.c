@@ -1,35 +1,44 @@
 #include "mon.h"
-#include "debug.h"
+// #include "debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void loadMonTextures(Mon *mon)
+
+static void loadOneTexture(char *imagePath, Texture2D *texture)
 {
-    // NOTE: We don't need to load both images at once
-    char frontTexturePath[256];
+    Image image = LoadImage(imagePath);
+    *texture = LoadTextureFromImage(image);
+    UnloadImage(image);
+}
+
+void loadMonTexture(Mon *mon, MonTexture whichTexture)
+{
+    char imagePath[256];
+    Image image = {};
     auto basePath = "assets/";
-    strcpy(frontTexturePath, basePath);
+    strcpy(imagePath, basePath);
     if (!mon->name)
     {
         fprintf(stderr, "ERROR: Can not load texture of mon with no name");
         exit(1);
     }
-    strcat(frontTexturePath, mon->name);
-    strcat(frontTexturePath, "-front.png");
-    debug_log("Loading asset: %s", frontTexturePath);
-    printf("Loading asset: %s", frontTexturePath);
-    Image image = LoadImage(frontTexturePath);
-    mon->textures.frontTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
+    strcat(imagePath, mon->name);
 
-    char backTexturePath[256];
-    strcpy(backTexturePath, basePath);
-    strcat(backTexturePath, mon->name);
-    strcat(backTexturePath, "-back.png");
-    debug_log("Loading asset: %s", backTexturePath);
-    image = LoadImage(backTexturePath);
-    mon->textures.backTexture = LoadTextureFromImage(image);
+    switch (whichTexture)
+    {
+    case FRONT:
+        strcat(imagePath, "-front.png");
+        image = LoadImage(imagePath);
+        mon->frontTexture = LoadTextureFromImage(image);
+        break;
+    case BACK:
+        strcat(imagePath, "-back.png");
+        image = LoadImage(imagePath);
+        mon->backTexture = LoadTextureFromImage(image);
+        break;
+    }
+
     UnloadImage(image);
 }
 

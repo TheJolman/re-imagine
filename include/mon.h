@@ -2,11 +2,11 @@
 
 #include "raylib.h"
 
-typedef struct
+typedef enum
 {
-    Texture2D frontTexture;
-    Texture2D backTexture;
-} MonTextures;
+    FRONT,
+    BACK
+} MonTexture;
 
 typedef struct
 {
@@ -17,7 +17,11 @@ typedef struct
 typedef struct
 {
     const char *name;
-    MonTextures textures;
+    union {
+        Texture2D frontTexture;
+        Texture2D backTexture;
+        Texture2D spriteTexture;
+    };
     Move moves[4];
     unsigned hp;
 } Mon;
