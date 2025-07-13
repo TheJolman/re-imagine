@@ -8,7 +8,7 @@ constexpr int windowMargin = 50;
 constexpr int textHeight = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
-constexpr float SCALE = 1.0;
+constexpr float SCALE = 0.6f;
 
 Mon *playerMon = nullptr;
 Mon *enemyMon = nullptr;
@@ -17,10 +17,6 @@ void renderPlayerMon(Mon *mon)
 {
     const Vector2 playerPosition = {screen.width - 500, screen.height - 500};
     DrawTextureEx(*playerMon->texture, playerPosition, ROTATION, SCALE, TINT);
-}
-
-void renderMon(Mon *mon) {
-
 }
 
 void renderEnemyMon(Mon *mon)
@@ -48,7 +44,7 @@ void BattleScene(void)
 
     //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
-                       screen.width - windowMargin * 2, textHeight, BLACK);
+                       screen.width - windowMargin * 2, textHeight, WHITE);
 
     renderEnemyMon(enemyMon);
     renderPlayerMon(playerMon);
