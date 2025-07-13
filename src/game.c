@@ -4,14 +4,15 @@
 #include "battle.h"
 #include "game.h"
 #include "map.h"
+#include "mon.h"
 #include "pause.h"
 // #include "utils.h"
 
 Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
-Image image = {0};
-MonTexture froge = {0};
+// Image image = {0};
+// MonTextures froge = {0};
 
 static void MovePlayer(void)
 {
@@ -61,7 +62,10 @@ static void HandleInput(void)
 
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B))
+        {
+            EndBattleScene();
             state = FREE_ROAM;
+        }
         break;
 
     case PAUSED:
@@ -98,14 +102,15 @@ void InitGame(void)
     state = FREE_ROAM;
 
     // TODO: implement lazy loading
-    image = LoadImage("resources/froge-front-1.png");
-    froge.frontTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
-    image = LoadImage("resources/froge-back-1.png");
-    froge.backTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
-    froge.scale = 0.4f;
-    froge.tint = WHITE;
+
+    // image = LoadImage("assets/froge-front.png");
+    // froge.frontTexture = LoadTextureFromImage(image);
+    // UnloadImage(image);
+    // image = LoadImage("assets/froge-back.png");
+    // froge.backTexture = LoadTextureFromImage(image);
+    // UnloadImage(image);
+    // froge.scale = 0.4f;
+    // froge.tint = WHITE;
 
     player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
     player.baseSpeed = 5.0f;
@@ -122,7 +127,7 @@ void UpdateGame(void) { HandleInput(); }
 void DrawGame(/* tmx_map *map */)
 {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
     // render_map(map);
 
     switch (state)
@@ -148,3 +153,5 @@ void DrawGame(/* tmx_map *map */)
 
     EndDrawing();
 }
+
+void CleanupGame(void) {}
