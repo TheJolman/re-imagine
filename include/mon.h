@@ -27,4 +27,4 @@ typedef struct
 } Mon;
 
 Mon *createMon(char *name);
-void loadMonTextures(Mon *mon);
+void loadMonTexture(Mon *mon, MonTextureType);

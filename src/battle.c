@@ -38,12 +38,12 @@ void BattleScene(void)
     if (!playerMon)
         playerMon = createMon("froge");
     if (!IsTextureValid(*playerMon->backTexture))
-        loadMonTextures(playerMon);
+        loadMonTexture(playerMon, BACK);
 
     if (!enemyMon)
         enemyMon = createMon("froge");
-    if (!IsTextureValid(*enemyMon->backTexture))
-        loadMonTextures(enemyMon);
+    if (!IsTextureValid(*enemyMon->frontTexture))
+        loadMonTexture(enemyMon, FRONT);
 
     //  Draw text box
     DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
