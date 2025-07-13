@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "battle.h"
 #include "map.h"
 #include "mon.h"
@@ -15,7 +16,7 @@ Mon *enemyMon = nullptr;
 void renderPlayerMon(Mon *mon)
 {
     const Vector2 playerPosition = {screen.width - 500, screen.height - 500};
-    DrawTextureEx(*playerMon->backTexture, playerPosition, ROTATION, SCALE, TINT);
+    DrawTextureEx(*playerMon->texture, playerPosition, ROTATION, SCALE, TINT);
 }
 
 void renderMon(Mon *mon) {
@@ -25,7 +26,7 @@ void renderMon(Mon *mon) {
 void renderEnemyMon(Mon *mon)
 {
     const Vector2 enemyPosition = {40, 40};
-    DrawTextureEx(*playerMon->frontTexture, enemyPosition, ROTATION, SCALE, TINT);
+    DrawTextureEx(*playerMon->texture, enemyPosition, ROTATION, SCALE, TINT);
 }
 
 void BattleScene(void)
@@ -37,12 +38,12 @@ void BattleScene(void)
     // Hardcode only asset for now
     if (!playerMon)
         playerMon = createMon("froge");
-    if (!IsTextureValid(*playerMon->backTexture))
+    if (!IsTextureValid(*playerMon->texture))
         loadMonTexture(playerMon, BACK);
 
     if (!enemyMon)
         enemyMon = createMon("froge");
-    if (!IsTextureValid(*enemyMon->frontTexture))
+    if (!IsTextureValid(*enemyMon->texture))
         loadMonTexture(enemyMon, FRONT);
 
     //  Draw text box
@@ -55,6 +56,6 @@ void BattleScene(void)
 
 void EndBattleScene(void)
 {
-    UnloadTexture(*playerMon->backTexture);
-    UnloadTexture(*playerMon->frontTexture);
+    destroyMon(playerMon);
+    destroyMon(enemyMon);
 }

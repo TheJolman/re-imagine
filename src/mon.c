@@ -1,4 +1,5 @@
 #include "mon.h"
+#include "raylib.h"
 // #include "debug.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +13,7 @@ static void loadOneTexture(char *imagePath, Texture2D *texture)
     UnloadImage(image);
 }
 
-void loadMonTexture(Mon *mon, MonTextureType whichTexture)
+void loadMonTexture(Mon *mon, MonTextureType textureType)
 {
     char imagePath[256];
     Image image = {};
@@ -25,20 +26,18 @@ void loadMonTexture(Mon *mon, MonTextureType whichTexture)
     }
     strcat(imagePath, mon->name);
 
-    switch (whichTexture)
+    switch (textureType)
     {
     case FRONT:
         strcat(imagePath, "-front.png");
-        image = LoadImage(imagePath);
-        *mon->frontTexture = LoadTextureFromImage(image);
         break;
     case BACK:
         strcat(imagePath, "-back.png");
-        image = LoadImage(imagePath);
-        *mon->backTexture = LoadTextureFromImage(image);
         break;
     }
 
+    image = LoadImage(imagePath);
+    *mon->texture = LoadTextureFromImage(image);
     UnloadImage(image);
 }
 
@@ -47,6 +46,12 @@ Mon *createMon(char *name)
     Mon *mon = malloc(sizeof(Mon));
     mon->name = name;
     mon->name = name;
+    mon->texture = malloc(sizeof(Texture2D));
     // TODO: Initialize other values
     return mon;
+}
+
+void destroyMon(Mon *mon) {
+    UnloadTexture(*mon->texture);
+    free(mon);
 }

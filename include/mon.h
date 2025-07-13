@@ -17,14 +17,12 @@ typedef struct
 typedef struct
 {
     const char *name;
-    union {
-        Texture2D *frontTexture;
-        Texture2D *backTexture;
-        Texture2D *spriteTexture;
-    };
+    Texture2D *texture;
+    MonTextureType textureType;
     Move moves[4];
     unsigned hp;
 } Mon;
 
 Mon *createMon(char *name);
+void destroyMon(Mon *mon);
 void loadMonTexture(Mon *mon, MonTextureType);
