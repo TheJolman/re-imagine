@@ -47,12 +47,6 @@ void BattleScene(void)
 
     renderEnemyMon(enemyMon);
     renderPlayerMon(playerMon);
-    // Draw hp bar for enemy mon
-
-    // Render art for players mon
-    // Draw hp bar for players mon
-
-    // Draw experience bar for players mon
 }
 
 void EndBattleScene(void)

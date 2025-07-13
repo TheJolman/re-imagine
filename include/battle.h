@@ -1,11 +1,7 @@
 #ifndef BATTLE
 #define BATTLE
 
-// #include "raylib.h"
-#include "mon.h"
-
-// extern Mon enemyMon;
-// extern Mon playerMon;
+// TODO: Use linked list for managing assets
 
 void BattleScene(void);
 void EndBattleScene(void);
