@@ -6,7 +6,7 @@ typedef enum
 {
     FRONT,
     BACK
-} MonTexture;
+} MonTextureType;
 
 typedef struct
 {
@@ -18,9 +18,9 @@ typedef struct
 {
     const char *name;
     union {
-        Texture2D frontTexture;
-        Texture2D backTexture;
-        Texture2D spriteTexture;
+        Texture2D *frontTexture;
+        Texture2D *backTexture;
+        Texture2D *spriteTexture;
     };
     Move moves[4];
     unsigned hp;

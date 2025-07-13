@@ -12,7 +12,7 @@ static void loadOneTexture(char *imagePath, Texture2D *texture)
     UnloadImage(image);
 }
 
-void loadMonTexture(Mon *mon, MonTexture whichTexture)
+void loadMonTexture(Mon *mon, MonTextureType whichTexture)
 {
     char imagePath[256];
     Image image = {};
@@ -30,12 +30,12 @@ void loadMonTexture(Mon *mon, MonTexture whichTexture)
     case FRONT:
         strcat(imagePath, "-front.png");
         image = LoadImage(imagePath);
-        mon->frontTexture = LoadTextureFromImage(image);
+        *mon->frontTexture = LoadTextureFromImage(image);
         break;
     case BACK:
         strcat(imagePath, "-back.png");
         image = LoadImage(imagePath);
-        mon->backTexture = LoadTextureFromImage(image);
+        *mon->backTexture = LoadTextureFromImage(image);
         break;
     }
 
@@ -45,6 +45,7 @@ void loadMonTexture(Mon *mon, MonTexture whichTexture)
 Mon *createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
+    mon->name = name;
     mon->name = name;
     // TODO: Initialize other values
     return mon;
