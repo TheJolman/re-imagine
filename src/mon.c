@@ -47,6 +47,7 @@ Mon *createMon(char *name)
     mon->name = malloc(strlen(name) + 1);
     strcpy((char*)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
+    mon->hp = 100;
     // TODO: Initialize other values
     return mon;
 }
