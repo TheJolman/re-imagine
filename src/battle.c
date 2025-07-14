@@ -37,9 +37,10 @@ static void initBattleUI(void)
     ui.textBox = (Rectangle){windowMargin, screen.height - (windowMargin + textHeight),
                              screen.width - windowMargin * 2, textHeight};
 
-    ui.playerMonPos = (Vector2){screen.width * 0.75f, screen.height * 0.6f};
+    // TODO: Get consistent asset sizes
+    ui.playerMonPos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
 
-    ui.enemyMonPos = (Vector2){screen.width * 0.25f, screen.height * 0.3f};
+    ui.enemyMonPos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
 
     ui.actionMenuPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 20};
 
@@ -64,8 +65,8 @@ static void renderActionMenu(void)
     switch (battleState)
     {
     case BATTLE_MENU:
-        DrawText("FIGHT  BAG", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
-        DrawText("MON    RUN", ui.actionMenuPos.x, ui.actionMenuPos.y + 25, 20, WHITE);
+        DrawText("FIGHT    BAG", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
+        DrawText("SWITCH   RUN", ui.actionMenuPos.x, ui.actionMenuPos.y + 25, 20, WHITE);
         break;
     case BATTLE_ATTACK:
         DrawText("Select an attack:", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
