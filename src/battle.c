@@ -1,8 +1,8 @@
-#include <stdlib.h>
 #include "battle.h"
 #include "map.h"
 #include "mon.h"
 #include "raylib.h"
+#include <stdlib.h>
 
 constexpr int windowMargin = 50;
 constexpr int textHeight = 150;
@@ -25,11 +25,18 @@ void renderEnemyMon(Mon *mon)
     DrawTextureEx(*enemyMon->texture, enemyPosition, ROTATION, SCALE, TINT);
 }
 
+void renderUI()
+{
+    DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
+                       screen.width - windowMargin * 2, textHeight, WHITE);
+
+    renderEnemyMon(enemyMon);
+    renderPlayerMon(playerMon);
+}
+
 void BattleScene(void)
 {
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
-
-    // TODO:: get rid of magic numbers
 
     // Hardcode only asset for now
     if (!playerMon)
@@ -42,12 +49,7 @@ void BattleScene(void)
     if (!IsTextureValid(*enemyMon->texture))
         loadMonTexture(enemyMon, FRONT);
 
-    //  Draw text box
-    DrawRectangleLines(windowMargin, screen.height - (windowMargin + textHeight),
-                       screen.width - windowMargin * 2, textHeight, WHITE);
-
-    renderEnemyMon(enemyMon);
-    renderPlayerMon(playerMon);
+    renderUI();
 }
 
 void EndBattleScene(void)
