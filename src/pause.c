@@ -20,9 +20,11 @@ typedef enum
     CREDITS
 } MenuIndices;
 
+// clang-format off
 const PauseItem pause_options = {"OPTIONS", 50, 100, 20, DARKGRAY};
-const PauseItem pause_exit = {"EXIT", 50, 130, 20, DARKGRAY};
+const PauseItem pause_exit =    {"EXIT",    50, 130, 20, DARKGRAY};
 const PauseItem pause_credits = {"CREDITS", 50, 160, 20, DARKGRAY};
+// clang-format on
 
 const PauseItem pauseItems[NUM_ITEMS] = {pause_options, pause_exit, pause_credits};
 
