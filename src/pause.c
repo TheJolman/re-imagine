@@ -2,27 +2,12 @@
 #include "assert.h"
 #include "menu.h"
 #include "raylib.h"
+#include <string.h>
 
 constexpr size_t NUM_ITEMS = 3;
 
-// typedef struct
-// {
-//     char *name;
-//     int posX;
-//     int posY;
-//     int fontSize;
-//     Color color;
-// } PauseItem;
-
-typedef enum
-{
-    OPTIONS,
-    EXIT,
-    CREDITS
-} MenuIndices;
-
 static void optionsSelect(void) { return; }
-static void exitSelect(void) { return; }
+static void exitSelect(void) { CloseWindow(); }
 static void creditsSelect(void) { return; }
 
 // clang-format off
@@ -33,45 +18,29 @@ static const MenuItem creditsItem = {"CREDITS", 50, 160, 20, DARKGRAY, creditsSe
 
 static const MenuItem pauseItems[NUM_ITEMS] = {optionsItem, exitItem, creditsItem};
 
-VerticalMenu *menu = nullptr;
+VerticalMenu *pauseMenu = nullptr;
 
-void pauseMenuNext(int *currentPos)
+static VerticalMenu *pauseMenuCreate()
 {
-    // wraps to top
-    if (*currentPos == NUM_ITEMS - 1)
+    pauseMenu = verticalMenuCreate(NUM_ITEMS);
+    if (pauseMenu)
     {
-        *currentPos = 0;
+        for (size_t i = 0; i < pauseMenu->numItems; i++)
+            memcpy(&pauseMenu->items[i], &pauseItems[i], sizeof(MenuItem));
     }
-    else
-    {
-        *currentPos += 1;
-    }
-}
 
-void pauseMenuPrev(int *currentPos)
-{
-    // wraps to bottom
-    if (*currentPos == 0)
-    {
-        *currentPos = NUM_ITEMS - 1;
-    }
-    else
-    {
-        *currentPos -= 1;
-    }
+    return pauseMenu;
 }
 
 void pauseMenuDisplay(void)
 {
-    if (!menu)
-    {
-        menu = verticalMenuCreate(NUM_ITEMS);
-    }
+    if (!pauseMenu)
+        pauseMenu = pauseMenuCreate();
+
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 
-    for (int i = 0; i < NUM_ITEMS; ++i)
+    for (int i = 0; i < pauseMenu->numItems; i++)
     {
-        // TODO: Use consistenet styling for all and make PauseItem less complex (maybe)
         MenuItem item = pauseItems[i];
         DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
     }
@@ -79,22 +48,4 @@ void pauseMenuDisplay(void)
     assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
     MenuItem currentItem = pauseItems[currentMenuIndex];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
-}
-
-void pauseMenuSelect(void)
-{
-    assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
-
-    switch (currentMenuIndex)
-    {
-    case OPTIONS:
-        // TODO: Implement options menu
-        break;
-    case EXIT:
-        CloseWindow();
-        break;
-    case CREDITS:
-        // TODO: Implement credits
-        break;
-    }
 }

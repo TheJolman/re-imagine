@@ -148,7 +148,7 @@ void DrawGame(/* tmx_map *map */)
         BattleScene();
         break;
     case PAUSED:
-        PauseMenu();
+        pauseMenuDisplay();
         break;
     case TITLE_SCREEN:
         break;
