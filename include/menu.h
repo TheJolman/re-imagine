@@ -36,5 +36,5 @@ typedef struct
     MenuItem items[];
 } VerticalMenu;
 
-GridMenu *gridMenuCreate(size_t numItems);
-VerticalMenu *verticalMenuCreate(size_t numItems);
+GridMenu *gridMenuCreate(const size_t numItems);
+VerticalMenu *verticalMenuCreate(const size_t numItems);
