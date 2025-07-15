@@ -19,7 +19,8 @@ typedef struct
     void (*moveRight)(const void *);
     void (*moveDown)(const void *);
     void (*moveUp)(const void *);
-    size_t selected_item;
+    void (*select)(const void *);
+    size_t selectedItem;
     size_t numItems;
     MenuItem *items[];
 } GridMenu;
@@ -28,12 +29,11 @@ typedef struct
 {
     void (*nextItem)(const void *);
     void (*prevItem)(const void *);
-    size_t selected_item;
+    void (*select)(const void *);
+    size_t selectedItem;
     size_t numItems;
     MenuItem items[];
-} VeticalMenu;
+} VerticalMenu;
 
-GridMenu *createGridMenu();
-GridMenu *createVerticalMenu();
-
-
+GridMenu *gridMenuCreate(size_t numItems);
+VerticalMenu *verticalMenuCreate(size_t numItems);
