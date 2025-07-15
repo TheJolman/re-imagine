@@ -1,5 +1,4 @@
-#ifndef PAUSE
-#define PAUSE
+#pragma once
 
 extern int currentMenuIndex;
 
@@ -22,5 +21,3 @@ void PauseMenu(void);
  * Selects an item in the pause menu
  */
 void selectMenuItem(void);
-
-#endif // !PAUSE
