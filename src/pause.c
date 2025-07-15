@@ -41,9 +41,8 @@ void pauseMenuDisplay(void)
 
     for (int i = 0; i < pauseMenu->numItems; i++)
     {
-#define item pauseItems[i]
+        MenuItem item = pauseItems[i];
         DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
-#undef item
     }
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
@@ -53,8 +52,6 @@ void pauseMenuDisplay(void)
     else if (IsKeyPressed(KEY_ENTER))
         pauseMenu->items[pauseMenu->selectedItem].select();
 
-#define currentItem pauseItems[pauseMenu->selectedItem]
-    // MenuItem currentItem = pauseItems[pauseMenu->selectedItem];
+    MenuItem currentItem = pauseItems[pauseMenu->selectedItem];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
-#undef currentItem
 }
