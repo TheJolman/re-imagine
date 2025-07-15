@@ -30,7 +30,7 @@ const PauseItem pauseItems[NUM_ITEMS] = {pause_options, pause_exit, pause_credit
 
 int currentMenuIndex = 0;
 
-void nextMenuItem(int *currentPos)
+void pauseMenuNext(int *currentPos)
 {
     // wraps to top
     if (*currentPos == NUM_ITEMS - 1)
@@ -43,7 +43,7 @@ void nextMenuItem(int *currentPos)
     }
 }
 
-void prevMenuItem(int *currentPos)
+void pauseMenuPrev(int *currentPos)
 {
     // wraps to bottom
     if (*currentPos == 0)
@@ -56,7 +56,7 @@ void prevMenuItem(int *currentPos)
     }
 }
 
-void PauseMenu(void)
+void pauseMenuDisplay(void)
 {
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 
@@ -72,7 +72,7 @@ void PauseMenu(void)
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
 }
 
-void selectMenuItem(void)
+void pauseMenuSelect(void)
 {
     assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
 

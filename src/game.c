@@ -75,15 +75,15 @@ static void HandleInput(void)
             state = FREE_ROAM;
         if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
         {
-            nextMenuItem(&currentMenuIndex);
+            pauseMenuNext(&currentMenuIndex);
         }
         else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
         {
-            prevMenuItem(&currentMenuIndex);
+            pauseMenuPrev(&currentMenuIndex);
         }
         else if (IsKeyPressed(KEY_ENTER))
         {
-            selectMenuItem();
+            pauseMenuSelect();
         }
         break;
 

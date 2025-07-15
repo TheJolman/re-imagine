@@ -5,19 +5,19 @@ extern int currentMenuIndex;
 /**
  * Moves to the next item in the pause menu
  */
-void nextMenuItem(int *currentPos);
+void pauseMenuNext(int *currentPos);
 
 /**
  * Moves to the previous item in the pause menu
  */
-void prevMenuItem(int *currentPos);
+void pauseMenuPrev(int *currentPos);
 
 /**
  * Displays the pause menu
  */
-void PauseMenu(void);
+void pauseMenuDisplay(void);
 
 /**
  * Selects an item in the pause menu
  */
-void selectMenuItem(void);
+void pauseMenuSelect(void);
