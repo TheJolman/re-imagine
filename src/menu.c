@@ -52,7 +52,7 @@ static void verticalMenuPrev(const void *menuPtr)
         menu->selectedItem = menu->numItems - 1;
 }
 
-VerticalMenu *verticalMenuCreate(size_t numItems)
+VerticalMenu *verticalMenuCreate(const size_t numItems)
 {
     VerticalMenu *menu = malloc(sizeof(VerticalMenu) + numItems * sizeof(MenuItem));
     if (!menu)
@@ -62,9 +62,6 @@ VerticalMenu *verticalMenuCreate(size_t numItems)
     menu->nextItem = verticalMenuNext;
     menu->prevItem = verticalMenuPrev;
     menu->selectedItem = 0;
-    menu->select = nullptr;
-
-    memset(menu, 0, numItems * sizeof(MenuItem *));
     return menu;
 }
 
