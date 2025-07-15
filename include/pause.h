@@ -1,6 +1,6 @@
 #pragma once
 
-extern int currentMenuIndex;
+// extern int currentMenuIndex;
 
 /**
  * Moves to the next item in the pause menu

@@ -73,18 +73,18 @@ static void HandleInput(void)
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE))
             state = FREE_ROAM;
-        if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
-        {
-            pauseMenuNext(&currentMenuIndex);
-        }
-        else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
-        {
-            pauseMenuPrev(&currentMenuIndex);
-        }
-        else if (IsKeyPressed(KEY_ENTER))
-        {
-            pauseMenuSelect();
-        }
+        // if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
+        // {
+        //     pauseMenuNext(&currentMenuIndex);
+        // }
+        // else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
+        // {
+        //     pauseMenuPrev(&currentMenuIndex);
+        // }
+        // else if (IsKeyPressed(KEY_ENTER))
+        // {
+        //     pauseMenuSelect();
+        // }
         break;
 
     case TITLE_SCREEN:
