@@ -46,9 +46,15 @@ void pauseMenuDisplay(void)
     }
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
+    {
+        assert(pauseMenu->nextItem);
         pauseMenu->nextItem(pauseMenu);
+    }
     else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
+    {
+        assert(pauseMenu->nextItem);
         pauseMenu->prevItem(pauseMenu);
+    }
     else if (IsKeyPressed(KEY_ENTER))
         pauseMenu->items[pauseMenu->selectedItem].select();
 
