@@ -1,17 +1,18 @@
 #include "pause.h"
 #include "assert.h"
+#include "menu.h"
 #include "raylib.h"
 
-#define NUM_ITEMS 3
+constexpr size_t NUM_ITEMS = 3;
 
-typedef struct
-{
-    char *name;
-    int posX;
-    int posY;
-    int fontSize;
-    Color color;
-} PauseItem;
+// typedef struct
+// {
+//     char *name;
+//     int posX;
+//     int posY;
+//     int fontSize;
+//     Color color;
+// } PauseItem;
 
 typedef enum
 {
@@ -20,15 +21,19 @@ typedef enum
     CREDITS
 } MenuIndices;
 
+static void optionsSelect(void) { return; }
+static void exitSelect(void) { return; }
+static void creditsSelect(void) { return; }
+
 // clang-format off
-const PauseItem pause_options = {"OPTIONS", 50, 100, 20, DARKGRAY};
-const PauseItem pause_exit =    {"EXIT",    50, 130, 20, DARKGRAY};
-const PauseItem pause_credits = {"CREDITS", 50, 160, 20, DARKGRAY};
+static const MenuItem optionsItem = {"OPTIONS", 50, 100, 20, DARKGRAY, optionsSelect};
+static const MenuItem exitItem =    {"EXIT",    50, 130, 20, DARKGRAY, exitSelect};
+static const MenuItem creditsItem = {"CREDITS", 50, 160, 20, DARKGRAY, creditsSelect};
 // clang-format on
 
-const PauseItem pauseItems[NUM_ITEMS] = {pause_options, pause_exit, pause_credits};
+static const MenuItem pauseItems[NUM_ITEMS] = {optionsItem, exitItem, creditsItem};
 
-int currentMenuIndex = 0;
+VerticalMenu *menu = nullptr;
 
 void pauseMenuNext(int *currentPos)
 {
@@ -58,17 +63,21 @@ void pauseMenuPrev(int *currentPos)
 
 void pauseMenuDisplay(void)
 {
+    if (!menu)
+    {
+        menu = verticalMenuCreate(NUM_ITEMS);
+    }
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 
     for (int i = 0; i < NUM_ITEMS; ++i)
     {
         // TODO: Use consistenet styling for all and make PauseItem less complex (maybe)
-        PauseItem item = pauseItems[i];
-        DrawText(item.name, item.posX, item.posY, item.fontSize, item.color);
+        MenuItem item = pauseItems[i];
+        DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
     }
 
     assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
-    PauseItem currentItem = pauseItems[currentMenuIndex];
+    MenuItem currentItem = pauseItems[currentMenuIndex];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
 }
 

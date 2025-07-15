@@ -11,6 +11,7 @@ typedef struct
     int posY;
     int fontSize;
     Color color;
+    void (*select)(void);
 } MenuItem;
 
 typedef struct
