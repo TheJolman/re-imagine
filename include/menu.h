@@ -37,4 +37,7 @@ typedef struct
 } VerticalMenu;
 
 GridMenu *gridMenuCreate(const size_t numItems);
+void gridMenuDestroy(GridMenu *menu);
+
 VerticalMenu *verticalMenuCreate(const size_t numItems);
+void verticalMenuDestroy(VerticalMenu *menu);

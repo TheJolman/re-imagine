@@ -55,3 +55,11 @@ void pauseMenuDisplay(void)
     MenuItem currentItem = pauseItems[pauseMenu->selectedItem];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
 }
+
+void pauseMenuEnd()
+{
+    if (pauseMenu)
+        verticalMenuDestroy(pauseMenu);
+
+    pauseMenu = nullptr;
+}

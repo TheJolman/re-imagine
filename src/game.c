@@ -72,7 +72,10 @@ static void HandleInput(void)
 
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE))
-            state = FREE_ROAM;
+            {
+                pauseMenuEnd();
+                state = FREE_ROAM;
+            }
         // if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
         // {
         //     pauseMenuNext(&currentMenuIndex);

@@ -26,6 +26,12 @@ GridMenu *gridMenuCreate(size_t numItems)
     return menu;
 }
 
+void gridMenuDestroy(GridMenu *menu)
+{
+    if (menu)
+        free(menu);
+}
+
 static void verticalMenuNext(const void *menuPtr)
 {
     VerticalMenu *menu = (VerticalMenu *)menuPtr;
@@ -60,4 +66,10 @@ VerticalMenu *verticalMenuCreate(size_t numItems)
 
     memset(menu, 0, numItems * sizeof(MenuItem *));
     return menu;
+}
+
+void verticalMenuDestroy(VerticalMenu *menu)
+{
+    if (menu)
+        free(menu);
 }
