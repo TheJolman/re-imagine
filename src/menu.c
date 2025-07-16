@@ -37,7 +37,7 @@ static void verticalMenuNext(const void *menuPtr)
 {
     VerticalMenu *menu = (VerticalMenu *)menuPtr;
 
-    if (menu->selectedItem < menu->numItems)
+    if (menu->selectedItem < menu->numItems - 1)
         menu->selectedItem++;
     else
         menu->selectedItem = 0;
