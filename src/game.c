@@ -4,15 +4,12 @@
 #include "battle.h"
 #include "game.h"
 #include "map.h"
-#include "mon.h"
 #include "pause.h"
 // #include "utils.h"
 
 Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
-// Image image = {0};
-// MonTextures froge = {0};
 
 static void MovePlayer(void)
 {
@@ -76,18 +73,6 @@ static void HandleInput(void)
                 pauseMenuEnd();
                 state = FREE_ROAM;
             }
-        // if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
-        // {
-        //     pauseMenuNext(&currentMenuIndex);
-        // }
-        // else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
-        // {
-        //     pauseMenuPrev(&currentMenuIndex);
-        // }
-        // else if (IsKeyPressed(KEY_ENTER))
-        // {
-        //     pauseMenuSelect();
-        // }
         break;
 
     case TITLE_SCREEN:
@@ -105,17 +90,6 @@ static void HandleInput(void)
 void InitGame(void)
 {
     state = FREE_ROAM;
-
-    // TODO: implement lazy loading
-
-    // image = LoadImage("assets/froge-front.png");
-    // froge.frontTexture = LoadTextureFromImage(image);
-    // UnloadImage(image);
-    // image = LoadImage("assets/froge-back.png");
-    // froge.backTexture = LoadTextureFromImage(image);
-    // UnloadImage(image);
-    // froge.scale = 0.4f;
-    // froge.tint = WHITE;
 
     player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
     player.baseSpeed = 5.0f;
