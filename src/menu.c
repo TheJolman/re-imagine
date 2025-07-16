@@ -3,12 +3,41 @@
 #include <stdlib.h>
 #include <string.h>
 
+// TODO: do some extra math so empty squares can't get hovered
 static void gridMenuLeft(const void *menuPtr)
 {
     GridMenu *menu = (GridMenu *)menuPtr;
-    if (menu->selectedItem > 0)
-    {
-    }
+    if (menu->grid.currentCol > 0)
+        menu->grid.currentCol--;
+    else
+        menu->grid.currentCol = menu->grid.numCols - 1;
+}
+
+static void gridMenuRight(const void *menuPtr)
+{
+    GridMenu *menu = (GridMenu *)menuPtr;
+    if (menu->grid.currentCol < menu->grid.numCols - 1)
+        menu->grid.currentCol++;
+    else
+        menu->grid.currentCol = 0;
+}
+
+static void gridMenuUp(const void *menuPtr)
+{
+    GridMenu *menu = (GridMenu *)menuPtr;
+    if (menu->grid.currentRow > 0)
+        menu->grid.currentRow--;
+    else
+        menu->grid.currentRow = menu->grid.numRows - 1;
+}
+
+static void gridMenuDown(const void *menuPtr)
+{
+    GridMenu *menu = (GridMenu *)menuPtr;
+    if (menu->grid.currentRow < menu->grid.numRows - 1)
+        menu->grid.currentRow++;
+    else
+        menu->grid.currentRow = 0;
 }
 
 GridMenu *gridMenuCreate(size_t numItems)
@@ -18,10 +47,10 @@ GridMenu *gridMenuCreate(size_t numItems)
         return nullptr;
 
     menu->numItems = numItems;
-    menu->moveLeft = nullptr;
-    menu->moveRight = nullptr;
-    menu->moveDown = nullptr;
-    menu->moveUp = nullptr;
+    menu->moveLeft = gridMenuLeft;
+    menu->moveRight = gridMenuRight;
+    menu->moveDown = gridMenuDown;
+    menu->moveUp = gridMenuUp;
 
     memset(menu, 0, numItems * sizeof(MenuItem *));
     return menu;

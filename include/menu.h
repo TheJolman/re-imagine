@@ -14,14 +14,20 @@ typedef struct
     void (*select)(void);
 } MenuItem;
 
+typedef struct {
+    size_t numRows;
+    size_t numCols;
+    size_t currentRow;
+    size_t currentCol;
+} Grid;
+
 typedef struct
 {
     void (*moveLeft)(const void *);
     void (*moveRight)(const void *);
     void (*moveDown)(const void *);
     void (*moveUp)(const void *);
-    void (*select)(const void *);
-    size_t selectedItem;
+    Grid grid;
     size_t numItems;
     MenuItem *items[];
 } GridMenu;
