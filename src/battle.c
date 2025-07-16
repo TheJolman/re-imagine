@@ -1,5 +1,6 @@
 #include "battle.h"
 #include "map.h"
+#include "menu.h"
 #include "mon.h"
 #include "raylib.h"
 
@@ -8,6 +9,9 @@ constexpr int textHeight = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
 constexpr float SCALE = 0.6f;
+constexpr size_t NUM_ITEMS = 4;
+constexpr size_t NUM_ROWS = 2;
+constexpr size_t NUM_COLS = 2;
 
 typedef struct
 {
@@ -16,7 +20,26 @@ typedef struct
     Vector2 enemyMonPos;
     Vector2 actionMenuPos;
     Vector2 statusBarPos;
+    GridMenu *battleMenu;
+    GridMenu *attackMenu;
+    GridMenu *itemsMenu;
 } BattleUI;
+
+static void attackSelect() { return; }
+static void itemsSelect() { return; }
+static void runSelect() { return; }
+static void switchSelect() { return; }
+
+// clang-format off
+static const MenuItem attackItem = {"ATTACK", 50, 100, 20, DARKGRAY, attackSelect};
+static const MenuItem itemsItem =  {"ITEMS",  50, 130, 20, DARKGRAY, itemsSelect};
+static const MenuItem runItem =    {"RUN",    50, 160, 20, DARKGRAY, runSelect};
+static const MenuItem switchItem = {"SWITCH", 50, 160, 20, DARKGRAY, switchSelect};
+// clang-format on
+
+static const MenuItem actionItems[NUM_ROWS][NUM_COLS] = {{attackItem, itemsItem},
+                                                         {runItem, switchItem}};
+
 
 typedef enum
 {
@@ -39,12 +62,13 @@ static void initBattleUI(void)
 
     // TODO: Get consistent asset sizes
     ui.playerMonPos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
-
     ui.enemyMonPos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
-
     ui.actionMenuPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 20};
-
     ui.statusBarPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 80};
+
+    ui.battleMenu = gridMenuCreate(NUM_ITEMS, NUM_ROWS, NUM_COLS);
+    ui.attackMenu = nullptr;
+    ui.itemsMenu = nullptr;
 }
 
 static void renderMon(Mon *mon, Vector2 position)

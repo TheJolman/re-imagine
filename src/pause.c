@@ -14,6 +14,8 @@ static void exitSelect(void)
 }
 static void creditsSelect(void) { return; }
 
+// NOTE: maybe move these into the create function?
+
 // clang-format off
 static const MenuItem optionsItem = {"OPTIONS", 50, 100, 20, DARKGRAY, optionsSelect};
 static const MenuItem exitItem =    {"EXIT",    50, 130, 20, DARKGRAY, exitSelect};
