@@ -62,6 +62,7 @@ static void HandleInput(void)
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B))
         {
+            // NOTE: If concurencey is ever added should these be switched?
             EndBattleScene();
             state = FREE_ROAM;
         }
