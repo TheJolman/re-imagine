@@ -1,4 +1,5 @@
 #include "menu.h"
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -36,7 +37,7 @@ static void verticalMenuNext(const void *menuPtr)
 {
     VerticalMenu *menu = (VerticalMenu *)menuPtr;
 
-    if (menu->selectedItem > 0)
+    if (menu->selectedItem < menu->numItems)
         menu->selectedItem++;
     else
         menu->selectedItem = 0;
@@ -46,7 +47,7 @@ static void verticalMenuPrev(const void *menuPtr)
 {
     VerticalMenu *menu = (VerticalMenu *)menuPtr;
 
-    if (menu->selectedItem < menu->numItems - 1)
+    if (menu->selectedItem > 0)
         menu->selectedItem--;
     else
         menu->selectedItem = menu->numItems - 1;
@@ -57,6 +58,8 @@ VerticalMenu *verticalMenuCreate(const size_t numItems)
     VerticalMenu *menu = malloc(sizeof(VerticalMenu) + numItems * sizeof(MenuItem));
     if (!menu)
         return nullptr;
+
+    assert(menu->numItems > 0);
 
     menu->numItems = numItems;
     menu->nextItem = verticalMenuNext;

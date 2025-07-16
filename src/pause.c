@@ -7,7 +7,11 @@
 constexpr size_t NUM_ITEMS = 3;
 
 static void optionsSelect(void) { return; }
-static void exitSelect(void) { CloseWindow(); }
+static void exitSelect(void)
+{
+    pauseMenuEnd();
+    CloseWindow();
+}
 static void creditsSelect(void) { return; }
 
 // clang-format off
@@ -52,7 +56,7 @@ void pauseMenuDisplay(void)
     }
     else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
     {
-        assert(pauseMenu->nextItem);
+        assert(pauseMenu->prevItem);
         pauseMenu->prevItem(pauseMenu);
     }
     else if (IsKeyPressed(KEY_ENTER))
