@@ -28,11 +28,11 @@ VerticalMenu *pauseMenu = nullptr;
 
 static VerticalMenu *pauseMenuCreate()
 {
-    pauseMenu = verticalMenuCreate(NUM_ITEMS);
-    if (pauseMenu)
+    VerticalMenu *menu = verticalMenuCreate(NUM_ITEMS);
+    if (menu)
     {
-        for (size_t i = 0; i < pauseMenu->numItems; i++)
-            memcpy(&pauseMenu->items[i], &pauseItems[i], sizeof(MenuItem));
+        for (size_t i = 0; i < menu->numItems; i++)
+            memcpy(&menu->items[i], &pauseItems[i], sizeof(MenuItem));
     }
 
     return pauseMenu;
