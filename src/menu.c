@@ -40,13 +40,15 @@ static void gridMenuDown(const void *menuPtr)
         menu->grid.currentRow = 0;
 }
 
-GridMenu *gridMenuCreate(size_t numItems)
+GridMenu *gridMenuCreate(size_t numItems, const size_t numRows, const size_t numCols)
 {
     GridMenu *menu = malloc(sizeof(GridMenu) + numItems * sizeof(MenuItem *));
     if (!menu)
         return nullptr;
 
     menu->numItems = numItems;
+    menu->grid.numRows = numRows;
+    menu->grid.numCols = numCols;
     menu->moveLeft = gridMenuLeft;
     menu->moveRight = gridMenuRight;
     menu->moveDown = gridMenuDown;
