@@ -88,8 +88,6 @@ VerticalMenu *verticalMenuCreate(const size_t numItems)
     if (!menu)
         return nullptr;
 
-    assert(menu->numItems > 0);
-
     menu->numItems = numItems;
     menu->nextItem = verticalMenuNext;
     menu->prevItem = verticalMenuPrev;
