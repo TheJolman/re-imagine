@@ -3,7 +3,10 @@
 #include "menu.h"
 #include "mon.h"
 #include "raylib.h"
+#include <assert.h>
+#include <string.h>
 
+// Should these be moved into initBattleUI ?
 constexpr int windowMargin = 50;
 constexpr int textHeight = 150;
 constexpr Color TINT = WHITE;
@@ -20,17 +23,25 @@ typedef struct
     Vector2 enemyMonPos;
     Vector2 actionMenuPos;
     Vector2 statusBarPos;
-    GridMenu *battleMenu;
-    GridMenu *attackMenu;
-    GridMenu *itemsMenu;
 } BattleUI;
 
-static void attackSelect() { return; }
-static void itemsSelect() { return; }
-static void runSelect() { return; }
-static void switchSelect() { return; }
+typedef enum
+{
+    BATTLE_MENU,
+    BATTLE_ATTACK,
+    BATTLE_ITEMS,
+    BATTLE_RUN,
+    BATTLE_SWITCH,
+} BattleState;
+
+static BattleState battleState = BATTLE_MENU;
 
 // clang-format off
+static void attackSelect() { battleState = BATTLE_ATTACK; }
+static void itemsSelect()  { battleState = BATTLE_ITEMS; }
+static void runSelect()    { battleState = BATTLE_RUN; }
+static void switchSelect() { battleState = BATTLE_SWITCH; }
+
 static const MenuItem attackItem = {"ATTACK", 50, 100, 20, DARKGRAY, attackSelect};
 static const MenuItem itemsItem =  {"ITEMS",  50, 130, 20, DARKGRAY, itemsSelect};
 static const MenuItem runItem =    {"RUN",    50, 160, 20, DARKGRAY, runSelect};
@@ -40,19 +51,70 @@ static const MenuItem switchItem = {"SWITCH", 50, 160, 20, DARKGRAY, switchSelec
 static const MenuItem actionItems[NUM_ROWS][NUM_COLS] = {{attackItem, itemsItem},
                                                          {runItem, switchItem}};
 
+GridMenu *actionMenu = nullptr;
+GridMenu *attackMenu = nullptr;
+GridMenu *itemsMenu = nullptr;
+GridMenu *switchMenu = nullptr;
 
-typedef enum
+static GridMenu *actionMenuCreate()
 {
-    BATTLE_MENU,
-    BATTLE_ATTACK,
-    BATTLE_ITEMS,
-    BATTLE_RUN
-} BattleState;
+    GridMenu *menu = gridMenuCreate(NUM_ITEMS, NUM_ROWS, NUM_COLS);
+    if (menu)
+    {
+        for (size_t i = 0; i < menu->numItems; i++)
+            memcpy(&menu->items[i], &actionItems[i], sizeof(MenuItem));
+    }
+    return menu;
+}
+
+static void actionMenuEnd(GridMenu *menu)
+{
+    if (menu)
+        gridMenuDestroy(menu);
+
+    menu = nullptr;
+}
+
+static void actionMenuDisplay()
+{
+    if (!actionMenu)
+        actionMenu = actionMenuCreate();
+
+    DrawText("BATTLE MENU", screen.width * 0.6f, screen.height * 0.35f, 20, WHITE);
+
+    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
+    {
+        assert(actionMenu->moveDown);
+        actionMenu->moveDown(actionMenu);
+    }
+    else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
+    {
+        assert(actionMenu->moveUp);
+        actionMenu->moveUp(actionMenu);
+    }
+    else if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A))
+    {
+        assert(actionMenu->moveLeft);
+        actionMenu->moveLeft(actionMenu);
+    }
+    else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D))
+    {
+        assert(actionMenu->moveRight);
+        actionMenu->moveRight(actionMenu);
+    }
+    else if (IsKeyPressed(KEY_ENTER))
+    {
+        actionMenu->items[actionMenu->grid.currentRow][actionMenu->grid.currentCol].select();
+        actionMenuEnd(actionMenu);
+    }
+
+    MenuItem currentItem = actionItems[actionMenu->grid.currentRow][actionMenu->grid.currentCol];
+    DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
+}
 
 Mon *playerMon = nullptr;
 Mon *enemyMon = nullptr;
 BattleUI ui = {0};
-BattleState battleState = BATTLE_MENU;
 static bool battleInitialized = false;
 
 static void initBattleUI(void)
@@ -66,9 +128,22 @@ static void initBattleUI(void)
     ui.actionMenuPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 20};
     ui.statusBarPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 80};
 
-    ui.battleMenu = gridMenuCreate(NUM_ITEMS, NUM_ROWS, NUM_COLS);
-    ui.attackMenu = nullptr;
-    ui.itemsMenu = nullptr;
+    initBattleUI();
+    battleState = BATTLE_MENU;
+
+    if (!playerMon)
+    {
+        playerMon = createMon("froge");
+        playerMon->hp = 100;
+        loadMonTexture(playerMon, BACK);
+    }
+
+    if (!enemyMon)
+    {
+        enemyMon = createMon("froge");
+        enemyMon->hp = 80;
+        loadMonTexture(enemyMon, FRONT);
+    }
 }
 
 static void renderMon(Mon *mon, Vector2 position)
@@ -89,32 +164,20 @@ static void renderActionMenu(void)
     switch (battleState)
     {
     case BATTLE_MENU:
-        DrawText("FIGHT    BAG", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
-        DrawText("SWITCH   RUN", ui.actionMenuPos.x, ui.actionMenuPos.y + 25, 20, WHITE);
+        actionMenuDisplay();
         break;
     case BATTLE_ATTACK:
-        DrawText("Select an attack:", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
+        // attackMenuDisplay();
         break;
     case BATTLE_ITEMS:
-        DrawText("Select an item:", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
+        // itemsMenuDisplay();
         break;
     case BATTLE_RUN:
-        DrawText("Got away safely!", ui.actionMenuPos.x, ui.actionMenuPos.y, 20, WHITE);
+        // runMenuDisplay();
         break;
-    }
-}
-
-static void renderStatusBar(void)
-{
-    if (playerMon)
-    {
-        DrawText(TextFormat("%s  HP: %d", playerMon->name, playerMon->hp), ui.statusBarPos.x,
-                 ui.statusBarPos.y, 16, WHITE);
-    }
-    if (enemyMon)
-    {
-        DrawText(TextFormat("%s  HP: %d", enemyMon->name, enemyMon->hp), ui.statusBarPos.x + 200,
-                 ui.statusBarPos.y, 16, WHITE);
+    case BATTLE_SWITCH:
+        // switchMenuDisplay();
+        break;
     }
 }
 
@@ -122,36 +185,15 @@ static void renderBattleUI(void)
 {
     renderTextBox();
     renderActionMenu();
-    renderStatusBar();
     renderMon(playerMon, ui.playerMonPos);
     renderMon(enemyMon, ui.enemyMonPos);
-}
-
-static void initBattleScene(void)
-{
-    initBattleUI();
-    battleState = BATTLE_MENU;
-
-    if (!playerMon)
-    {
-        playerMon = createMon("froge");
-        playerMon->hp = 100;
-        loadMonTexture(playerMon, BACK);
-    }
-
-    if (!enemyMon)
-    {
-        enemyMon = createMon("froge");
-        enemyMon->hp = 80;
-        loadMonTexture(enemyMon, FRONT);
-    }
 }
 
 void BattleScene(void)
 {
     if (!battleInitialized)
     {
-        initBattleScene();
+        initBattleUI();
         battleInitialized = true;
     }
 
