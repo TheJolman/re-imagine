@@ -4,8 +4,8 @@
 #include "mon.h"
 #include "raylib.h"
 #include <assert.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 // Should these be moved into initBattleUI ?
 constexpr int windowMargin = 50;
@@ -49,7 +49,7 @@ static const MenuItem runItem =    {"RUN",    50, 160, 20, DARKGRAY, runSelect};
 static const MenuItem switchItem = {"SWITCH", 50, 160, 20, DARKGRAY, switchSelect};
 // clang-format on
 
-static const MenuItem actionItems[NUM_ROWS][NUM_COLS] = {{attackItem, itemsItem},
+static MenuItem actionItems[NUM_ROWS][NUM_COLS] = {{attackItem, itemsItem},
                                                          {runItem, switchItem}};
 
 GridMenu *actionMenu = nullptr;
@@ -60,17 +60,22 @@ GridMenu *switchMenu = nullptr;
 static GridMenu *actionMenuCreate()
 {
     GridMenu *menu = gridMenuCreate(NUM_ITEMS, NUM_ROWS, NUM_COLS);
-    if (menu)
+    if (!menu)
     {
-        for (size_t row = 0; row < NUM_ROWS; row++)
+        return nullptr;
+    }
+
+    for (size_t row = 0; row < NUM_ROWS; row++)
+    {
+        for (size_t col = 0; col < NUM_COLS; col++)
         {
-            for (size_t col = 0; col < NUM_COLS; col++)
+            size_t index = row * NUM_COLS + col;
+            if (index >= menu->numItems)
             {
-                size_t index = row * NUM_COLS + col;
-                puts("Before memcpy");
-                memcpy(&menu->items[index], &actionItems[row][col], sizeof(MenuItem));
-                puts("After memcpy");
+                gridMenuDestroy(menu);
+                return nullptr;
             }
+            menu->items[index] = &actionItems[row][col];
         }
     }
     return menu;
@@ -87,7 +92,11 @@ static void actionMenuEnd()
 static void actionMenuDisplay()
 {
     if (!actionMenu)
+    {
         actionMenu = actionMenuCreate();
+        if (!actionMenu)
+            return;
+    }
 
     DrawText("BATTLE MENU", screen.width * 0.6f, screen.height * 0.35f, 20, WHITE);
     for (size_t i = 0; i < actionMenu->grid.numRows; i++)
@@ -95,38 +104,54 @@ static void actionMenuDisplay()
         for (size_t j = 0; j < actionMenu->grid.numCols; j++)
         {
             MenuItem item = actionItems[i][j];
-            DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
+            if (item.text)
+            {
+                DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
+            }
         }
     }
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
     {
-        assert(actionMenu->moveDown);
-        actionMenu->moveDown(actionMenu);
+        if (actionMenu->moveDown)
+            actionMenu->moveDown(actionMenu);
     }
     else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
     {
-        assert(actionMenu->moveUp);
-        actionMenu->moveUp(actionMenu);
+        if (actionMenu->moveUp)
+            actionMenu->moveUp(actionMenu);
     }
     else if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A))
     {
-        assert(actionMenu->moveLeft);
-        actionMenu->moveLeft(actionMenu);
+        if (actionMenu->moveLeft)
+            actionMenu->moveLeft(actionMenu);
     }
     else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D))
     {
-        assert(actionMenu->moveRight);
-        actionMenu->moveRight(actionMenu);
+        if (actionMenu->moveRight)
+            actionMenu->moveRight(actionMenu);
     }
     else if (IsKeyPressed(KEY_ENTER))
     {
-        actionMenu->items[actionMenu->grid.currentRow][actionMenu->grid.currentCol].select();
-        actionMenuEnd();
+        if (actionMenu->grid.currentRow < actionMenu->grid.numRows &&
+            actionMenu->grid.currentCol < actionMenu->grid.numCols)
+        {
+            size_t index = actionMenu->grid.currentRow * actionMenu->grid.numCols +
+                           actionMenu->grid.currentCol;
+            if (index < actionMenu->numItems && actionMenu->items[index]->select)
+            {
+                actionMenu->items[index]->select();
+                actionMenuEnd();
+            }
+        }
     }
 
-    MenuItem currentItem = actionItems[actionMenu->grid.currentRow][actionMenu->grid.currentCol];
-    DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
+    if (actionMenu->grid.currentRow < NUM_ROWS && actionMenu->grid.currentCol < NUM_COLS)
+    {
+        MenuItem currentItem =
+            actionItems[actionMenu->grid.currentRow][actionMenu->grid.currentCol];
+        DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
+    }
 }
 
 Mon *playerMon = nullptr;
@@ -150,24 +175,36 @@ static void initBattleUI(void)
     if (!playerMon)
     {
         playerMon = createMon("froge");
-        playerMon->hp = 100;
-        loadMonTexture(playerMon, BACK);
+        if (playerMon)
+        {
+            playerMon->hp = 100;
+            loadMonTexture(playerMon, BACK);
+        }
     }
 
     if (!enemyMon)
     {
         enemyMon = createMon("froge");
-        enemyMon->hp = 80;
-        loadMonTexture(enemyMon, FRONT);
+        if (enemyMon)
+        {
+            enemyMon->hp = 80;
+            loadMonTexture(enemyMon, FRONT);
+        }
     }
 }
 
 static void renderMon(Mon *mon, Vector2 position)
 {
-    if (mon && mon->texture && IsTextureValid(*mon->texture))
-    {
-        DrawTextureEx(*mon->texture, position, ROTATION, SCALE, TINT);
-    }
+    if (!mon)
+        return;
+
+    if (!mon->texture)
+        return;
+
+    if (!IsTextureValid(*mon->texture))
+        return;
+
+    DrawTextureEx(*mon->texture, position, ROTATION, SCALE, TINT);
 }
 
 static void renderTextBox(void)
@@ -201,8 +238,12 @@ static void renderBattleUI(void)
 {
     renderTextBox();
     renderActionMenu();
-    renderMon(playerMon, ui.playerMonPos);
-    renderMon(enemyMon, ui.enemyMonPos);
+
+    if (playerMon)
+        renderMon(playerMon, ui.playerMonPos);
+
+    if (enemyMon)
+        renderMon(enemyMon, ui.enemyMonPos);
 }
 
 void BattleScene(void)
@@ -219,10 +260,19 @@ void BattleScene(void)
 
 void EndBattleScene(void)
 {
-    destroyMon(playerMon);
-    destroyMon(enemyMon);
-    playerMon = nullptr;
-    enemyMon = nullptr;
+    if (playerMon)
+    {
+        destroyMon(playerMon);
+        playerMon = nullptr;
+    }
+
+    if (enemyMon)
+    {
+        destroyMon(enemyMon);
+        enemyMon = nullptr;
+    }
+
+    actionMenuEnd();
     battleState = BATTLE_MENU;
     battleInitialized = false;
 }
