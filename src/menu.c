@@ -54,7 +54,6 @@ GridMenu *gridMenuCreate(size_t numItems, const size_t numRows, const size_t num
     menu->moveDown = gridMenuDown;
     menu->moveUp = gridMenuUp;
 
-    memset(menu, 0, numItems * sizeof(MenuItem *));
     return menu;
 }
 

@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 // Should these be moved into initBattleUI ?
 constexpr int windowMargin = 50;
@@ -61,18 +62,26 @@ static GridMenu *actionMenuCreate()
     GridMenu *menu = gridMenuCreate(NUM_ITEMS, NUM_ROWS, NUM_COLS);
     if (menu)
     {
-        for (size_t i = 0; i < menu->numItems; i++)
-            memcpy(&menu->items[i], &actionItems[i], sizeof(MenuItem));
+        for (size_t row = 0; row < NUM_ROWS; row++)
+        {
+            for (size_t col = 0; col < NUM_COLS; col++)
+            {
+                size_t index = row * NUM_COLS + col;
+                puts("Before memcpy");
+                memcpy(&menu->items[index], &actionItems[row][col], sizeof(MenuItem));
+                puts("After memcpy");
+            }
+        }
     }
     return menu;
 }
 
-static void actionMenuEnd(GridMenu *menu)
+static void actionMenuEnd()
 {
-    if (menu)
-        gridMenuDestroy(menu);
+    if (actionMenu)
+        gridMenuDestroy(actionMenu);
 
-    menu = nullptr;
+    actionMenu = nullptr;
 }
 
 static void actionMenuDisplay()
@@ -113,7 +122,7 @@ static void actionMenuDisplay()
     else if (IsKeyPressed(KEY_ENTER))
     {
         actionMenu->items[actionMenu->grid.currentRow][actionMenu->grid.currentCol].select();
-        actionMenuEnd(actionMenu);
+        actionMenuEnd();
     }
 
     MenuItem currentItem = actionItems[actionMenu->grid.currentRow][actionMenu->grid.currentCol];
