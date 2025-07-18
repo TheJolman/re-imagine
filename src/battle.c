@@ -183,7 +183,9 @@ static void actionMenuDisplay()
     {
         MenuItem currentItem =
             actionItems[actionMenu->grid.currentRow][actionMenu->grid.currentCol];
-        DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
+        constexpr int width = 120;
+        constexpr int height = 30;
+        DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, width, height, DARKGRAY);
     }
 }
 
