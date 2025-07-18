@@ -1,89 +1,81 @@
 #include "pause.h"
 #include "assert.h"
+#include "menu.h"
 #include "raylib.h"
+#include <string.h>
 
-#define NUM_ITEMS 3
+constexpr size_t NUM_ITEMS = 3;
 
-typedef struct
+static void optionsSelect(void) { return; }
+static void exitSelect(void)
 {
-    char *name;
-    int posX;
-    int posY;
-    int fontSize;
-    Color color;
-} PauseItem;
+    pauseMenuEnd();
+    CloseWindow();
+}
+static void creditsSelect(void) { return; }
 
-typedef enum
+// NOTE: maybe move these into the create function?
+
+// clang-format off
+static const MenuItem optionsItem = {"OPTIONS", 50, 100, 20, DARKGRAY, optionsSelect};
+static const MenuItem exitItem =    {"EXIT",    50, 130, 20, DARKGRAY, exitSelect};
+static const MenuItem creditsItem = {"CREDITS", 50, 160, 20, DARKGRAY, creditsSelect};
+// clang-format on
+
+static const MenuItem pauseItems[NUM_ITEMS] = {optionsItem, exitItem, creditsItem};
+
+VerticalMenu *pauseMenu = nullptr;
+
+static VerticalMenu *pauseMenuCreate()
 {
-    OPTIONS,
-    EXIT,
-    CREDITS
-} MenuIndices;
-
-const PauseItem pause_options = {"OPTIONS", 50, 100, 20, DARKGRAY};
-const PauseItem pause_exit = {"EXIT", 50, 130, 20, DARKGRAY};
-const PauseItem pause_credits = {"CREDITS", 50, 160, 20, DARKGRAY};
-
-const PauseItem pauseItems[NUM_ITEMS] = {pause_options, pause_exit, pause_credits};
-
-int currentMenuIndex = 0;
-
-void nextMenuItem(int *currentPos)
-{
-    // wraps to top
-    if (*currentPos == NUM_ITEMS - 1)
+    VerticalMenu *menu = verticalMenuCreate(NUM_ITEMS);
+    if (menu)
     {
-        *currentPos = 0;
+        for (size_t i = 0; i < menu->numItems; i++)
+            memcpy(&menu->items[i], &pauseItems[i], sizeof(MenuItem));
     }
-    else
-    {
-        *currentPos += 1;
-    }
+
+    return menu;
 }
 
-void prevMenuItem(int *currentPos)
+void pauseMenuDisplay(void)
 {
-    // wraps to bottom
-    if (*currentPos == 0)
+    if (!pauseMenu)
     {
-        *currentPos = NUM_ITEMS - 1;
+        pauseMenu = pauseMenuCreate();
+        if (!pauseMenu)
+            return;
     }
-    else
-    {
-        *currentPos -= 1;
-    }
-}
 
-void PauseMenu(void)
-{
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 
-    for (int i = 0; i < NUM_ITEMS; ++i)
+    for (int i = 0; i < pauseMenu->numItems; i++)
     {
-        // TODO: Use consistenet styling for all and make PauseItem less complex (maybe)
-        PauseItem item = pauseItems[i];
-        DrawText(item.name, item.posX, item.posY, item.fontSize, item.color);
+        MenuItem item = pauseItems[i];
+        DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
     }
 
-    assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
-    PauseItem currentItem = pauseItems[currentMenuIndex];
+    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
+    {
+        assert(pauseMenu->nextItem);
+        pauseMenu->nextItem(pauseMenu);
+    }
+    else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
+    {
+        assert(pauseMenu->prevItem);
+        pauseMenu->prevItem(pauseMenu);
+    }
+    else if (IsKeyPressed(KEY_ENTER))
+        pauseMenu->items[pauseMenu->selectedItem].select();
+
+    MenuItem currentItem = pauseItems[pauseMenu->selectedItem];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
 }
 
-void selectMenuItem(void)
+void pauseMenuEnd()
 {
-    assert(currentMenuIndex >= 0 && currentMenuIndex < NUM_ITEMS);
+    if (pauseMenu)
+        verticalMenuDestroy(pauseMenu);
 
-    switch (currentMenuIndex)
-    {
-    case OPTIONS:
-        // TODO: Implement options menu
-        break;
-    case EXIT:
-        CloseWindow();
-        break;
-    case CREDITS:
-        // TODO: Implement credits
-        break;
-    }
+    pauseMenu = nullptr;
 }

@@ -7,3 +7,5 @@ build/
 .pre-commit-config.yaml
 result
 CMakeFiles/
+.claude
+vgcore.*

@@ -4,15 +4,12 @@
 #include "battle.h"
 #include "game.h"
 #include "map.h"
-#include "mon.h"
 #include "pause.h"
 // #include "utils.h"
 
 Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
-// Image image = {0};
-// MonTextures froge = {0};
 
 static void MovePlayer(void)
 {
@@ -65,6 +62,7 @@ static void HandleInput(void)
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B))
         {
+            // NOTE: If concurencey is ever added should these be switched?
             EndBattleScene();
             state = FREE_ROAM;
         }
@@ -72,19 +70,10 @@ static void HandleInput(void)
 
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE))
-            state = FREE_ROAM;
-        if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
-        {
-            nextMenuItem(&currentMenuIndex);
-        }
-        else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
-        {
-            prevMenuItem(&currentMenuIndex);
-        }
-        else if (IsKeyPressed(KEY_ENTER))
-        {
-            selectMenuItem();
-        }
+            {
+                pauseMenuEnd();
+                state = FREE_ROAM;
+            }
         break;
 
     case TITLE_SCREEN:
@@ -102,17 +91,6 @@ static void HandleInput(void)
 void InitGame(void)
 {
     state = FREE_ROAM;
-
-    // TODO: implement lazy loading
-
-    // image = LoadImage("assets/froge-front.png");
-    // froge.frontTexture = LoadTextureFromImage(image);
-    // UnloadImage(image);
-    // image = LoadImage("assets/froge-back.png");
-    // froge.backTexture = LoadTextureFromImage(image);
-    // UnloadImage(image);
-    // froge.scale = 0.4f;
-    // froge.tint = WHITE;
 
     player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
     player.baseSpeed = 5.0f;
@@ -148,7 +126,7 @@ void DrawGame(/* tmx_map *map */)
         BattleScene();
         break;
     case PAUSED:
-        PauseMenu();
+        pauseMenuDisplay();
         break;
     case TITLE_SCREEN:
         break;
