@@ -43,14 +43,42 @@ static void itemsSelect()  { battleState = BATTLE_ITEMS; }
 static void runSelect()    { battleState = BATTLE_RUN; }
 static void switchSelect() { battleState = BATTLE_SWITCH; }
 
-static const MenuItem attackItem = {"ATTACK", 50, 100, 20, DARKGRAY, attackSelect};
-static const MenuItem itemsItem =  {"ITEMS",  50, 130, 20, DARKGRAY, itemsSelect};
-static const MenuItem runItem =    {"RUN",    50, 160, 20, DARKGRAY, runSelect};
-static const MenuItem switchItem = {"SWITCH", 50, 160, 20, DARKGRAY, switchSelect};
+static MenuItem attackItem = {"ATTACK", 0, 0, 20, DARKGRAY, attackSelect};
+static MenuItem itemsItem =  {"ITEMS",  0, 0, 20, DARKGRAY, itemsSelect};
+static MenuItem runItem =    {"RUN",    0, 0, 20, DARKGRAY, runSelect};
+static MenuItem switchItem = {"SWITCH", 0, 0, 20, DARKGRAY, switchSelect};
 // clang-format on
 
-static MenuItem actionItems[NUM_ROWS][NUM_COLS] = {{attackItem, itemsItem},
-                                                         {runItem, switchItem}};
+Mon *playerMon = nullptr;
+Mon *enemyMon = nullptr;
+BattleUI ui = {0};
+static bool battleInitialized = false;
+
+static MenuItem actionItems[NUM_ROWS][NUM_COLS];
+
+static void updateMenuItemPositions()
+{
+    float menuStartX = ui.textBox.x + ui.textBox.width * 0.5f + 10;
+    float menuStartY = ui.textBox.y + 30;
+    float itemSpacing = 35;
+
+    attackItem.posX = menuStartX;
+    attackItem.posY = menuStartY;
+
+    itemsItem.posX = menuStartX + 120;
+    itemsItem.posY = menuStartY;
+
+    runItem.posX = menuStartX;
+    runItem.posY = menuStartY + itemSpacing;
+
+    switchItem.posX = menuStartX + 120;
+    switchItem.posY = menuStartY + itemSpacing;
+
+    actionItems[0][0] = attackItem;
+    actionItems[0][1] = itemsItem;
+    actionItems[1][0] = runItem;
+    actionItems[1][1] = switchItem;
+}
 
 GridMenu *actionMenu = nullptr;
 GridMenu *attackMenu = nullptr;
@@ -98,7 +126,12 @@ static void actionMenuDisplay()
             return;
     }
 
-    DrawText("BATTLE MENU", screen.width * 0.6f, screen.height * 0.35f, 20, WHITE);
+    float menuTitleX = ui.textBox.x + ui.textBox.width * 0.5f + 10;
+    float menuTitleY = ui.textBox.y + 5;
+    DrawText("BATTLE MENU", menuTitleX, menuTitleY, 18, WHITE);
+
+    DrawLine(ui.textBox.x + ui.textBox.width * 0.5f, ui.textBox.y,
+             ui.textBox.x + ui.textBox.width * 0.5f, ui.textBox.y + ui.textBox.height, GRAY);
     for (size_t i = 0; i < actionMenu->grid.numRows; i++)
     {
         for (size_t j = 0; j < actionMenu->grid.numCols; j++)
@@ -154,11 +187,6 @@ static void actionMenuDisplay()
     }
 }
 
-Mon *playerMon = nullptr;
-Mon *enemyMon = nullptr;
-BattleUI ui = {0};
-static bool battleInitialized = false;
-
 static void initBattleUI(void)
 {
     ui.textBox = (Rectangle){windowMargin, screen.height - (windowMargin + textHeight),
@@ -170,6 +198,7 @@ static void initBattleUI(void)
     ui.actionMenuPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 20};
     ui.statusBarPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 80};
 
+    updateMenuItemPositions();
     battleState = BATTLE_MENU;
 
     if (!playerMon)
