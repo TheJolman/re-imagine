@@ -81,6 +81,14 @@ static void actionMenuDisplay()
         actionMenu = actionMenuCreate();
 
     DrawText("BATTLE MENU", screen.width * 0.6f, screen.height * 0.35f, 20, WHITE);
+    for (size_t i = 0; i < actionMenu->grid.numRows; i++)
+    {
+        for (size_t j = 0; j < actionMenu->grid.numCols; j++)
+        {
+            MenuItem item = actionItems[i][j];
+            DrawText(item.text, item.posX, item.posY, item.fontSize, item.color);
+        }
+    }
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
     {
@@ -128,7 +136,6 @@ static void initBattleUI(void)
     ui.actionMenuPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 20};
     ui.statusBarPos = (Vector2){ui.textBox.x + 20, ui.textBox.y + 80};
 
-    initBattleUI();
     battleState = BATTLE_MENU;
 
     if (!playerMon)
