@@ -35,13 +35,17 @@ static VerticalMenu *pauseMenuCreate()
             memcpy(&menu->items[i], &pauseItems[i], sizeof(MenuItem));
     }
 
-    return pauseMenu;
+    return menu;
 }
 
 void pauseMenuDisplay(void)
 {
     if (!pauseMenu)
+    {
         pauseMenu = pauseMenuCreate();
+        if (!pauseMenu)
+            return;
+    }
 
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 

@@ -49,6 +49,8 @@ GridMenu *gridMenuCreate(size_t numItems, const size_t numRows, const size_t num
     menu->numItems = numItems;
     menu->grid.numRows = numRows;
     menu->grid.numCols = numCols;
+    menu->grid.currentRow = 0;
+    menu->grid.currentCol = 0;
     menu->moveLeft = gridMenuLeft;
     menu->moveRight = gridMenuRight;
     menu->moveDown = gridMenuDown;
