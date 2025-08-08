@@ -175,6 +175,8 @@ static void actionMenuDisplay()
             {
                 actionMenu->items[index]->select();
                 actionMenuEnd();
+                            return;
+                
             }
         }
     }
