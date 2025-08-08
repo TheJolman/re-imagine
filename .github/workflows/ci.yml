@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Build project
+        run: nix develop --command bash -c "cmake -B build -S . && cmake --build build"
+      - name: Format check
+        run: nix develop --command cmake --build build --target format
+      - name: Clang-Tidy check
+        run: nix develop --command cmake --build build --target tidy
