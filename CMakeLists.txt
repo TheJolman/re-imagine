@@ -6,8 +6,15 @@ project(rpg-raylib C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(SOURCES src/main.c src/utils.c src/game.c src/pause.c src/battle.c
-            src/map.c src/mon.c src/menu.c)
+set(SOURCES
+    src/main.c
+    src/utils.c
+    src/game.c
+    src/pause.c
+    src/battle.c
+    src/map.c
+    src/mon.c
+    src/menu.c)
 
 # Check for raylib and install it if it's not found
 find_package(raylib 5.5 QUIET)
@@ -91,6 +98,13 @@ endif()
 add_custom_target(
   tidy
   COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Running clang-tidy"
+  VERBATIM)
+
+add_custom_target(
+  fix
+  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES} --fix
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Running clang-tidy"
   VERBATIM)
