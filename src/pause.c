@@ -11,6 +11,7 @@ static void exitSelect(void)
 {
     pauseMenuEnd();
     CloseWindow();
+    exit(0);
 }
 static void creditsSelect(void) { return; }
 
