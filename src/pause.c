@@ -32,7 +32,7 @@ static VerticalMenu *pauseMenuCreate()
     if (menu)
     {
         for (size_t i = 0; i < menu->numItems; i++)
-            memcpy(&menu->items[i], &pauseItems[i], sizeof(MenuItem));
+            menu->items[i] = pauseItems[i];
     }
 
     return menu;

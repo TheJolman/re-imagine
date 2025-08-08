@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 static void loadOneTexture(char *imagePath, Texture2D *texture)
 {
     Image image = LoadImage(imagePath);
@@ -17,22 +16,19 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
 {
     char imagePath[256];
     Image image = {};
-    auto basePath = "assets/";
-    strcpy(imagePath, basePath);
     if (!mon->name)
     {
-        fprintf(stderr, "ERROR: Can not load texture of mon with no name");
+        fputs("ERROR: Can not load texture of mon with no name", stderr);
         exit(1);
     }
-    strcat(imagePath, mon->name);
 
     switch (textureType)
     {
     case FRONT:
-        strcat(imagePath, "-front.png");
+        snprintf(imagePath, sizeof(imagePath), "assets/%s-front.png", mon->name);
         break;
     case BACK:
-        strcat(imagePath, "-back.png");
+        snprintf(imagePath, sizeof(imagePath), "assets/%s-back.png", mon->name);
         break;
     }
 
@@ -45,21 +41,27 @@ Mon *createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
     mon->name = malloc(strlen(name) + 1);
-    strcpy((char*)mon->name, name);
+    size_t nameLen = strlen(name);
+    memcpy((char *)mon->name, name, nameLen);
+    ((char *)mon->name)[nameLen] = '\0';
     mon->texture = malloc(sizeof(Texture2D));
     mon->hp = 100;
     // TODO: Initialize other values
     return mon;
 }
 
-void destroyMon(Mon *mon) {
-    if (mon) {
-        if (mon->texture) {
+void destroyMon(Mon *mon)
+{
+    if (mon)
+    {
+        if (mon->texture)
+        {
             UnloadTexture(*mon->texture);
             free(mon->texture);
         }
-        if (mon->name) {
-            free((char*)mon->name);
+        if (mon->name)
+        {
+            free((char *)mon->name);
         }
         free(mon);
     }

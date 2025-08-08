@@ -12,10 +12,10 @@
  ********************************************************************************************/
 
 #include <raylib.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tmx.h>
-#include <stdio.h>
 
 #include "debug.h"
 #include "game.h"
@@ -57,7 +57,9 @@ int main(int argc, const char **argv)
         }
         else
         {
-            fprintf(stderr, "ERROR: Unrecognized argument: %s\n", argv[i]);
+            fputs("ERROR: Unrecognized argument: ", stderr);
+            fputs(argv[i], stderr);
+            fputc('\n', stderr);
             exit(1);
         }
     }
