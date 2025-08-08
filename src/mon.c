@@ -41,9 +41,7 @@ Mon *createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
     mon->name = malloc(strlen(name) + 1);
-    size_t nameLen = strlen(name);
-    memcpy((char *)mon->name, name, nameLen);
-    ((char *)mon->name)[nameLen] = '\0';
+    strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
     mon->hp = 100;
     // TODO: Initialize other values
