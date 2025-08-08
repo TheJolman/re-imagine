@@ -66,11 +66,10 @@ void pauseMenuDisplay(void)
         pauseMenu->prevItem(pauseMenu);
     }
     else if (IsKeyPressed(KEY_ENTER))
-        {
-    pauseMenu->items[pauseMenu->selectedItem].select();
-    return;
-
-                }
+    {
+        pauseMenu->items[pauseMenu->selectedItem].select();
+        return;
+    }
 
     MenuItem currentItem = pauseItems[pauseMenu->selectedItem];
     DrawRectangleLines(currentItem.posX - 10, currentItem.posY - 5, 300, 30, DARKGRAY);
