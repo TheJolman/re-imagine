@@ -70,10 +70,10 @@ static void HandleInput(void)
 
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE))
-            {
-                pauseMenuEnd();
-                state = FREE_ROAM;
-            }
+        {
+            pauseMenuEnd();
+            state = FREE_ROAM;
+        }
         break;
 
     case TITLE_SCREEN:
