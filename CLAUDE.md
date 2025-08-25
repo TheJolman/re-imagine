@@ -4,7 +4,7 @@ This file contains project-specific information for Claude Code to help with dev
 
 ## Project Overview
 
-RPG game built with raylib and C. Uses TMX format for tilemaps.
+RPG game built with raylib and C23. Uses TMX format for tilemaps.
 
 ## Build System
 
@@ -12,13 +12,12 @@ RPG game built with raylib and C. Uses TMX format for tilemaps.
 - **Environment**: Nix flake-based development environment
 - **Build commands**:
   ```bash
-  nix develop --command bash -c "cd build && ninja"
+  nix develop --command cmake --build build
   ```
 - **Run**: `nix develop --command ./build/rpg-raylib`
 
 ## Development Environment
 
-- Uses `direnv` for automatic environment loading
 - Development shell defined in `flake.nix`
 - Key dependencies: raylib, tmx, glfw, mesa
 - Debug build by default (`CMAKE_BUILD_TYPE=Debug`)
@@ -37,8 +36,8 @@ src/
 └── utils.c       # Utilities
 
 include/          # Header files
-build/           # Build output
-assets/          # Game assets
+build/            # Build output
+assets/           # Game assets
 ```
 
 ## Key Files
@@ -65,3 +64,4 @@ assets/          # Game assets
 - 2D camera system with player following
 - TMX tilemap support (currently commented out)
 - Basic movement with WASD + Shift for speed boost
+- Battle scene with image rendering and wip UI
