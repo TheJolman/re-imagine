@@ -13,6 +13,7 @@
   valgrind,
   glfw,
   lldb,
+  mesa,
 }:
 mkShell {
   packages =
@@ -32,6 +33,7 @@ mkShell {
     tmx
     glfw
     gcc.cc.lib
+    mesa
   ];
 
   shellHook = ''

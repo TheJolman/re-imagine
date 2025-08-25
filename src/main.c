@@ -76,6 +76,11 @@ int main(int argc, const char **argv)
     // tmx_map *map = tmx_load(mapPath);
 
     InitWindow(screen.width, screen.height, "Game!");
+    if (!IsWindowReady())
+    {
+        fputs("Failed to initialize window\n", stderr);
+        exit(1);
+    }
     SetTargetFPS(60);
     InitGame();
 
