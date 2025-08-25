@@ -11,7 +11,8 @@
   raylib,
   tmx,
   valgrind,
-  glfw
+  glfw,
+  lldb,
 }:
 mkShell {
   packages =
@@ -21,18 +22,22 @@ mkShell {
       ninja
       gcc
       gdb
+      lldb
       clang-tools
-      raylib
-      tmx
-      gcc.cc.lib
-      glfw
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
-  CC = "gcc";
-  CMAKE_GENERATOR = "Ninja";
+  buildInputs = [
+    raylib
+    tmx
+    glfw
+    gcc.cc.lib
+  ];
 
   shellHook = ''
+    export CC=gcc
+    export CMAKE_GENERATOR=Ninja
+    export CMAKE_BUILD_TYPE=Debug
     export PATH="$PWD/build:$PATH"
     echo "Dev shell activated."
   '';

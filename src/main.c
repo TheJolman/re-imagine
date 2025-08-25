@@ -23,8 +23,8 @@
 
 #define VERSION "0.0.1"
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 900
+constexpr size_t screen_width = 1200;
+constexpr size_t screen_height = 900;
 
 Screen screen = {0};
 
@@ -64,8 +64,8 @@ int main(int argc, const char **argv)
         }
     }
 
-    screen.width = SCREEN_WIDTH;
-    screen.height = SCREEN_HEIGHT;
+    screen.width = screen_width;
+    screen.height = screen_height;
 
     debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
 
