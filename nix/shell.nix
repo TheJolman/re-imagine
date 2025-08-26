@@ -9,7 +9,7 @@
   raylib,
   valgrind,
   lldb,
-  llvmPackages_21,
+  llvmPackages_20,
 }:
 mkShellNoCC {
   packages =
@@ -17,10 +17,10 @@ mkShellNoCC {
       cmake
       pkg-config
       ninja
-      llvmPackages_21.clangUseLLVM
+      llvmPackages_20.clangUseLLVM
       gdb
       lldb
-      llvmPackages_21.clang-tools
+      llvmPackages_20.clang-tools
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
