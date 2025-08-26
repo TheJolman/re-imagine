@@ -45,33 +45,13 @@ if(NOT raylib_FOUND)
   FetchContent_MakeAvailable(raylib)
 endif()
 
-# TMX map renderer (libxml2 and zlib are deps)
-find_package(LibXml2 REQUIRED)
-find_package(ZLIB REQUIRED)
-
-find_package(tmx 1.10 QUIET)
-if(NOT tmx_FOUND)
-  include(FetchContent)
-  set(FETCHCONTENT_QUIET FALSE)
-
-  FetchContent_Declare(
-    tmx
-    GIT_REPOSITORY https://github.com/baylej/tmx
-    GIT_TAG tmx_1.10.0
-    GIT_PROGRESS TRUE)
-endif()
-
 # ---------- Primary build target ----------
-# if(NOT CMAKE_BUILD_TYPE)
-#   set(CMAKE_BUILD_TYPE Debug)
-# endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 endif()
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
-                                              ZLIB::ZLIB)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 if(WIN32)

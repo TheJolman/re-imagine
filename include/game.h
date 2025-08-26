@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <tmx.h>
+// #include <tmx.h>
 
 #include "player.h"
 

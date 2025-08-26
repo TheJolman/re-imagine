@@ -9,9 +9,8 @@
   gdb,
   clang-tools,
   raylib,
-  tmx,
   valgrind,
-  glfw,
+  # glfw,
   lldb,
   # mesa,
   clang,
@@ -32,8 +31,7 @@ mkShell {
 
   buildInputs = [
     raylib
-    # tmx
-    glfw
+    # glfw
     # gcc.cc.lib
     # mesa
   ];

@@ -3,7 +3,6 @@
   cmake,
   ninja,
   raylib,
-  tmx,
 }:
 stdenv.mkDerivation {
   name = "rpg-raylib";
@@ -17,7 +16,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     raylib
-    tmx
   ];
 
   cmakeFlags = [

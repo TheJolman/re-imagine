@@ -19,12 +19,10 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
-        packages.default = pkgs.callPackage ./nix/default.nix {
-          tmx = pkgs.callPackage ./nix/tmx.nix {};
-        };
-        devShells.default = pkgs.callPackage ./nix/shell.nix {
-          tmx = pkgs.callPackage ./nix/tmx.nix {};
-        };
+        packages.default =
+          pkgs.callPackage ./nix/default.nix {};
+        devShells.default =
+          pkgs.callPackage ./nix/shell.nix {};
       }
     );
 }
