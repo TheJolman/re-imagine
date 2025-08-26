@@ -40,7 +40,5 @@ mkShell {
     export CC=gcc
     export CMAKE_GENERATOR=Ninja
     export CMAKE_BUILD_TYPE=Debug
-    export PATH="$PWD/build:$PATH"
-    echo "Dev shell activated."
   '';
 }

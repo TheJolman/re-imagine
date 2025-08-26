@@ -1,20 +1,23 @@
 {
-  description = "Generic Dev Environment";
+  description = "Flake for a Raylib game";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    systems.url = "github:nix-systems/default";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
   };
 
   outputs = {
-    self,
     nixpkgs,
     flake-utils,
+    ...
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        pname = "rpg-raylib";
       in {
         packages.default = pkgs.callPackage ./nix/default.nix {
           tmx = pkgs.callPackage ./nix/tmx.nix {};
