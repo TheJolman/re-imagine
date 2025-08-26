@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   ninja,
-  gcc,
+  # gcc,
   gdb,
   clang-tools,
   raylib,
@@ -13,7 +13,8 @@
   valgrind,
   glfw,
   lldb,
-  mesa,
+  # mesa,
+  clang,
 }:
 mkShell {
   packages =
@@ -21,7 +22,8 @@ mkShell {
       cmake
       pkg-config
       ninja
-      gcc
+      # gcc
+      clang
       gdb
       lldb
       clang-tools
@@ -30,14 +32,14 @@ mkShell {
 
   buildInputs = [
     raylib
-    tmx
+    # tmx
     glfw
-    gcc.cc.lib
-    mesa
+    # gcc.cc.lib
+    # mesa
   ];
 
   shellHook = ''
-    export CC=gcc
+    export CC=clang
     export CMAKE_GENERATOR=Ninja
     export CMAKE_BUILD_TYPE=Debug
   '';
