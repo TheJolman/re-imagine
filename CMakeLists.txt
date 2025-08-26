@@ -67,27 +67,19 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 # ---------- Code quality targets ----------
 if(WIN32)
-  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.bat")
+  set(CPPCHECK_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.bat")
   set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.bat")
 else()
-  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.sh")
+  set(CPPCHECK_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/cppcheck.sh")
   set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.sh")
 endif()
 
 # clang-tidy
 add_custom_target(
-  tidy
-  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
+  check
+  COMMAND ${CPPCHECK_SCRIPT}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Running clang-tidy"
-  VERBATIM)
-
-# clang-tidy fix
-add_custom_target(
-  fix
-  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES} --fix
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Running clang-tidy"
+  COMMENT "Running code analysis tool"
   VERBATIM)
 
 # clang-format target

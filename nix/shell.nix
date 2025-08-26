@@ -10,6 +10,7 @@
   valgrind,
   lldb,
   llvmPackages_20,
+  cppcheck,
 }:
 mkShellNoCC {
   packages =
@@ -21,6 +22,7 @@ mkShellNoCC {
       gdb
       lldb
       llvmPackages_20.clang-tools
+      cppcheck
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
