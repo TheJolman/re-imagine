@@ -6,6 +6,7 @@ project(rpg-raylib C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# ----------  Dependencies ----------
 set(SOURCES
     src/main.c
     src/utils.c
@@ -16,7 +17,7 @@ set(SOURCES
     src/mon.c
     src/menu.c)
 
-# Check for raylib and install it if it's not found
+# Raylib graphics library
 find_package(raylib 5.5 QUIET)
 
 if(NOT raylib_FOUND)
@@ -44,34 +45,13 @@ if(NOT raylib_FOUND)
   FetchContent_MakeAvailable(raylib)
 endif()
 
-# required for TMX library
-find_package(LibXml2 REQUIRED)
-find_package(ZLIB REQUIRED)
-
-find_package(tmx 1.10 QUIET)
-if(NOT tmx_FOUND)
-  include(FetchContent)
-  set(FETCHCONTENT_QUIET FALSE)
-
-  FetchContent_Declare(
-    tmx
-    GIT_REPOSITORY https://github.com/baylej/tmx
-    GIT_TAG tmx_1.10.0
-    GIT_PROGRESS TRUE)
-endif()
-
-# Use debug build by default
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug)
-endif()
+# ---------- Primary build target ----------
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 endif()
 
-# Target
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib tmx LibXml2::LibXml2
-                                              ZLIB::ZLIB)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 if(WIN32)
@@ -85,31 +65,24 @@ endif()
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
-# Code quality targets
+# ---------- Code quality targets ----------
 if(WIN32)
-  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.bat")
+  set(CPPCHECK_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.bat")
   set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.bat")
 else()
-  set(CLANG_TIDY_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-tidy.sh")
+  set(CPPCHECK_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/cppcheck.sh")
   set(CLANG_FORMAT_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/clang-format.sh")
 endif()
 
-# Add clang-tidy target
+# clang-tidy
 add_custom_target(
-  tidy
-  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES}
+  check
+  COMMAND ${CPPCHECK_SCRIPT}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Running clang-tidy"
+  COMMENT "Running code analysis tool"
   VERBATIM)
 
-add_custom_target(
-  fix
-  COMMAND ${CLANG_TIDY_SCRIPT} ${SOURCES} --fix
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Running clang-tidy"
-  VERBATIM)
-
-# Add clang-format target
+# clang-format target
 add_custom_target(
   format
   COMMAND ${CLANG_FORMAT_SCRIPT} -i ${SOURCES}

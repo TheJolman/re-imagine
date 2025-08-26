@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tmx.h>
 
 #include "debug.h"
 #include "game.h"
@@ -23,8 +22,8 @@
 
 #define VERSION "0.0.1"
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 900
+constexpr size_t screen_width = 1200;
+constexpr size_t screen_height = 900;
 
 Screen screen = {0};
 
@@ -64,18 +63,18 @@ int main(int argc, const char **argv)
         }
     }
 
-    screen.width = SCREEN_WIDTH;
-    screen.height = SCREEN_HEIGHT;
+    screen.width = screen_width;
+    screen.height = screen_height;
 
     debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
 
-    // tmx_img_load_func = raylib_tex_loader;
-    // tmx_img_free_func = raylib_free_tex;
-    //
-    // char mapPath[] = "resources/island.tmx";
-    // tmx_map *map = tmx_load(mapPath);
 
     InitWindow(screen.width, screen.height, "Game!");
+    if (!IsWindowReady())
+    {
+        fputs("Failed to initialize window\n", stderr);
+        exit(1);
+    }
     SetTargetFPS(60);
     InitGame();
 
@@ -83,10 +82,9 @@ int main(int argc, const char **argv)
     while (true)
     {
         UpdateGame();
-        DrawGame(/* map */);
+        DrawGame();
     }
 
-    // tmx_map_free(map);
     CloseWindow();
 
     return 0;

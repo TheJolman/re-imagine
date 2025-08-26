@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-# Check if clang-tidy is available
 if command -v clang-tidy &> /dev/null; then
     echo "Running clang-tidy..."
-    clang-tidy -p build "$@"
+    cppcheck --project=build/compile_commands.json "$@"
 else
-    echo "Error: clang-tidy not found in PATH"
+    echo "Error: cppcheck not found in PATH"
     exit 1
 fi

@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <tmx.h>
-
 #include "player.h"
 
 typedef enum
@@ -30,6 +28,6 @@ void UpdateGame(void);
 /**
  * Draws a single frame
  */
-void DrawGame(/* tmx_map *map */);
+void DrawGame(void);
 
 #endif // !GAME_H

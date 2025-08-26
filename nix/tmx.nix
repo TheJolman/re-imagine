@@ -1,3 +1,7 @@
+/*
+* This is a package defintion for tmx: a tiled map renderer. It was briefly used in this project,
+* but no longer. I'm keeping the package defintion here in case I ever go back to it.
+*/
 {
   lib,
   stdenv,
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "C tmx map loader";
     changelog = "https://github.com/baylej/tmx/releases/tag/v${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ thejolman ];
+    maintainers = with lib.maintainers; [thejolman];
     platforms = lib.platforms.all;
   };
 }

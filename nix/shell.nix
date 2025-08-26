@@ -1,39 +1,38 @@
 {
-  mkShell,
+  mkShellNoCC,
   lib,
   stdenv,
   cmake,
   pkg-config,
   ninja,
-  gcc,
   gdb,
-  clang-tools,
   raylib,
-  tmx,
   valgrind,
-  glfw
+  lldb,
+  llvmPackages_20,
+  cppcheck,
 }:
-mkShell {
+mkShellNoCC {
   packages =
     [
       cmake
       pkg-config
       ninja
-      gcc
+      llvmPackages_20.clangUseLLVM
       gdb
-      clang-tools
-      raylib
-      tmx
-      gcc.cc.lib
-      glfw
+      lldb
+      llvmPackages_20.clang-tools
+      cppcheck
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
-  CC = "gcc";
-  CMAKE_GENERATOR = "Ninja";
+  buildInputs = [
+    raylib
+  ];
 
   shellHook = ''
-    export PATH="$PWD/build:$PATH"
-    echo "Dev shell activated."
+    export CC=clang
+    export CMAKE_GENERATOR=Ninja
+    export CMAKE_BUILD_TYPE=Debug
   '';
 }
