@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <tmx.h>
 
 #include "debug.h"
 #include "game.h"
@@ -69,11 +68,6 @@ int main(int argc, const char **argv)
 
     debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
 
-    // tmx_img_load_func = raylib_tex_loader;
-    // tmx_img_free_func = raylib_free_tex;
-    //
-    // char mapPath[] = "resources/island.tmx";
-    // tmx_map *map = tmx_load(mapPath);
 
     InitWindow(screen.width, screen.height, "Game!");
     if (!IsWindowReady())
@@ -88,10 +82,9 @@ int main(int argc, const char **argv)
     while (true)
     {
         UpdateGame();
-        DrawGame(/* map */);
+        DrawGame();
     }
 
-    // tmx_map_free(map);
     CloseWindow();
 
     return 0;

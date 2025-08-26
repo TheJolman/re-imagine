@@ -104,11 +104,10 @@ void InitGame(void)
 
 void UpdateGame(void) { HandleInput(); }
 
-void DrawGame(/* tmx_map *map */)
+void DrawGame(void)
 {
     BeginDrawing();
     ClearBackground(BLACK);
-    // render_map(map);
 
     switch (state)
     {
