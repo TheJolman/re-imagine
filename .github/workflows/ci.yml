@@ -19,5 +19,5 @@ jobs:
         run: nix develop --command bash -c "cmake -B build -S . && cmake --build build"
       - name: Format check
         run: nix develop --command bash -c "./scripts/clang-format.sh && git diff --exit-code"
-      # - name: Clang-Tidy check
-      #   run: nix develop --command run-clang-tidy -p build
+      - name: Check
+        run: nix develop --command cmake --build build --target check
