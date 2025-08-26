@@ -1,39 +1,31 @@
 {
-  mkShell,
+  mkShellNoCC,
   lib,
   stdenv,
   cmake,
   pkg-config,
   ninja,
-  # gcc,
   gdb,
-  clang-tools,
   raylib,
   valgrind,
-  # glfw,
   lldb,
-  # mesa,
-  clang,
+  llvmPackages_21,
 }:
-mkShell {
+mkShellNoCC {
   packages =
     [
       cmake
       pkg-config
       ninja
-      # gcc
-      clang
+      llvmPackages_21.clangUseLLVM
       gdb
       lldb
-      clang-tools
+      llvmPackages_21.clang-tools
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
   buildInputs = [
     raylib
-    # glfw
-    # gcc.cc.lib
-    # mesa
   ];
 
   shellHook = ''
