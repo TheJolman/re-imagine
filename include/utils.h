@@ -20,3 +20,6 @@ typedef struct
  * @return float Original value if within range, or min/max otherwise
  */
 float clamp_float(float value, float min, float max);
+
+void error_log(const char *format, ...);
+void error_exit(int code, const char *format, ...);
