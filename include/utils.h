@@ -10,6 +10,12 @@ typedef struct
     size_t element_size;
 } Array;
 
+typedef struct
+{
+    void *value;
+    const char *err;
+} Result;
+
 /**
  * Clamps a float between a min and max range
  * @return float Original value if within range, or min/max otherwise

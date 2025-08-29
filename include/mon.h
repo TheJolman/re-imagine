@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "utils.h"
 
 typedef enum
 {
@@ -23,6 +24,6 @@ typedef struct
     unsigned hp;
 } Mon;
 
-Mon *createMon(char *name);
+Result createMon(char *name);
 void destroyMon(Mon *mon);
 void loadMonTexture(Mon *mon, MonTextureType);
