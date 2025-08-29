@@ -206,22 +206,34 @@ static void initBattleUI(void)
 
     if (!playerMon)
     {
-        playerMon = createMon("froge");
-        if (playerMon)
+        Result res = createMon("froge");
+        if (res.err)
         {
-            playerMon->hp = 100;
-            loadMonTexture(playerMon, BACK);
+            fprintf(stderr, "Error: %s\n", res.err);
+            exit(1);
         }
+        else
+        {
+            playerMon = (Mon *)res.value;
+        }
+        playerMon->hp = 100;
+        loadMonTexture(playerMon, BACK);
     }
 
     if (!enemyMon)
     {
-        enemyMon = createMon("froge");
-        if (enemyMon)
+        Result res = createMon("froge");
+        if (res.err)
         {
-            enemyMon->hp = 80;
-            loadMonTexture(enemyMon, FRONT);
+            fprintf(stderr, "Error: %s\n", res.err);
+            exit(1);
         }
+        else
+        {
+            enemyMon = (Mon *)res.value;
+        }
+        enemyMon->hp = 80;
+        loadMonTexture(enemyMon, FRONT);
     }
 }
 

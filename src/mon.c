@@ -1,6 +1,7 @@
 #include "mon.h"
 #include "debug.h"
 #include "raylib.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,30 +38,29 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
     UnloadImage(image);
 }
 
-Mon *createMon(char *name)
+Result createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
     if (!mon)
     {
-        debug_log("Error allocating memory");
-        exit(1);
+        return (Result){.value = nullptr, .err = "Out of memory "};
     }
+
     mon->name = malloc(strlen(name) + 1);
     if (!mon->name)
     {
-        debug_log("Error allocating memory");
-        exit(1);
+        return (Result){.value = nullptr, .err = "Out of memory "};
     }
     strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
     if (!mon->name)
     {
-        debug_log("Error allocating memory");
-        exit(1);
+        return (Result){.value = nullptr, .err = "Out of memory "};
     }
     mon->hp = 100;
     // TODO: Initialize other values
-    return mon;
+
+    return (Result){.value = mon, .err = nullptr};
 }
 
 void destroyMon(Mon *mon)
