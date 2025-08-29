@@ -1,6 +1,6 @@
 #include "mon.h"
+#include "debug.h"
 #include "raylib.h"
-// #include "debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,9 +40,24 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
 Mon *createMon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
+    if (!mon)
+    {
+        debug_log("Error allocating memory");
+        exit(1);
+    }
     mon->name = malloc(strlen(name) + 1);
+    if (!mon->name)
+    {
+        debug_log("Error allocating memory");
+        exit(1);
+    }
     strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
+    if (!mon->name)
+    {
+        debug_log("Error allocating memory");
+        exit(1);
+    }
     mon->hp = 100;
     // TODO: Initialize other values
     return mon;
