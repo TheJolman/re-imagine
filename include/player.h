@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include "raylib.h"
 
@@ -10,5 +9,3 @@ typedef struct Player
     float speed;
     float size;
 } Player;
-
-#endif

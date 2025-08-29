@@ -1,5 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include "player.h"
 
@@ -29,5 +28,3 @@ void update_game(void);
  * Draws a single frame
  */
 void draw_game(void);
-
-#endif // !GAME_H

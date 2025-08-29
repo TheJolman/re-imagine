@@ -1,5 +1,4 @@
-#ifndef DEBUG_H
-#define DEBUG_H
+#pragma once
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -32,5 +31,3 @@ static inline void debug_log_impl(const char *format, ...)
 #define debug_log(fmt, ...) ((void)0)
 
 #endif
-
-#endif /* !DEBUG_H */

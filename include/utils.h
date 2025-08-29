@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include <stddef.h>
 
@@ -21,5 +20,3 @@ typedef struct
  * @return float Original value if within range, or min/max otherwise
  */
 float clamp_float(float value, float min, float max);
-
-#endif
