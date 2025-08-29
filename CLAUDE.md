@@ -18,7 +18,7 @@ RPG game built with raylib and C23.
 
 ### Development Environment
 
-- Development shell and environment variables defined in `flake.nix` for Unix systems
+- Development shell and environment variables defined in `nix/shell.nix` for Unix systems
 - Key dependencies: raylib
 - Debug build by default (`CMAKE_BUILD_TYPE=Debug`)
 
