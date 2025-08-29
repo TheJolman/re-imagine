@@ -78,15 +78,15 @@ int main(int argc, const char **argv)
     }
     SetTargetFPS(60);
     InitGame();
+    SetExitKey(KEY_NULL);
 
     // Main game loop
-    while (true)
+    while (!WindowShouldClose())
     {
         UpdateGame();
         DrawGame();
     }
 
     CloseWindow();
-
     return 0;
 }
