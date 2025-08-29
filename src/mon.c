@@ -19,8 +19,7 @@ void load_mon_texture(Mon *mon, MonTextureType textureType)
     Image image = {};
     if (!mon->name)
     {
-        fputs("ERROR: Can not load texture of mon with no name", stderr);
-        exit(1);
+        error_exit(1, "attempted to load texture of mon with no name");
     }
 
     switch (textureType)

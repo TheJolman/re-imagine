@@ -20,6 +20,7 @@
 #include "debug.h"
 #include "game.h"
 #include "map.h"
+#include "utils.h"
 
 #define VERSION "0.0.1"
 
@@ -57,11 +58,10 @@ int main(int argc, const char **argv)
         }
         else
         {
-            fprintf(stderr,
-                    "ERROR: Unrecognized argument."
-                    "Try '%s --help' for usage information.",
-                    argv[0]);
-            exit(1);
+            error_exit(1,
+                       "ERROR: Unrecognized argument."
+                       "Try '%s --help' for usage information.",
+                       argv[0]);
         }
     }
 
@@ -73,8 +73,7 @@ int main(int argc, const char **argv)
     InitWindow(screen.width, screen.height, "Game!");
     if (!IsWindowReady())
     {
-        fputs("Failed to initialize window\n", stderr);
-        exit(1);
+        error_exit(1, "failed to initialize window");
     }
     SetTargetFPS(60);
     init_game();

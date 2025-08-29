@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "utils.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +45,10 @@ GridMenu *grid_menu_create(size_t num_items, const size_t num_rows, const size_t
 {
     GridMenu *menu = malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
+    {
+        error_log("Could not allocate memory for GridMenu");
         return nullptr;
+    }
 
     menu->num_items = num_items;
     menu->grid.num_rows = num_rows;

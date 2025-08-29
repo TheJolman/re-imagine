@@ -210,8 +210,7 @@ static void init_battle_ui(void)
         Result res = create_mon("froge");
         if (res.err)
         {
-            fprintf(stderr, "Error: %s\n", res.err);
-            exit(1);
+            error_exit(1, "%s", res.err);
         }
         else
         {
@@ -226,8 +225,7 @@ static void init_battle_ui(void)
         Result res = create_mon("froge");
         if (res.err)
         {
-            fprintf(stderr, "Error: %s\n", res.err);
-            exit(1);
+            error_exit(1, "%s", res.err);
         }
         else
         {
