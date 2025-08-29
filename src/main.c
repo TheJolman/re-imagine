@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "debug.h"
 #include "game.h"
@@ -22,8 +23,8 @@
 
 #define VERSION "0.0.1"
 
-constexpr size_t screen_width = 1200;
-constexpr size_t screen_height = 900;
+uint32_t screen_width = 1200;
+uint32_t screen_height = 900;
 
 Screen screen = {0};
 
