@@ -56,9 +56,10 @@ int main(int argc, const char **argv)
         }
         else
         {
-            fputs("ERROR: Unrecognized argument: ", stderr);
-            fputs(argv[i], stderr);
-            fputc('\n', stderr);
+            fprintf(stderr,
+                    "ERROR: Unrecognized argument."
+                    "Try '%s --help' for usage information.",
+                    argv[0]);
             exit(1);
         }
     }
@@ -67,7 +68,6 @@ int main(int argc, const char **argv)
     screen.height = screen_height;
 
     debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
-
 
     InitWindow(screen.width, screen.height, "Game!");
     if (!IsWindowReady())
