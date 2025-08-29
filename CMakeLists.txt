@@ -85,7 +85,7 @@ add_custom_target(
 # clang-format target
 add_custom_target(
   format
-  COMMAND ${CLANG_FORMAT_SCRIPT} -i ${SOURCES}
+  COMMAND ${CLANG_FORMAT_SCRIPT} -i
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Running clang-format"
+  COMMENT "Running clang-format on all source files"
   VERBATIM)

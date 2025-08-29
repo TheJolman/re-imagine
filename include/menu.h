@@ -3,7 +3,6 @@
 #include "raylib.h"
 #include <stdlib.h>
 
-
 typedef struct
 {
     char *text;
@@ -14,7 +13,8 @@ typedef struct
     void (*select)(void);
 } MenuItem;
 
-typedef struct {
+typedef struct
+{
     size_t num_rows;
     size_t num_cols;
     size_t current_row;
