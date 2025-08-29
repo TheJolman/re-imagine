@@ -186,14 +186,15 @@ static void action_menu_display()
             action_items[action_menu->grid.current_row][action_menu->grid.current_col];
         constexpr int width = 120;
         constexpr int height = 30;
-        DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, width, height, DARKGRAY);
+        DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, width, height,
+                           DARKGRAY);
     }
 }
 
 static void init_battle_ui(void)
 {
     ui.text_box = (Rectangle){WINDOW_MARGIN, screen.height - (WINDOW_MARGIN + TEXT_HEIGHT),
-                             screen.width - WINDOW_MARGIN * 2, TEXT_HEIGHT};
+                              screen.width - WINDOW_MARGIN * 2, TEXT_HEIGHT};
 
     // TODO: Get consistent asset sizes
     ui.player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};

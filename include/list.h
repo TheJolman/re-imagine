@@ -122,7 +122,8 @@ bool list_pop_back(List *list)
         return false;
 
     // Handle single item case
-    if (list->head->next == nullptr) {
+    if (list->head->next == nullptr)
+    {
         node_destroy(list->head, list->destroy);
         list->head = nullptr;
         list->size--;
@@ -131,7 +132,8 @@ bool list_pop_back(List *list)
 
     // Find second-to-last node
     Node *prev = list->head;
-    while (prev->next->next != nullptr) {
+    while (prev->next->next != nullptr)
+    {
         prev = prev->next;
     }
 
@@ -139,7 +141,7 @@ bool list_pop_back(List *list)
     node_destroy(prev->next, list->destroy);
     prev->next = nullptr;
     list->size--;
-    
+
     return true;
 }
 
