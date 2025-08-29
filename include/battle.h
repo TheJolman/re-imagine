@@ -3,7 +3,7 @@
 
 // TODO: Use linked list for managing assets
 
-void BattleScene(void);
-void EndBattleScene(void);
+void battle_scene_render(void);
+void battle_scene_end(void);
 
 #endif // !BATTLE

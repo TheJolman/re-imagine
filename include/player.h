@@ -6,7 +6,7 @@
 typedef struct Player
 {
     Vector2 position;
-    float baseSpeed;
+    float base_speed;
     float speed;
     float size;
 } Player;

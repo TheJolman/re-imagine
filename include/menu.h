@@ -7,43 +7,43 @@
 typedef struct
 {
     char *text;
-    int posX;
-    int posY;
-    int fontSize;
+    int pos_x;
+    int pos_y;
+    int font_size;
     Color color;
     void (*select)(void);
 } MenuItem;
 
 typedef struct {
-    size_t numRows;
-    size_t numCols;
-    size_t currentRow;
-    size_t currentCol;
+    size_t num_rows;
+    size_t num_cols;
+    size_t current_row;
+    size_t current_col;
 } Grid;
 
 typedef struct
 {
-    void (*moveLeft)(const void *);
-    void (*moveRight)(const void *);
-    void (*moveDown)(const void *);
-    void (*moveUp)(const void *);
+    void (*move_left)(const void *);
+    void (*move_right)(const void *);
+    void (*move_down)(const void *);
+    void (*move_up)(const void *);
     Grid grid;
-    size_t numItems;
+    size_t num_items;
     MenuItem *items[];
 } GridMenu;
 
 typedef struct
 {
-    void (*nextItem)(const void *);
-    void (*prevItem)(const void *);
+    void (*next_item)(const void *);
+    void (*prev_item)(const void *);
     void (*select)(const void *);
-    size_t selectedItem;
-    size_t numItems;
+    size_t selected_item;
+    size_t num_items;
     MenuItem items[];
 } VerticalMenu;
 
-GridMenu *gridMenuCreate(const size_t numItems, const size_t numRows, const size_t numCols);
-void gridMenuDestroy(GridMenu *menu);
+GridMenu *grid_menu_create(const size_t num_items, const size_t num_rows, const size_t num_cols);
+void grid_menu_destroy(GridMenu *menu);
 
-VerticalMenu *verticalMenuCreate(const size_t numItems);
-void verticalMenuDestroy(VerticalMenu *menu);
+VerticalMenu *vertical_menu_create(const size_t num_items);
+void vertical_menu_destroy(VerticalMenu *menu);

@@ -13,7 +13,7 @@ static void loadOneTexture(char *imagePath, Texture2D *texture)
     UnloadImage(image);
 }
 
-void loadMonTexture(Mon *mon, MonTextureType textureType)
+void load_mon_texture(Mon *mon, MonTextureType textureType)
 {
     char imagePath[256];
     Image image = {};
@@ -38,7 +38,7 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
     UnloadImage(image);
 }
 
-Result createMon(char *name)
+Result create_mon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
     if (!mon)
@@ -63,7 +63,7 @@ Result createMon(char *name)
     return (Result){.value = mon, .err = nullptr};
 }
 
-void destroyMon(Mon *mon)
+void destroy_mon(Mon *mon)
 {
     if (mon)
     {

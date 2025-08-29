@@ -18,16 +18,16 @@ extern GameState state;
 /**
  * Loads initial values on game startup
  */
-void InitGame(void);
+void init_game(void);
 
 /**
  * Updates game variables before next frame is drawn
  */
-void UpdateGame(void);
+void update_game(void);
 
 /**
  * Draws a single frame
  */
-void DrawGame(void);
+void draw_game(void);
 
 #endif // !GAME_H

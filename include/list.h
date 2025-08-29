@@ -121,17 +121,25 @@ bool list_pop_back(List *list)
     if (list_is_empty(list))
         return false;
 
-    Node *prev = list->head;
-    Node *current = prev->next;
-
-    while (current) {
-        current = current->next;
-        prev->next = current;
+    // Handle single item case
+    if (list->head->next == nullptr) {
+        node_destroy(list->head, list->destroy);
+        list->head = nullptr;
+        list->size--;
+        return true;
     }
 
-    node_destroy(current, list->destroy);
-    prev->next = nullptr;
+    // Find second-to-last node
+    Node *prev = list->head;
+    while (prev->next->next != nullptr) {
+        prev = prev->next;
+    }
 
+    // Destroy last node and update pointer
+    node_destroy(prev->next, list->destroy);
+    prev->next = nullptr;
+    list->size--;
+    
     return true;
 }
 

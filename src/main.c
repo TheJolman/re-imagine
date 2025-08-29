@@ -77,14 +77,14 @@ int main(int argc, const char **argv)
         exit(1);
     }
     SetTargetFPS(60);
-    InitGame();
+    init_game();
     SetExitKey(KEY_NULL);
 
     // Main game loop
     while (!WindowShouldClose())
     {
-        UpdateGame();
-        DrawGame();
+        update_game();
+        draw_game();
     }
 
     CloseWindow();

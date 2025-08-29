@@ -4,101 +4,101 @@
 #include <string.h>
 
 // TODO: do some extra math so empty squares can't get hovered
-static void gridMenuLeft(const void *menuPtr)
+static void grid_menu_left(const void *menu_ptr)
 {
-    GridMenu *menu = (GridMenu *)menuPtr;
-    if (menu->grid.currentCol > 0)
-        menu->grid.currentCol--;
+    GridMenu *menu = (GridMenu *)menu_ptr;
+    if (menu->grid.current_col > 0)
+        menu->grid.current_col--;
     else
-        menu->grid.currentCol = menu->grid.numCols - 1;
+        menu->grid.current_col = menu->grid.num_cols - 1;
 }
 
-static void gridMenuRight(const void *menuPtr)
+static void grid_menu_right(const void *menu_ptr)
 {
-    GridMenu *menu = (GridMenu *)menuPtr;
-    if (menu->grid.currentCol < menu->grid.numCols - 1)
-        menu->grid.currentCol++;
+    GridMenu *menu = (GridMenu *)menu_ptr;
+    if (menu->grid.current_col < menu->grid.num_cols - 1)
+        menu->grid.current_col++;
     else
-        menu->grid.currentCol = 0;
+        menu->grid.current_col = 0;
 }
 
-static void gridMenuUp(const void *menuPtr)
+static void grid_menu_up(const void *menu_ptr)
 {
-    GridMenu *menu = (GridMenu *)menuPtr;
-    if (menu->grid.currentRow > 0)
-        menu->grid.currentRow--;
+    GridMenu *menu = (GridMenu *)menu_ptr;
+    if (menu->grid.current_row > 0)
+        menu->grid.current_row--;
     else
-        menu->grid.currentRow = menu->grid.numRows - 1;
+        menu->grid.current_row = menu->grid.num_rows - 1;
 }
 
-static void gridMenuDown(const void *menuPtr)
+static void grid_menu_down(const void *menu_ptr)
 {
-    GridMenu *menu = (GridMenu *)menuPtr;
-    if (menu->grid.currentRow < menu->grid.numRows - 1)
-        menu->grid.currentRow++;
+    GridMenu *menu = (GridMenu *)menu_ptr;
+    if (menu->grid.current_row < menu->grid.num_rows - 1)
+        menu->grid.current_row++;
     else
-        menu->grid.currentRow = 0;
+        menu->grid.current_row = 0;
 }
 
-GridMenu *gridMenuCreate(size_t numItems, const size_t numRows, const size_t numCols)
+GridMenu *grid_menu_create(size_t num_items, const size_t num_rows, const size_t num_cols)
 {
-    GridMenu *menu = malloc(sizeof(GridMenu) + numItems * sizeof(MenuItem *));
+    GridMenu *menu = malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
         return nullptr;
 
-    menu->numItems = numItems;
-    menu->grid.numRows = numRows;
-    menu->grid.numCols = numCols;
-    menu->grid.currentRow = 0;
-    menu->grid.currentCol = 0;
-    menu->moveLeft = gridMenuLeft;
-    menu->moveRight = gridMenuRight;
-    menu->moveDown = gridMenuDown;
-    menu->moveUp = gridMenuUp;
+    menu->num_items = num_items;
+    menu->grid.num_rows = num_rows;
+    menu->grid.num_cols = num_cols;
+    menu->grid.current_row = 0;
+    menu->grid.current_col = 0;
+    menu->move_left = grid_menu_left;
+    menu->move_right = grid_menu_right;
+    menu->move_down = grid_menu_down;
+    menu->move_up = grid_menu_up;
 
     return menu;
 }
 
-void gridMenuDestroy(GridMenu *menu)
+void grid_menu_destroy(GridMenu *menu)
 {
     if (menu)
         free(menu);
 }
 
-static void verticalMenuNext(const void *menuPtr)
+static void vertical_menu_next(const void *menu_ptr)
 {
-    VerticalMenu *menu = (VerticalMenu *)menuPtr;
+    VerticalMenu *menu = (VerticalMenu *)menu_ptr;
 
-    if (menu->selectedItem < menu->numItems - 1)
-        menu->selectedItem++;
+    if (menu->selected_item < menu->num_items - 1)
+        menu->selected_item++;
     else
-        menu->selectedItem = 0;
+        menu->selected_item = 0;
 }
 
-static void verticalMenuPrev(const void *menuPtr)
+static void vertical_menu_prev(const void *menu_ptr)
 {
-    VerticalMenu *menu = (VerticalMenu *)menuPtr;
+    VerticalMenu *menu = (VerticalMenu *)menu_ptr;
 
-    if (menu->selectedItem > 0)
-        menu->selectedItem--;
+    if (menu->selected_item > 0)
+        menu->selected_item--;
     else
-        menu->selectedItem = menu->numItems - 1;
+        menu->selected_item = menu->num_items - 1;
 }
 
-VerticalMenu *verticalMenuCreate(const size_t numItems)
+VerticalMenu *vertical_menu_create(const size_t num_items)
 {
-    VerticalMenu *menu = malloc(sizeof(VerticalMenu) + numItems * sizeof(MenuItem));
+    VerticalMenu *menu = malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
     if (!menu)
         return nullptr;
 
-    menu->numItems = numItems;
-    menu->nextItem = verticalMenuNext;
-    menu->prevItem = verticalMenuPrev;
-    menu->selectedItem = 0;
+    menu->num_items = num_items;
+    menu->next_item = vertical_menu_next;
+    menu->prev_item = vertical_menu_prev;
+    menu->selected_item = 0;
     return menu;
 }
 
-void verticalMenuDestroy(VerticalMenu *menu)
+void vertical_menu_destroy(VerticalMenu *menu)
 {
     if (menu)
         free(menu);
