@@ -69,5 +69,6 @@ assets/           # Game assets
   commits, switch branches, create worktrees, etc. Prefer rebasing over merging if pulling or
   updating a feature branch. Only perform state-changing git commands upon request or after
   asking the user. You can use read-only git commands without asking.
+  - Make sure to run `cmake --build build --target format` before committing code.
 - Code can only be contributed to main via github pull request. Only create a
   pull request if explicitly asked to submit code.
