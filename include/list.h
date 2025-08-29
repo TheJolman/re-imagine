@@ -120,6 +120,18 @@ bool list_pop_back(List *list)
 {
     if (list_is_empty(list))
         return false;
+
+    Node *prev = list->head;
+    Node *current = prev->next;
+
+    while (current) {
+        current = current->next;
+        prev->next = current;
+    }
+
+    node_destroy(current, list->destroy);
+    prev->next = nullptr;
+
     return true;
 }
 
