@@ -53,7 +53,7 @@ Result createMon(char *name)
     }
     strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
-    if (!mon->name)
+    if (!mon->texture)
     {
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
