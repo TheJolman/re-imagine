@@ -1,6 +1,7 @@
 #pragma once
 
 #include "player.h"
+#include "map.h"
 
 typedef enum
 {
@@ -27,4 +28,4 @@ void update_game(void);
 /**
  * Draws a single frame
  */
-void draw_game(void);
+void draw_game(Map *map);

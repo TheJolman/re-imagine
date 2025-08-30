@@ -1,8 +1,8 @@
 #pragma once
 
-#include <raylib.h>
-#include "utils.h"
 #include "stdint.h"
+#include "utils.h"
+#include <raylib.h>
 
 typedef struct
 {
@@ -23,3 +23,4 @@ typedef struct
 } Map;
 
 Result map_load_from_csv(const char *file_path);
+void map_draw(Map *map);

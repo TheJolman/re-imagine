@@ -94,7 +94,7 @@ int main(int argc, const char **argv)
     while (!WindowShouldClose())
     {
         update_game();
-        draw_game();
+        draw_game(map);
     }
 
     free(map->data);

@@ -64,6 +64,6 @@ Result map_load_from_csv(const char *file_path)
     return (Result){.value = map, .err = nullptr};
 }
 
-void map_draw() {
+void map_draw(Map *map) {
     debug_log("drawing map...");
 }

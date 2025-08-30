@@ -5,7 +5,6 @@
 #include "game.h"
 #include "map.h"
 #include "pause.h"
-#include "map.h"
 // #include "utils.h"
 
 Player player = {0};
@@ -105,11 +104,11 @@ void init_game(void)
 
 void update_game(void) { handle_input(); }
 
-void draw_game(void)
+void draw_game(Map *map)
 {
     BeginDrawing();
     ClearBackground(BLACK);
-    map_draw(Map map*);
+    map_draw(map);
 
     switch (state)
     {
