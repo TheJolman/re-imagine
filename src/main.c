@@ -22,7 +22,9 @@
 #include "map.h"
 #include "utils.h"
 
-#define VERSION "0.0.1"
+#ifndef GIT_VERSION
+#define GIT_VERSION "unknown"
+#endif
 
 uint32_t screen_width = 1200;
 uint32_t screen_height = 900;
@@ -46,7 +48,7 @@ int main(int argc, const char **argv)
     {
         if (match_arg(argv[i], "-v", "--version"))
         {
-            printf("%s v%s\n", argv[0], VERSION);
+            printf("%s %s\n", argv[0], GIT_VERSION);
             exit(0);
         }
         else if (match_arg(argv[i], "-h", "--help"))
