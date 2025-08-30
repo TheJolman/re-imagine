@@ -14,7 +14,7 @@ extern Screen screen;
 
 constexpr uint32_t MAP_MAX_ROWS = 100;
 constexpr uint32_t MAP_MAX_COLS = 100;
-constexpr uint32_t MAP_TILE_SIZE = 50;
+constexpr uint32_t MAP_TILE_SIZE = 80;
 
 typedef struct
 {
