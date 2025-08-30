@@ -28,9 +28,9 @@ Result map_load_from_csv(const char *file_path)
         char *token = strtok(line, ",");
         while (token != nullptr && col < MAP_MAX_COLS)
         {
-            debug_log("Current token: %s", token);
             temp_data[row][col] = atoi(token);
-            token = strtok(line, ",");
+            debug_log("Current token [%d][%d]: %d",row, col, temp_data[row][col]);
+            token = strtok(nullptr, ",");
             col++;
         }
         max_cols = col > max_cols ? col : max_cols;
