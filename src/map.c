@@ -2,6 +2,8 @@
 #include "debug.h"
 #include "utils.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 Result map_load_from_csv(const char *file_path)
 {
@@ -13,6 +15,49 @@ Result map_load_from_csv(const char *file_path)
         return (Result){.value = nullptr, .err = err};
     }
 
-    debug_log("Map file %s loaded successfully");
-    return (Result){.value = (Map *){}, .err = nullptr};
+    debug_log("Map file %s opened successfully", file_path);
+
+    int temp_data[MAP_MAX_ROWS][MAP_MAX_COLS] = {};
+    char line[1024];
+    uint32_t row = 0;
+    uint32_t max_cols = 0;
+    while (fgets(line, sizeof(line), file) && row < MAP_MAX_ROWS)
+    {
+        uint32_t col = 0;
+
+        char *token = strtok(line, ",");
+        while (token != nullptr && col < MAP_MAX_COLS)
+        {
+            debug_log("Current token: %s", token);
+            temp_data[row][col] = *token;
+            token = strtok(line, ",");
+            col++;
+        }
+        max_cols = col > max_cols ? col : max_cols;
+        row++;
+    }
+
+    fclose(file);
+    debug_log("File %s read from and closed.", file_path);
+
+    Map *map = malloc(sizeof(Map *));
+    if (!map)
+        error_exit(1, "Failed to allocate memory for Map object");
+
+    map->data = malloc(row * max_cols * sizeof(int));
+    if (!map->data)
+        error_exit(1, "Failed to allocate memory for map->data");
+
+    for (uint32_t i = 0; i < row; i++)
+    {
+        for (uint32_t j = 0; j < max_cols; j++)
+        {
+            map->data[i][j] = temp_data[i][j];
+        }
+    }
+
+    map->height = row;
+    map->width = max_cols;
+
+    return (Result){.value = map, .err = nullptr};
 }

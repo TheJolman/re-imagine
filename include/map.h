@@ -12,11 +12,14 @@ typedef struct
 
 extern Screen screen;
 
+constexpr uint32_t MAP_MAX_ROWS = 100;
+constexpr uint32_t MAP_MAX_COLS = 100;
+
 typedef struct
 {
     uint32_t height;
     uint32_t width;
-    int *data[];
+    int **data;
 } Map;
 
 Result map_load_from_csv(const char *file_path);

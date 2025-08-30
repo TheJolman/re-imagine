@@ -81,7 +81,8 @@ int main(int argc, const char **argv)
     init_game();
     SetExitKey(KEY_NULL);
 
-    Result res = map_load_from_csv("assets/map.csv");
+    const char *file_path = "assets/map.csv";
+    Result res = map_load_from_csv(file_path);
     if (res.err)
     {
         error_exit(1, "%s", res.err);
