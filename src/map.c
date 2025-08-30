@@ -68,7 +68,6 @@ Result map_load_from_csv(const char *file_path)
 void map_destroy(Map *map)
 {
     free(map->data);
-    map->data = nullptr;
     free(map);
     map = nullptr;
 }
