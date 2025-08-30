@@ -1,5 +1,6 @@
 #include "map.h"
 #include "debug.h"
+#include "raylib.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,12 +49,12 @@ Result map_load_from_csv(const char *file_path)
     if (!map->data)
         error_exit(1, "Failed to allocate memory for map->data");
 
-    for (uint32_t i = 0; i < row; i++)
+    for (uint32_t x = 0; x < row; x++)
     {
-        for (uint32_t j = 0; j < max_cols; j++)
+        for (uint32_t y = 0; y < max_cols; y++)
         {
             // accessing 1D array as if it were 2D
-            map->data[i * max_cols + j] = temp_data[i][j];
+            map->data[x * max_cols + y] = temp_data[x][y];
         }
     }
     debug_log("copied data successfully");
@@ -64,6 +65,33 @@ Result map_load_from_csv(const char *file_path)
     return (Result){.value = map, .err = nullptr};
 }
 
-void map_draw(Map *map) {
-    debug_log("drawing map...");
+void map_draw(Map *map)
+{
+    for (uint32_t x = 0; x < map->height; x++)
+    {
+        for (uint32_t y = 0; y < map->width; y++)
+        {
+            Color color = {};
+            switch (map->data[x * map->width + y])
+            {
+            case 0:
+                color = BROWN;
+                break;
+            case 1:
+                color = GREEN;
+                break;
+            case 2:
+                color = BLUE;
+                break;
+            default:
+                color = RED;
+                break;
+            }
+            Rectangle rec = (Rectangle){.x = x * MAP_TILE_SIZE,
+                                        .y = y * MAP_TILE_SIZE,
+                                        .width = MAP_TILE_SIZE,
+                                        .height = MAP_TILE_SIZE};
+            DrawRectangleRec(rec, color);
+        }
+    }
 }
