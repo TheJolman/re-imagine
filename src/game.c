@@ -104,7 +104,7 @@ void init_game(void)
 
 void update_game(void) { handle_input(); }
 
-void draw_game(void)
+void draw_game(Map *map)
 {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -114,7 +114,7 @@ void draw_game(void)
     case FREE_ROAM:
         BeginMode2D(camera);
 
-        DrawRectangle(200, 200, 50, 50, BLUE);
+        map_draw(map);
         // Draw player
         DrawCircleV(player.position, player.size / 2, RED);
 

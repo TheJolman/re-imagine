@@ -81,12 +81,24 @@ int main(int argc, const char **argv)
     init_game();
     SetExitKey(KEY_NULL);
 
+    const char *file_path = "assets/map.csv";
+    Result res = map_load_from_csv(file_path);
+    if (res.err)
+    {
+        error_exit(1, "%s", res.err);
+    }
+    Map *map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", map->height, map->width);
+
     // Main game loop
     while (!WindowShouldClose())
     {
         update_game();
-        draw_game();
+        draw_game(map);
     }
+
+    free(map->data);
+    free(map);
 
     CloseWindow();
     return 0;
