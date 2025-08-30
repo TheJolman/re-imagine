@@ -1,4 +1,5 @@
-#include <stdint.h>
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -120,6 +121,28 @@ bool list_pop_back(List *list)
 {
     if (list_is_empty(list))
         return false;
+
+    // Handle single item case
+    if (list->head->next == nullptr)
+    {
+        node_destroy(list->head, list->destroy);
+        list->head = nullptr;
+        list->size--;
+        return true;
+    }
+
+    // Find second-to-last node
+    Node *prev = list->head;
+    while (prev->next->next != nullptr)
+    {
+        prev = prev->next;
+    }
+
+    // Destroy last node and update pointer
+    node_destroy(prev->next, list->destroy);
+    prev->next = nullptr;
+    list->size--;
+
     return true;
 }
 

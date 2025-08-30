@@ -12,6 +12,7 @@
  ********************************************************************************************/
 
 #include <raylib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,11 +20,12 @@
 #include "debug.h"
 #include "game.h"
 #include "map.h"
+#include "utils.h"
 
 #define VERSION "0.0.1"
 
-constexpr size_t screen_width = 1200;
-constexpr size_t screen_height = 900;
+uint32_t screen_width = 1200;
+uint32_t screen_height = 900;
 
 Screen screen = {0};
 
@@ -56,11 +58,10 @@ int main(int argc, const char **argv)
         }
         else
         {
-            fprintf(stderr,
-                    "ERROR: Unrecognized argument."
-                    "Try '%s --help' for usage information.",
-                    argv[0]);
-            exit(1);
+            error_exit(1,
+                       "ERROR: Unrecognized argument."
+                       "Try '%s --help' for usage information.",
+                       argv[0]);
         }
     }
 
@@ -72,20 +73,19 @@ int main(int argc, const char **argv)
     InitWindow(screen.width, screen.height, "Game!");
     if (!IsWindowReady())
     {
-        fputs("Failed to initialize window\n", stderr);
-        exit(1);
+        error_exit(1, "failed to initialize window");
     }
     SetTargetFPS(60);
-    InitGame();
+    init_game();
+    SetExitKey(KEY_NULL);
 
     // Main game loop
-    while (true)
+    while (!WindowShouldClose())
     {
-        UpdateGame();
-        DrawGame();
+        update_game();
+        draw_game();
     }
 
     CloseWindow();
-
     return 0;
 }

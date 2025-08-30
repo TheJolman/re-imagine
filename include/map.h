@@ -1,5 +1,4 @@
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include <raylib.h>
 
@@ -10,5 +9,3 @@ typedef struct
 } Screen;
 
 extern Screen screen;
-
-#endif

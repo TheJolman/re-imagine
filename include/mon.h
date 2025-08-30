@@ -24,6 +24,6 @@ typedef struct
     unsigned hp;
 } Mon;
 
-Result createMon(char *name);
-void destroyMon(Mon *mon);
-void loadMonTexture(Mon *mon, MonTextureType);
+Result create_mon(char *name);
+void destroy_mon(Mon *mon);
+void load_mon_texture(Mon *mon, MonTextureType);

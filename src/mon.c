@@ -13,14 +13,13 @@ static void loadOneTexture(char *imagePath, Texture2D *texture)
     UnloadImage(image);
 }
 
-void loadMonTexture(Mon *mon, MonTextureType textureType)
+void load_mon_texture(Mon *mon, MonTextureType textureType)
 {
     char imagePath[256];
     Image image = {};
     if (!mon->name)
     {
-        fputs("ERROR: Can not load texture of mon with no name", stderr);
-        exit(1);
+        error_exit(1, "attempted to load texture of mon with no name");
     }
 
     switch (textureType)
@@ -38,7 +37,7 @@ void loadMonTexture(Mon *mon, MonTextureType textureType)
     UnloadImage(image);
 }
 
-Result createMon(char *name)
+Result create_mon(char *name)
 {
     Mon *mon = malloc(sizeof(Mon));
     if (!mon)
@@ -53,7 +52,7 @@ Result createMon(char *name)
     }
     strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
-    if (!mon->name)
+    if (!mon->texture)
     {
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
@@ -63,7 +62,7 @@ Result createMon(char *name)
     return (Result){.value = mon, .err = nullptr};
 }
 
-void destroyMon(Mon *mon)
+void destroy_mon(Mon *mon)
 {
     if (mon)
     {

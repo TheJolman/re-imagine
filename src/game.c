@@ -11,7 +11,7 @@ Player player = {0};
 Camera2D camera = {0};
 GameState state = {0};
 
-static void MovePlayer(void)
+static void move_player(void)
 {
     // Movement
     float moveSpeedModifier = 1.0f;
@@ -20,7 +20,7 @@ static void MovePlayer(void)
         moveSpeedModifier = 2.0f;
     }
 
-    player.speed = player.baseSpeed * moveSpeedModifier;
+    player.speed = player.base_speed * moveSpeedModifier;
     Vector2 moveDirection = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W))
@@ -47,12 +47,12 @@ static void MovePlayer(void)
     camera.target = player.position;
 }
 
-static void HandleInput(void)
+static void handle_input(void)
 {
     switch (state)
     {
     case FREE_ROAM:
-        MovePlayer();
+        move_player();
         if (IsKeyPressed(KEY_B))
             state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
@@ -63,7 +63,7 @@ static void HandleInput(void)
         if (IsKeyPressed(KEY_B))
         {
             // NOTE: If concurencey is ever added should these be switched?
-            EndBattleScene();
+            battle_scene_end();
             state = FREE_ROAM;
         }
         break;
@@ -71,7 +71,7 @@ static void HandleInput(void)
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE))
         {
-            pauseMenuEnd();
+            pause_menu_end();
             state = FREE_ROAM;
         }
         break;
@@ -88,13 +88,13 @@ static void HandleInput(void)
     }
 }
 
-void InitGame(void)
+void init_game(void)
 {
     state = FREE_ROAM;
 
     player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
-    player.baseSpeed = 5.0f;
-    player.speed = player.baseSpeed;
+    player.base_speed = 5.0f;
+    player.speed = player.base_speed;
     player.size = 30;
 
     camera.target = player.position;
@@ -102,9 +102,9 @@ void InitGame(void)
     camera.zoom = 1.0f;
 }
 
-void UpdateGame(void) { HandleInput(); }
+void update_game(void) { handle_input(); }
 
-void DrawGame(void)
+void draw_game(void)
 {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -122,10 +122,10 @@ void DrawGame(void)
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;
     case BATTLE_SCENE:
-        BattleScene();
+        battle_scene_render();
         break;
     case PAUSED:
-        pauseMenuDisplay();
+        pause_menu_display();
         break;
     case TITLE_SCREEN:
         break;
@@ -134,4 +134,4 @@ void DrawGame(void)
     EndDrawing();
 }
 
-void CleanupGame(void) {}
+void cleanup_game(void) {}
