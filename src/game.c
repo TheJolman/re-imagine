@@ -1,3 +1,8 @@
+/**
+ * @file game.c
+ * @brief Core game logic implementation
+ */
+
 #include <raylib.h>
 #include <raymath.h>
 

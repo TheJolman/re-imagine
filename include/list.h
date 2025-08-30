@@ -1,32 +1,63 @@
+/**
+ * @file list.h
+ * @brief Generic linked list implementation with function pointers
+ */
+
 #pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Node structure for linked list
+ */
 typedef struct Node
 {
-    void *data;
-    struct Node *next;
+    void *data;        ///< Pointer to node data
+    struct Node *next; ///< Pointer to next node
 } Node;
 
+/**
+ * @brief Generic linked list structure
+ */
 typedef struct
 {
-    Node *head;
-    size_t size;
-    size_t data_size;
-    void (*destroy)(void *);
-    void (*print)(const void *); // probably don't need this method
+    Node *head;                  ///< Pointer to first node
+    size_t size;                 ///< Number of nodes in list
+    size_t data_size;            ///< Size of each data element
+    void (*destroy)(void *);     ///< Function to destroy data elements
+    void (*print)(const void *); ///< Function to print data elements
 } List;
 
+/**
+ * @brief Initializes a new list
+ *
+ * @param data_size Size of each data element
+ * @param destroy Function to destroy data elements (can be NULL)
+ * @param print Function to print data elements (can be NULL)
+ * @return Initialized list structure
+ */
 List list_init(size_t data_size, void (*destroy)(void *), void (*print)(const void *))
 {
     return (List){
         .head = nullptr, .size = 0, .data_size = data_size, .destroy = destroy, .print = print};
 }
 
+/**
+ * @brief Gets the size of the list
+ *
+ * @param list Pointer to the list
+ * @return Number of elements in the list
+ */
 size_t list_get_size(const List *list) { return list ? list->size : 0; }
 
+/**
+ * @brief Checks if the list is empty
+ *
+ * @param list Pointer to the list
+ * @return true if list is empty, false otherwise
+ */
 bool list_is_empty(const List *list) { return !list || !list->head; }
 
 Node *node_create(const void *data, size_t data_size)

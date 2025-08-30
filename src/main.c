@@ -11,6 +11,11 @@
  *
  ********************************************************************************************/
 
+/**
+ * @file main.c
+ * @brief Main entry point and window initialization
+ */
+
 #include <raylib.h>
 #include <stdint.h>
 #include <stdio.h>
