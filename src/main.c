@@ -81,6 +81,12 @@ int main(int argc, const char **argv)
     init_game();
     SetExitKey(KEY_NULL);
 
+    Result res = map_load_from_csv("assets/map.csv");
+    if (res.err)
+    {
+        error_exit(1, "%s", res.err);
+    }
+
     // Main game loop
     while (!WindowShouldClose())
     {
