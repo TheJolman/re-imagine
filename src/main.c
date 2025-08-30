@@ -59,7 +59,7 @@ int main(int argc, const char **argv)
         else
         {
             error_exit(1,
-                       "ERROR: Unrecognized argument."
+                       "Unrecognized argument. "
                        "Try '%s --help' for usage information.",
                        argv[0]);
         }
