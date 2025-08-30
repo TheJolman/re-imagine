@@ -9,3 +9,5 @@ result
 CMakeFiles/
 .claude
 vgcore.*
+docs/html
+docs/latex

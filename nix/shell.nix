@@ -11,6 +11,7 @@
   lldb,
   llvmPackages_20,
   cppcheck,
+  doxygen,
 }:
 mkShellNoCC {
   packages =
@@ -23,6 +24,7 @@ mkShellNoCC {
       lldb
       llvmPackages_20.clang-tools
       cppcheck
+      doxygen
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
 
