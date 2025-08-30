@@ -1,7 +1,7 @@
 #include "utils.h"
 
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 float clamp_float(float value, float min, float max)

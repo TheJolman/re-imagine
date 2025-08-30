@@ -3,7 +3,7 @@
 Thank you for your interest in contributing to RPG Raylib! This document outlines the development process and standards for this project.
 
 ## Development Setup
-See the README.
+See [`README.md`](./../README.md) for details on setting up the project.
 
 ## Development Workflow
 
@@ -67,6 +67,8 @@ This project follows specific naming conventions and code style. Please review [
 - Add comments for complex logic, not obvious code
 - Use `debug_log()` from `include/debug.h` for debugging output
 - Follow the existing project structure in `src/` and `include/`
+- Try to document public functions and types with doxygen comments. See
+  [`doxygen.md`](./doxygen.md) for details.
 
 ## Project Architecture
 

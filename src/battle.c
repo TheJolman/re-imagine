@@ -1,3 +1,8 @@
+/**
+ * @file battle.c
+ * @brief Battle system implementation
+ */
+
 #include "battle.h"
 #include "map.h"
 #include "menu.h"
