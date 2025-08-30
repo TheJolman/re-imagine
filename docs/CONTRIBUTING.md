@@ -10,9 +10,9 @@ See the README.
 ### Making Changes
 1. Create a feature branch from `main`:
    ```sh
-   git checkout main
-   git pull origin main
-   git checkout -b feature/your-feature-name
+   git switch main
+   git pull --rebase
+   git switch -c your-feature-name
    ```
 
 2. Make your changes following the [coding standards](#coding-standards)
@@ -37,10 +37,11 @@ See the README.
 ### Submitting Changes
 1. **All code changes must go through GitHub pull requests** - direct pushes to `main` are not allowed
 
-2. Ensure your branch is up to date with `main`:
+2. Ensure your branch is up to date with `main` and push:
    ```sh
    git fetch origin
    git rebase origin/main
+   git push -u origin your-feature-name
    ```
 
 3. Create a pull request with:
