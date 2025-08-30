@@ -49,12 +49,12 @@ Result map_load_from_csv(const char *file_path)
     if (!map->data)
         error_exit(1, "Failed to allocate memory for map->data");
 
-    for (uint32_t x = 0; x < row; x++)
+    for (uint32_t y = 0; y < row; y++)
     {
-        for (uint32_t y = 0; y < max_cols; y++)
+        for (uint32_t x = 0; x < max_cols; x++)
         {
             // accessing 1D array as if it were 2D
-            map->data[x * max_cols + y] = temp_data[x][y];
+            map->data[y * max_cols + x] = temp_data[y][x];
         }
     }
     debug_log("copied data successfully");
@@ -67,12 +67,12 @@ Result map_load_from_csv(const char *file_path)
 
 void map_draw(Map *map)
 {
-    for (uint32_t x = 0; x < map->height; x++)
+    for (uint32_t y = 0; y < map->height; y++)
     {
-        for (uint32_t y = 0; y < map->width; y++)
+        for (uint32_t x = 0; x < map->width; x++)
         {
             Color color = {};
-            switch (map->data[x * map->width + y])
+            switch (map->data[y * map->width + x])
             {
             case 0:
                 color = BROWN;
