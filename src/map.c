@@ -29,7 +29,7 @@ Result map_load_from_csv(const char *file_path)
         while (token != nullptr && col < MAP_MAX_COLS)
         {
             temp_data[row][col] = atoi(token);
-            debug_log("Current token [%d][%d]: %d",row, col, temp_data[row][col]);
+            // debug_log("Current token [%d][%d]: %d",row, col, temp_data[row][col]);
             token = strtok(nullptr, ",");
             col++;
         }
@@ -52,12 +52,18 @@ Result map_load_from_csv(const char *file_path)
     {
         for (uint32_t j = 0; j < max_cols; j++)
         {
-            map->data[i][j] = temp_data[i][j];
+            // accessing 1D array as if it were 2D
+            map->data[i * max_cols + j] = temp_data[i][j];
         }
     }
+    debug_log("copied data successfully");
 
     map->height = row;
     map->width = max_cols;
 
     return (Result){.value = map, .err = nullptr};
+}
+
+void map_draw() {
+    debug_log("drawing map...");
 }

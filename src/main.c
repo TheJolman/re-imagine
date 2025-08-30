@@ -87,6 +87,8 @@ int main(int argc, const char **argv)
     {
         error_exit(1, "%s", res.err);
     }
+    Map *map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", map->height, map->width);
 
     // Main game loop
     while (!WindowShouldClose())
@@ -94,6 +96,9 @@ int main(int argc, const char **argv)
         update_game();
         draw_game();
     }
+
+    free(map->data);
+    free(map);
 
     CloseWindow();
     return 0;

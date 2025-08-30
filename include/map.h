@@ -19,7 +19,7 @@ typedef struct
 {
     uint32_t height;
     uint32_t width;
-    int **data;
+    int *data; // use 1D array for simple memory management
 } Map;
 
 Result map_load_from_csv(const char *file_path);
