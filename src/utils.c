@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "list.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -30,3 +31,31 @@ void error_exit(int code, const char *format, ...)
     va_end(args);
     exit(code);
 }
+
+void *my_malloc(size_t size)
+{
+    void *ptr = malloc(size);
+
+    if (!ptr)
+    {
+    }
+    return ptr;
+}
+
+static void heap_list_destroy(void *ptr)
+{
+    if (ptr)
+    {
+        free(ptr);
+        ptr = nullptr;
+    }
+}
+
+List heap_list_create()
+{
+    List list = list_init(sizeof(void *), heap_list_destroy, nullptr);
+
+    return list;
+}
+
+void free_all(void);

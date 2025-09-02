@@ -71,6 +71,9 @@ int main(int argc, const char **argv)
         }
     }
 
+    heap_list = heap_list_create();
+    atexit(free_all);
+
     screen.width = screen_width;
     screen.height = screen_height;
 

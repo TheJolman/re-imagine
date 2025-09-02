@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "list.h"
 #include <stddef.h>
 
 /**
@@ -52,3 +53,9 @@ void error_log(const char *format, ...);
  * @param ... Variable arguments for the format string
  */
 void error_exit(int code, const char *format, ...);
+
+extern List heap_list; ///< Global linked list for allocating and freeing memory
+
+void *my_malloc(size_t size);
+List heap_list_create();
+void free_all(void);
