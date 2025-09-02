@@ -26,6 +26,7 @@ endif()
 set(SOURCES
     src/main.c
     src/utils.c
+    src/list.c
     src/game.c
     src/pause.c
     src/battle.c

@@ -41,14 +41,16 @@ Result map_load_from_csv(const char *file_path)
     fclose(file);
     debug_log("File %s read from and closed.", file_path);
 
-    Map *map = malloc(sizeof(Map *));
+    // Map *map = malloc(sizeof(Map *));
+    Map *map = heap_list.malloc(sizeof(Map *));
+
     if (!map)
         return (Result){.value = nullptr, .err = "failed to allocate memory for map"};
 
-    map->data = malloc(row * max_cols * sizeof(int16_t));
+    map->data = heap_list.malloc(row * max_cols * sizeof(int16_t));
     if (!map->data)
     {
-        free(map);
+        // free(map);
         return (Result){.value = nullptr, .err = "failed to allocate memory for map->data"};
     }
 
