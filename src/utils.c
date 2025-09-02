@@ -76,6 +76,10 @@ static void my_free(void *ptr)
     }
 }
 
+/**
+ * @brief Returns an object with .malloc and .free methods that uses a linked list to keep track
+ *        of memory allocations
+ */
 HeapList heap_list_create()
 {
     List list = list_init(sizeof(void *), free_user_pointer, nullptr);
