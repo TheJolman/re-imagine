@@ -2,7 +2,6 @@
 #include "utils.h"
 #include <assert.h>
 #include <stdlib.h>
-#include <string.h>
 
 // TODO: do some extra math so empty squares can't get hovered
 static void grid_menu_left(const void *menu_ptr)
