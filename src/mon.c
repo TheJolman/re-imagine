@@ -48,12 +48,15 @@ Result create_mon(char *name)
     mon->name = malloc(strlen(name) + 1);
     if (!mon->name)
     {
+        free(mon);
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
     strcpy((char *)mon->name, name);
     mon->texture = malloc(sizeof(Texture2D));
     if (!mon->texture)
     {
+        free((char *)mon->name);
+        free(mon);
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
     mon->hp = 100;

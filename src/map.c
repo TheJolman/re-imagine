@@ -43,11 +43,14 @@ Result map_load_from_csv(const char *file_path)
 
     Map *map = malloc(sizeof(Map *));
     if (!map)
-        error_exit(1, "Failed to allocate memory for Map object");
+        return (Result){.value = nullptr, .err = "failed to allocate memory for map"};
 
     map->data = malloc(row * max_cols * sizeof(int16_t));
     if (!map->data)
-        error_exit(1, "Failed to allocate memory for map->data");
+    {
+        free(map);
+        return (Result){.value = nullptr, .err = "failed to allocate memory for map->data"};
+    }
 
     for (uint32_t y = 0; y < row; y++)
     {
