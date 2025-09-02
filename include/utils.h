@@ -54,8 +54,12 @@ void error_log(const char *format, ...);
  */
 void error_exit(int code, const char *format, ...);
 
-extern List heap_list; ///< Global linked list for allocating and freeing memory
+typedef struct {
+    List list;
+    void *(*malloc)(size_t);
+} HeapList;
 
-void *my_malloc(size_t size);
-List heap_list_create();
+extern HeapList heap_list; ///< Global linked list for allocating and freeing memory
+
+HeapList heap_list_create();
 void free_all(void);

@@ -32,15 +32,20 @@ void error_exit(int code, const char *format, ...)
     exit(code);
 }
 
-void *my_malloc(size_t size)
+static void *my_malloc(size_t size)
 {
     void *ptr = malloc(size);
 
     if (!ptr)
     {
+        error_exit(1, "could not allocate memory");
     }
+
+    list_push_front(&heap_list.list, ptr);
     return ptr;
 }
+
+static void my_free(void *ptr) { free(ptr); }
 
 static void heap_list_destroy(void *ptr)
 {
@@ -51,11 +56,10 @@ static void heap_list_destroy(void *ptr)
     }
 }
 
-List heap_list_create()
+HeapList heap_list_create()
 {
     List list = list_init(sizeof(void *), heap_list_destroy, nullptr);
-
-    return list;
+    return (HeapList){.list = list, .malloc = my_malloc};
 }
 
-void free_all(void);
+void free_all(void) { clear_list(&heap_list.list); }
