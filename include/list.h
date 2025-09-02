@@ -88,8 +88,8 @@ void node_destroy(Node *node, void (*destroy)(void *))
     if (destroy)
         destroy(node->data);
 
-    if (node->data)
-        free(node->data);
+    // if (node->data)
+    //     free(node->data);
     free(node);
 }
 

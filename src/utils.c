@@ -41,19 +41,19 @@ static void *my_malloc(size_t size)
         error_exit(1, "could not allocate memory");
     }
 
-    list_push_front(&heap_list.list, ptr);
+    list_push_front(&heap_list.list, &ptr);
     return ptr;
 }
 
 static void my_free(void *ptr)
 {
-    list_delete(&heap_list.list, ptr);
+    list_delete(&heap_list.list, &ptr);
 }
 
 HeapList heap_list_create()
 {
     // I don't think I need to define custom behavior for `destroy` here
-    List list = list_init(sizeof(void *), nullptr, nullptr);
+    List list = list_init(sizeof(void *), free, nullptr);
     return (HeapList){.list = list, .malloc = my_malloc, .free = my_free};
 }
 
