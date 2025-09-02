@@ -19,8 +19,8 @@ void error_log(const char *format, ...)
     va_list args;
     va_start(args, format);
     fprintf(stderr, "[ERROR] ");
-    vfprintf(format, args);
-    putchar('\n');
+    vfprintf(stderr, format, args);
+    fputc('\n', stderr);
     va_end(args);
 }
 
@@ -29,8 +29,8 @@ void error_exit(int code, const char *format, ...)
     va_list args;
     va_start(args, format);
     fprintf(stderr, "[ERROR] ");
-    vfprintf(format, args);
-    putchar('\n');
+    vfprintf(stderr, format, args);
+    fputc('\n', stderr);
     va_end(args);
     exit(code);
 }
