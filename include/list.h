@@ -86,11 +86,10 @@ void node_destroy(Node *node, void (*destroy)(void *))
     if (!node)
         return;
     if (destroy)
-    {
         destroy(node->data);
-    }
 
-    free(node->data);
+    if (node->data)
+        free(node->data);
     free(node);
 }
 
