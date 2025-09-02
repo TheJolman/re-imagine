@@ -9,18 +9,17 @@
 #include "mon.h"
 #include "raylib.h"
 #include <assert.h>
-#include <stdio.h>
-#include <string.h>
+#include <stdint.h>
 
 // Should these be moved into initBattleUI ?
-constexpr int WINDOW_MARGIN = 50;
-constexpr int TEXT_HEIGHT = 150;
+constexpr uint32_t WINDOW_MARGIN = 50;
+constexpr uint32_t TEXT_HEIGHT = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
 constexpr float SCALE = 0.6f;
-constexpr size_t NUM_ITEMS = 4;
-constexpr size_t NUM_ROWS = 2;
-constexpr size_t NUM_COLS = 2;
+constexpr uint32_t NUM_ITEMS = 4;
+constexpr uint32_t NUM_ROWS = 2;
+constexpr uint32_t NUM_COLS = 2;
 
 typedef struct
 {
@@ -98,11 +97,11 @@ static GridMenu *action_menu_create()
         return nullptr;
     }
 
-    for (size_t row = 0; row < NUM_ROWS; row++)
+    for (uint32_t row = 0; row < NUM_ROWS; row++)
     {
-        for (size_t col = 0; col < NUM_COLS; col++)
+        for (uint32_t col = 0; col < NUM_COLS; col++)
         {
-            size_t index = row * NUM_COLS + col;
+            uint32_t index = row * NUM_COLS + col;
             if (index >= menu->num_items)
             {
                 grid_menu_destroy(menu);
@@ -137,9 +136,9 @@ static void action_menu_display()
 
     DrawLine(ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y,
              ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y + ui.text_box.height, GRAY);
-    for (size_t i = 0; i < action_menu->grid.num_rows; i++)
+    for (uint32_t i = 0; i < action_menu->grid.num_rows; i++)
     {
-        for (size_t j = 0; j < action_menu->grid.num_cols; j++)
+        for (uint32_t j = 0; j < action_menu->grid.num_cols; j++)
         {
             MenuItem item = action_items[i][j];
             if (item.text)
@@ -174,8 +173,8 @@ static void action_menu_display()
         if (action_menu->grid.current_row < action_menu->grid.num_rows &&
             action_menu->grid.current_col < action_menu->grid.num_cols)
         {
-            size_t index = action_menu->grid.current_row * action_menu->grid.num_cols +
-                           action_menu->grid.current_col;
+            uint32_t index = action_menu->grid.current_row * action_menu->grid.num_cols +
+                             action_menu->grid.current_col;
             if (index < action_menu->num_items && action_menu->items[index]->select)
             {
                 action_menu->items[index]->select();
@@ -189,9 +188,9 @@ static void action_menu_display()
     {
         MenuItem current_item =
             action_items[action_menu->grid.current_row][action_menu->grid.current_col];
-        constexpr int width = 120;
-        constexpr int height = 30;
-        DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, width, height,
+        constexpr int WIDTH = 120;
+        constexpr int HEIGHT = 30;
+        DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, WIDTH, HEIGHT,
                            DARKGRAY);
     }
 }

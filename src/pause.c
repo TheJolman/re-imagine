@@ -2,9 +2,10 @@
 #include "assert.h"
 #include "menu.h"
 #include "raylib.h"
-#include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
 
-constexpr size_t NUM_ITEMS = 3;
+constexpr uint32_t NUM_ITEMS = 3;
 
 static void options_select(void) { return; }
 static void exit_select(void)
@@ -32,7 +33,7 @@ static VerticalMenu *pause_menu_create()
     VerticalMenu *menu = vertical_menu_create(NUM_ITEMS);
     if (menu)
     {
-        for (size_t i = 0; i < menu->num_items; i++)
+        for (uint32_t i = 0; i < menu->num_items; i++)
             menu->items[i] = pause_items[i];
     }
 
@@ -50,7 +51,7 @@ void pause_menu_display(void)
 
     DrawText("PAUSE MENU", 50, 50, 40, DARKGRAY);
 
-    for (int i = 0; i < pause_menu->num_items; i++)
+    for (uint32_t i = 0; i < pause_menu->num_items; i++)
     {
         MenuItem item = pause_items[i];
         DrawText(item.text, item.pos_x, item.pos_y, item.font_size, item.color);

@@ -41,7 +41,7 @@ static void grid_menu_down(const void *menu_ptr)
         menu->grid.current_row = 0;
 }
 
-GridMenu *grid_menu_create(size_t num_items, const size_t num_rows, const size_t num_cols)
+GridMenu *grid_menu_create(uint16_t num_items, const uint16_t num_rows, const uint16_t num_cols)
 {
     GridMenu *menu = malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
@@ -89,7 +89,7 @@ static void vertical_menu_prev(const void *menu_ptr)
         menu->selected_item = menu->num_items - 1;
 }
 
-VerticalMenu *vertical_menu_create(const size_t num_items)
+VerticalMenu *vertical_menu_create(const uint16_t num_items)
 {
     VerticalMenu *menu = malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
     if (!menu)

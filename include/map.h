@@ -9,13 +9,15 @@
 #include "utils.h"
 #include <raylib.h>
 
+typedef uint32_t Pixels;
+
 /**
  * @brief Screen dimensions structure
  */
 typedef struct
 {
-    int width;  ///< Screen width in pixels
-    int height; ///< Screen height in pixels
+    Pixels width;  ///< Screen width in pixels
+    Pixels height; ///< Screen height in pixels
 } Screen;
 
 extern Screen screen; ///< Global screen dimensions
@@ -31,7 +33,7 @@ typedef struct
 {
     uint32_t height; ///< Map height in tiles
     uint32_t width;  ///< Map width in tiles
-    int *data;       ///< 1D array of tile data for simple memory management
+    int16_t *data;   ///< 1D array of tile data for simple memory management
 } Map;
 
 /**
