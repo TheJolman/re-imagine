@@ -52,6 +52,7 @@ Result create_mon(char *name)
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
     strcpy((char *)mon->name, name);
+
     mon->texture = malloc(sizeof(Texture2D));
     if (!mon->texture)
     {
@@ -67,18 +68,9 @@ Result create_mon(char *name)
 
 void destroy_mon(Mon *mon)
 {
-    if (mon)
-    {
-        if (mon->texture)
-        {
-            UnloadTexture(*mon->texture);
-            free(mon->texture);
-        }
-        if (mon->name)
-        {
-            free((char *)mon->name);
-        }
-        free(mon);
-        mon = nullptr;
-    }
+    UnloadTexture(*mon->texture);
+    free(mon->texture);
+    free((char *)mon->name);
+    free(mon);
+    mon = nullptr;
 }
