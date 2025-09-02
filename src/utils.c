@@ -47,7 +47,7 @@ static void *my_malloc(size_t size)
 
 static void my_free(void *ptr)
 {
-    // what goes here?
+    list_delete(&heap_list.list, ptr);
 }
 
 HeapList heap_list_create()
