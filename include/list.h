@@ -88,8 +88,8 @@ void node_destroy(Node *node, void (*destroy)(void *))
     if (destroy)
         destroy(node->data);
 
-    // if (node->data)
-    //     free(node->data);
+    if (node->data)
+        free(node->data);
     free(node);
 }
 
@@ -107,6 +107,7 @@ bool list_push_front(List *list, const void *data)
     list->size++;
     return true;
 }
+
 
 bool list_push_back(List *list, const void *data)
 {

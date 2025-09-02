@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// This defines the global heap_list declared in utils.h
+HeapList heap_list;
+
 float clamp_float(float value, float min, float max)
 {
     const float res = value < min ? min : value;
@@ -16,7 +19,7 @@ void error_log(const char *format, ...)
     va_list args;
     va_start(args, format);
     fprintf(stderr, "[ERROR] ");
-    vprintf(format, args);
+    vfprintf(format, args);
     putchar('\n');
     va_end(args);
 }
@@ -26,10 +29,25 @@ void error_exit(int code, const char *format, ...)
     va_list args;
     va_start(args, format);
     fprintf(stderr, "[ERROR] ");
-    vprintf(format, args);
+    vfprintf(format, args);
     putchar('\n');
     va_end(args);
     exit(code);
+}
+
+/**
+ * @brief Frees the underlying memory block tracked by the list.
+ * @param p A pointer to the list's node data, which itself holds the pointer
+ * to the allocated memory block.
+ */
+static void free_user_pointer(void *p)
+{
+    // p is the node->data, which is a container holding the user's pointer.
+    // We need to dereference it to get the user's pointer and free that.
+    if (p)
+    {
+        free(*(void **)p);
+    }
 }
 
 static void *my_malloc(size_t size)
@@ -47,13 +65,20 @@ static void *my_malloc(size_t size)
 
 static void my_free(void *ptr)
 {
-    list_delete(&heap_list.list, &ptr);
+    if (!ptr)
+    {
+        return;
+    }
+
+    if (!list_delete(&heap_list.list, &ptr))
+    {
+        error_log("Attempted to free non-tracked pointer or double free: %p", ptr);
+    }
 }
 
 HeapList heap_list_create()
 {
-    // I don't think I need to define custom behavior for `destroy` here
-    List list = list_init(sizeof(void *), free, nullptr);
+    List list = list_init(sizeof(void *), free_user_pointer, nullptr);
     return (HeapList){.list = list, .malloc = my_malloc, .free = my_free};
 }
 
