@@ -17,7 +17,6 @@
  */
 
 #include <raylib.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,8 +30,8 @@
 #define GIT_VERSION "unknown"
 #endif
 
-uint32_t screen_width = 1200;
-uint32_t screen_height = 900;
+Pixels screen_width = 1200;
+Pixels screen_height = 900;
 
 Screen screen = {0};
 

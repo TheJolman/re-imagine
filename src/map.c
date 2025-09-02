@@ -18,7 +18,7 @@ Result map_load_from_csv(const char *file_path)
 
     debug_log("Map file %s opened successfully", file_path);
 
-    int temp_data[MAP_MAX_ROWS][MAP_MAX_COLS] = {};
+    int16_t temp_data[MAP_MAX_ROWS][MAP_MAX_COLS] = {};
     char line[1024];
     uint32_t row = 0;
     uint32_t max_cols = 0;
@@ -45,7 +45,7 @@ Result map_load_from_csv(const char *file_path)
     if (!map)
         error_exit(1, "Failed to allocate memory for Map object");
 
-    map->data = malloc(row * max_cols * sizeof(int));
+    map->data = malloc(row * max_cols * sizeof(int16_t));
     if (!map->data)
         error_exit(1, "Failed to allocate memory for map->data");
 
