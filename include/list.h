@@ -202,6 +202,36 @@ bool list_insert(List *list, size_t index, const void *data)
     return true;
 }
 
+bool list_delete(List *list, void *data)
+{
+    if (list_is_empty(list) || !data)
+        return false;
+
+    if (list->head->data == data)
+    {
+        node_destroy(list->head, list->destroy);
+        list->head = nullptr;
+        list->size--;
+        return true;
+    }
+
+    Node *prev = list->head;
+    Node *temp = prev->next;
+    while (temp)
+    {
+        if (temp->data == data)
+        {
+            prev->next = temp->next;
+            node_destroy(temp, list->destroy);
+            temp = nullptr;
+            return true;
+        }
+        prev->next = temp;
+        temp = temp->next;
+    }
+    return false;
+}
+
 void clear_list(List *list)
 {
     if (!list)

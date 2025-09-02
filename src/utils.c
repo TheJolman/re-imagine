@@ -45,21 +45,16 @@ static void *my_malloc(size_t size)
     return ptr;
 }
 
-static void my_free(void *ptr) { free(ptr); }
-
-static void heap_list_destroy(void *ptr)
+static void my_free(void *ptr)
 {
-    if (ptr)
-    {
-        free(ptr);
-        ptr = nullptr;
-    }
+    // what goes here?
 }
 
 HeapList heap_list_create()
 {
-    List list = list_init(sizeof(void *), heap_list_destroy, nullptr);
-    return (HeapList){.list = list, .malloc = my_malloc};
+    // I don't think I need to define custom behavior for `destroy` here
+    List list = list_init(sizeof(void *), nullptr, nullptr);
+    return (HeapList){.list = list, .malloc = my_malloc, .free = my_free};
 }
 
 void free_all(void) { clear_list(&heap_list.list); }

@@ -57,6 +57,7 @@ void error_exit(int code, const char *format, ...);
 typedef struct {
     List list;
     void *(*malloc)(size_t);
+    void (*free)(void *);
 } HeapList;
 
 extern HeapList heap_list; ///< Global linked list for allocating and freeing memory
