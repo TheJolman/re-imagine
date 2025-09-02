@@ -202,34 +202,40 @@ bool list_insert(List *list, size_t index, const void *data)
     return true;
 }
 
-bool list_delete(List *list, void *data)
+bool list_delete(List *list, const void *data)
 {
     if (list_is_empty(list) || !data)
+    {
         return false;
-
-    if (list->head->data == data)
-    {
-        node_destroy(list->head, list->destroy);
-        list->head = nullptr;
-        list->size--;
-        return true;
     }
 
-    Node *prev = list->head;
-    Node *temp = prev->next;
-    while (temp)
+    Node *current = list->head;
+    Node *prev = nullptr;
+
+    while (current != nullptr && memcmp(current->data, data, list->data_size) != 0)
     {
-        if (temp->data == data)
-        {
-            prev->next = temp->next;
-            node_destroy(temp, list->destroy);
-            temp = nullptr;
-            return true;
-        }
-        prev->next = temp;
-        temp = temp->next;
+        prev = current;
+        current = current->next;
     }
-    return false;
+
+    if (current == nullptr)
+    {
+        return false; // Not found
+    }
+
+    if (prev == nullptr)
+    {
+        list->head = current->next; // Deleting head
+    }
+    else
+    {
+        prev->next = current->next;
+    }
+
+    node_destroy(current, list->destroy);
+    list->size--;
+
+    return true;
 }
 
 void clear_list(List *list)
