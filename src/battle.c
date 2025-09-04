@@ -11,21 +11,11 @@
 #include <assert.h>
 #include <stdint.h>
 
-// Should these be moved into initBattleUI ?
 constexpr uint32_t WINDOW_MARGIN = 50;
 constexpr uint32_t TEXT_HEIGHT = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
 constexpr float SCALE = 0.6f;
-
-typedef struct
-{
-    Rectangle text_box;
-    Vector2 player_mon_pos;
-    Vector2 enemy_mon_pos;
-    Vector2 action_menu_pos;
-    Vector2 status_bar_pos;
-} BattleUI;
 
 typedef enum
 {
@@ -47,7 +37,7 @@ static void switch_select() { battle_state = BATTLE_SWITCH; }
 
 Mon *player_mon = nullptr;
 Mon *enemy_mon = nullptr;
-BattleUI ui = {0};
+static BattleUI *battle_ui = nullptr;
 static bool battle_initialized = false;
 static Menu *action_menu = nullptr;
 
@@ -57,7 +47,8 @@ static void action_menu_create()
     void (*select_callbacks[])(void) = {attack_select, items_select, run_select, switch_select};
     MenuConfig config = {
         .title = "BATTLE MENU",
-        .rect = {ui.text_box.x + ui.text_box.width * 0.5f + 10, ui.text_box.y + 30, 0, 0},
+        .rect = {battle_ui->text_box.x + battle_ui->text_box.width * 0.5f + 10,
+                 battle_ui->text_box.y + 30, 0, 0},
         .font_size = 20,
         .layout = MENU_LAYOUT_GRID,
         .num_rows = 2,
@@ -88,8 +79,9 @@ static void action_menu_display()
         action_menu_create();
     }
 
-    DrawLine(ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y,
-             ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y + ui.text_box.height, GRAY);
+    DrawLine(battle_ui->text_box.x + battle_ui->text_box.width * 0.5f, battle_ui->text_box.y,
+             battle_ui->text_box.x + battle_ui->text_box.width * 0.5f,
+             battle_ui->text_box.y + battle_ui->text_box.height, GRAY);
 
     menu_draw(action_menu);
     menu_handle_input(action_menu);
@@ -97,14 +89,20 @@ static void action_menu_display()
 
 static void init_battle_ui(void)
 {
-    ui.text_box = (Rectangle){WINDOW_MARGIN, screen.height - (WINDOW_MARGIN + TEXT_HEIGHT),
-                              screen.width - WINDOW_MARGIN * 2, TEXT_HEIGHT};
+    battle_ui = heap_list.malloc(sizeof(BattleUI));
+    if (!battle_ui)
+    {
+        error_exit(1, "Could not allocate memory for BattleUI");
+    }
+
+    battle_ui->text_box = (Rectangle){WINDOW_MARGIN, screen.height - (WINDOW_MARGIN + TEXT_HEIGHT),
+                                      screen.width - WINDOW_MARGIN * 2, TEXT_HEIGHT};
 
     // TODO: Get consistent asset sizes
-    ui.player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
-    ui.enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
-    ui.action_menu_pos = (Vector2){ui.text_box.x + 20, ui.text_box.y + 20};
-    ui.status_bar_pos = (Vector2){ui.text_box.x + 20, ui.text_box.y + 80};
+    battle_ui->player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
+    battle_ui->enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
+    battle_ui->action_menu_pos = (Vector2){battle_ui->text_box.x + 20, battle_ui->text_box.y + 20};
+    battle_ui->status_bar_pos = (Vector2){battle_ui->text_box.x + 20, battle_ui->text_box.y + 80};
 
     battle_state = BATTLE_MENU;
 
@@ -155,7 +153,8 @@ static void render_mon(Mon *mon, Vector2 position)
 
 static void render_text_box(void)
 {
-    DrawRectangleLines(ui.text_box.x, ui.text_box.y, ui.text_box.width, ui.text_box.height, WHITE);
+    DrawRectangleLines(battle_ui->text_box.x, battle_ui->text_box.y, battle_ui->text_box.width,
+                       battle_ui->text_box.height, WHITE);
 }
 
 static void render_action_menu(void)
@@ -186,10 +185,10 @@ static void render_battle_ui(void)
     render_action_menu();
 
     if (player_mon)
-        render_mon(player_mon, ui.player_mon_pos);
+        render_mon(player_mon, battle_ui->player_mon_pos);
 
     if (enemy_mon)
-        render_mon(enemy_mon, ui.enemy_mon_pos);
+        render_mon(enemy_mon, battle_ui->enemy_mon_pos);
 }
 
 void battle_scene_render(void)
@@ -216,6 +215,12 @@ void battle_scene_end(void)
     {
         destroy_mon(enemy_mon);
         enemy_mon = nullptr;
+    }
+
+    if (battle_ui)
+    {
+        heap_list.free(battle_ui);
+        battle_ui = nullptr;
     }
 
     action_menu_end();

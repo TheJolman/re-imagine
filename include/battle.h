@@ -5,7 +5,19 @@
 
 #pragma once
 
+#include "mon.h"
+#include "raylib.h"
+
 // TODO: Use linked list for managing assets
+
+typedef struct
+{
+    Rectangle text_box;
+    Vector2 player_mon_pos;
+    Vector2 enemy_mon_pos;
+    Vector2 action_menu_pos;
+    Vector2 status_bar_pos;
+} BattleUI;
 
 /**
  * @brief Renders the battle scene interface
