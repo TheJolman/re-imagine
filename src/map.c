@@ -30,7 +30,6 @@ Result map_load_from_csv(const char *file_path)
         while (token != nullptr && col < MAP_MAX_COLS)
         {
             temp_data[row][col] = atoi(token);
-            // debug_log("Current token [%d][%d]: %d",row, col, temp_data[row][col]);
             token = strtok(nullptr, ",");
             col++;
         }
@@ -41,14 +40,14 @@ Result map_load_from_csv(const char *file_path)
     fclose(file);
     debug_log("File %s read from and closed.", file_path);
 
-    Map *map = malloc(sizeof(Map *));
+    Map *map = heap_list.malloc(sizeof(Map *));
+
     if (!map)
         return (Result){.value = nullptr, .err = "failed to allocate memory for map"};
 
-    map->data = malloc(row * max_cols * sizeof(int16_t));
+    map->data = heap_list.malloc(row * max_cols * sizeof(int16_t));
     if (!map->data)
     {
-        free(map);
         return (Result){.value = nullptr, .err = "failed to allocate memory for map->data"};
     }
 
@@ -70,8 +69,8 @@ Result map_load_from_csv(const char *file_path)
 
 void map_destroy(Map *map)
 {
-    free(map->data);
-    free(map);
+    heap_list.free(map->data);
+    heap_list.free(map);
     map = nullptr;
 }
 

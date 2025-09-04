@@ -39,25 +39,25 @@ void load_mon_texture(Mon *mon, MonTextureType textureType)
 
 Result create_mon(char *name)
 {
-    Mon *mon = malloc(sizeof(Mon));
+    Mon *mon = heap_list.malloc(sizeof(Mon));
     if (!mon)
     {
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
 
-    mon->name = malloc(strlen(name) + 1);
+    mon->name = heap_list.malloc(strlen(name) + 1);
     if (!mon->name)
     {
-        free(mon);
+        heap_list.free(mon);
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
     strcpy((char *)mon->name, name);
 
-    mon->texture = malloc(sizeof(Texture2D));
+    mon->texture = heap_list.malloc(sizeof(Texture2D));
     if (!mon->texture)
     {
-        free((char *)mon->name);
-        free(mon);
+        heap_list.free((char *)mon->name);
+        heap_list.free(mon);
         return (Result){.value = nullptr, .err = "Out of memory "};
     }
     mon->hp = 100;
@@ -69,8 +69,8 @@ Result create_mon(char *name)
 void destroy_mon(Mon *mon)
 {
     UnloadTexture(*mon->texture);
-    free(mon->texture);
-    free((char *)mon->name);
-    free(mon);
+    heap_list.free(mon->texture);
+    heap_list.free((char *)mon->name);
+    heap_list.free(mon);
     mon = nullptr;
 }

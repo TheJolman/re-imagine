@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "list.h"
 #include <stddef.h>
 
 /**
@@ -52,3 +53,19 @@ void error_log(const char *format, ...);
  * @param ... Variable arguments for the format string
  */
 void error_exit(int code, const char *format, ...);
+
+typedef struct
+{
+    List list;
+    void *(*malloc)(size_t);
+    void (*free)(void *);
+} HeapList;
+
+extern HeapList heap_list; ///< Global linked list for allocating and freeing memory
+
+HeapList heap_list_create();
+
+/**
+ * @brief Frees all memory using global linked list. Registered with `atexit()`
+ */
+void free_all(void);

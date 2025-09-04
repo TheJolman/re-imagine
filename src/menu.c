@@ -2,7 +2,6 @@
 #include "utils.h"
 #include <assert.h>
 #include <stdlib.h>
-#include <string.h>
 
 // TODO: do some extra math so empty squares can't get hovered
 static void grid_menu_left(const void *menu_ptr)
@@ -43,6 +42,7 @@ static void grid_menu_down(const void *menu_ptr)
 
 GridMenu *grid_menu_create(uint16_t num_items, const uint16_t num_rows, const uint16_t num_cols)
 {
+    // TODO: Uitilize result type here
     GridMenu *menu = malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
     {
@@ -63,11 +63,7 @@ GridMenu *grid_menu_create(uint16_t num_items, const uint16_t num_rows, const ui
     return menu;
 }
 
-void grid_menu_destroy(GridMenu *menu)
-{
-    if (menu)
-        free(menu);
-}
+void grid_menu_destroy(GridMenu *menu) { heap_list.free(menu); }
 
 static void vertical_menu_next(const void *menu_ptr)
 {
@@ -91,7 +87,8 @@ static void vertical_menu_prev(const void *menu_ptr)
 
 VerticalMenu *vertical_menu_create(const uint16_t num_items)
 {
-    VerticalMenu *menu = malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
+    // TODO: Utilize result type here
+    VerticalMenu *menu = heap_list.malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
     if (!menu)
         return nullptr;
 
@@ -102,8 +99,4 @@ VerticalMenu *vertical_menu_create(const uint16_t num_items)
     return menu;
 }
 
-void vertical_menu_destroy(VerticalMenu *menu)
-{
-    if (menu)
-        free(menu);
-}
+void vertical_menu_destroy(VerticalMenu *menu) { heap_list.free(menu); }
