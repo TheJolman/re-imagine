@@ -89,14 +89,13 @@ GridMenu *attack_menu = nullptr;
 GridMenu *items_menu = nullptr;
 GridMenu *switch_menu = nullptr;
 
-static GridMenu *action_menu_create()
+static Result action_menu_create()
 {
-    GridMenu *menu = grid_menu_create(NUM_ITEMS, NUM_ROWS, NUM_COLS);
-    if (!menu)
-    {
-        return nullptr;
-    }
+    Result res = grid_menu_create(NUM_ITEMS, NUM_ROWS, NUM_COLS);
+    if (res.err)
+        return res;
 
+    GridMenu *menu = (GridMenu *)res.value;
     for (uint32_t row = 0; row < NUM_ROWS; row++)
     {
         for (uint32_t col = 0; col < NUM_COLS; col++)
@@ -105,12 +104,12 @@ static GridMenu *action_menu_create()
             if (index >= menu->num_items)
             {
                 grid_menu_destroy(menu);
-                return nullptr;
+                return (Result){.err = "Index out of bounds"};
             }
             menu->items[index] = &action_items[row][col];
         }
     }
-    return menu;
+    return (Result){.value = menu};
 }
 
 static void action_menu_end()
@@ -125,9 +124,13 @@ static void action_menu_display()
 {
     if (!action_menu)
     {
-        action_menu = action_menu_create();
-        if (!action_menu)
+        Result res = action_menu_create();
+        if (res.err)
+        {
+            error_log(res.err);
             return;
+        }
+        action_menu = (GridMenu *)res.value;
     }
 
     float menu_title_x = ui.text_box.x + ui.text_box.width * 0.5f + 10;
@@ -136,9 +139,9 @@ static void action_menu_display()
 
     DrawLine(ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y,
              ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y + ui.text_box.height, GRAY);
-    for (uint32_t i = 0; i < action_menu->grid.num_rows; i++)
+    for (uint32_t i = 0; i < action_menu->num_rows; i++)
     {
-        for (uint32_t j = 0; j < action_menu->grid.num_cols; j++)
+        for (uint32_t j = 0; j < action_menu->num_cols; j++)
         {
             MenuItem item = action_items[i][j];
             if (item.text)
@@ -170,11 +173,11 @@ static void action_menu_display()
     }
     else if (IsKeyPressed(KEY_ENTER))
     {
-        if (action_menu->grid.current_row < action_menu->grid.num_rows &&
-            action_menu->grid.current_col < action_menu->grid.num_cols)
+        if (action_menu->current_row < action_menu->num_rows &&
+            action_menu->current_col < action_menu->num_cols)
         {
-            uint32_t index = action_menu->grid.current_row * action_menu->grid.num_cols +
-                             action_menu->grid.current_col;
+            uint32_t index =
+                action_menu->current_row * action_menu->num_cols + action_menu->current_col;
             if (index < action_menu->num_items && action_menu->items[index]->select)
             {
                 action_menu->items[index]->select();
@@ -184,10 +187,9 @@ static void action_menu_display()
         }
     }
 
-    if (action_menu->grid.current_row < NUM_ROWS && action_menu->grid.current_col < NUM_COLS)
+    if (action_menu->current_row < NUM_ROWS && action_menu->current_col < NUM_COLS)
     {
-        MenuItem current_item =
-            action_items[action_menu->grid.current_row][action_menu->grid.current_col];
+        MenuItem current_item = action_items[action_menu->current_row][action_menu->current_col];
         constexpr int WIDTH = 120;
         constexpr int HEIGHT = 30;
         DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, WIDTH, HEIGHT,

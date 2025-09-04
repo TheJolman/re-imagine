@@ -6,6 +6,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "utils.h"
 #include <stdint.h>
 
 /**
@@ -22,17 +23,6 @@ typedef struct
 } MenuItem;
 
 /**
- * @brief Grid navigation helper structure
- */
-typedef struct
-{
-    uint16_t num_rows;    ///< Number of rows in the grid
-    uint16_t num_cols;    ///< Number of columns in the grid
-    uint16_t current_row; ///< Currently selected row
-    uint16_t current_col; ///< Currently selected column
-} Grid;
-
-/**
  * @brief Menu arranged in a grid layout
  */
 typedef struct
@@ -41,7 +31,10 @@ typedef struct
     void (*move_right)(const void *); ///< Function to handle right movement
     void (*move_down)(const void *);  ///< Function to handle down movement
     void (*move_up)(const void *);    ///< Function to handle up movement
-    Grid grid;                        ///< Grid navigation state
+    uint16_t num_rows;                ///< Number of rows in the grid
+    uint16_t num_cols;                ///< Number of columns in the grid
+    uint16_t current_row;             ///< Currently selected row
+    uint16_t current_col;             ///< Currently selected column
     uint16_t num_items;               ///< Total number of menu items
     MenuItem *items[];                ///< Array of menu item pointers
 } GridMenu;
@@ -65,10 +58,9 @@ typedef struct
  * @param num_items Total number of menu items
  * @param num_rows Number of rows in the grid
  * @param num_cols Number of columns in the grid
- * @return Pointer to the created grid menu
+ * @return Result containing the created grid menu or an error
  */
-GridMenu *grid_menu_create(const uint16_t num_items, const uint16_t num_rows,
-                           const uint16_t num_cols);
+Result grid_menu_create(const uint16_t num_items, const uint16_t num_rows, const uint16_t num_cols);
 
 /**
  * @brief Destroys a grid menu and frees its memory

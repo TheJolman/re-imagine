@@ -7,60 +7,56 @@
 static void grid_menu_left(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
-    if (menu->grid.current_col > 0)
-        menu->grid.current_col--;
+    if (menu->current_col > 0)
+        menu->current_col--;
     else
-        menu->grid.current_col = menu->grid.num_cols - 1;
+        menu->current_col = menu->num_cols - 1;
 }
 
 static void grid_menu_right(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
-    if (menu->grid.current_col < menu->grid.num_cols - 1)
-        menu->grid.current_col++;
+    if (menu->current_col < menu->num_cols - 1)
+        menu->current_col++;
     else
-        menu->grid.current_col = 0;
+        menu->current_col = 0;
 }
 
 static void grid_menu_up(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
-    if (menu->grid.current_row > 0)
-        menu->grid.current_row--;
+    if (menu->current_row > 0)
+        menu->current_row--;
     else
-        menu->grid.current_row = menu->grid.num_rows - 1;
+        menu->current_row = menu->num_rows - 1;
 }
 
 static void grid_menu_down(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
-    if (menu->grid.current_row < menu->grid.num_rows - 1)
-        menu->grid.current_row++;
+    if (menu->current_row < menu->num_rows - 1)
+        menu->current_row++;
     else
-        menu->grid.current_row = 0;
+        menu->current_row = 0;
 }
 
-GridMenu *grid_menu_create(uint16_t num_items, const uint16_t num_rows, const uint16_t num_cols)
+Result grid_menu_create(uint16_t num_items, const uint16_t num_rows, const uint16_t num_cols)
 {
-    // TODO: Uitilize result type here
-    GridMenu *menu = malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
+    GridMenu *menu = heap_list.malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
-    {
-        error_log("Could not allocate memory for GridMenu");
-        return nullptr;
-    }
+        return (Result){.err = "Could not allocate memory for GridMenu"};
 
     menu->num_items = num_items;
-    menu->grid.num_rows = num_rows;
-    menu->grid.num_cols = num_cols;
-    menu->grid.current_row = 0;
-    menu->grid.current_col = 0;
+    menu->num_rows = num_rows;
+    menu->num_cols = num_cols;
+    menu->current_row = 0;
+    menu->current_col = 0;
     menu->move_left = grid_menu_left;
     menu->move_right = grid_menu_right;
     menu->move_down = grid_menu_down;
     menu->move_up = grid_menu_up;
 
-    return menu;
+    return (Result){.value = menu};
 }
 
 void grid_menu_destroy(GridMenu *menu) { heap_list.free(menu); }
