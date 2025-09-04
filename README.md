@@ -1,20 +1,23 @@
 # Raylib Game Project
 
-A cross-platform game developed with Raylib, C11, and CMake.  
-This game is being developed as a part of VGDC @ CSUF.  
+A cross-platform game developed with Raylib, C23, and CMake.  
+This game is being developed with VGDC@CSUF.  
   
-Idea: Pokemon-like top down rpg with a small story.  
+Pitch: Pokemon-like top down rpg with a small story.  
 
 ## Requirements
 
-- C23 compiler
+- Recent version of Clang
 - CMake + Ninja
 - Raylib 5.5 (optional, CMake will download and compile this for you if you don't have it)
 
 ## Quick Start - Windows
-1. Install `clang`, `cmake`, and `ninja`. I recommend using [Chocolatey](https://chocolatey.org/) or [Scoop](https://scoop.sh/):
+1. Install `clang`, `cmake`, and `ninja` using one of the following package managers (if you don't know which to use, use WinGet):
 ```sh
-# Chocolatey (use admin shell)
+# WinGet
+winget install BrechtSanders.WinLibs.POSIX.UCRT.LLVM
+
+# Chocolatey (admin shell)
 choco install -y llvm cmake ninja
 
 # Scoop
@@ -27,12 +30,16 @@ git clone https://github.com/TheJolman/raylib-game.git
 cd raylib-game
 ```
 
+3. Load the required environment variables (requires Powershell):
+```
+. .\env.ps1
+```
+
 3. Setup build files:
 > This might take a few minutes as CMake downloads and compiles the project's dependencies from
-> source.
+> source. You only need to run this before your first build and when `CMakeLists.txt` changes.
 ```sh
-# First time setup only (or when CMakeLists.txt changes)
-cmake -B build -G Ninja
+cmake -B build
 ```
 
 3. Build and run:
@@ -43,9 +50,7 @@ cmake --build build
 
 ## Quick Start - Linux/MacOS
 
-1. Install Nix and optionally direnv:  
-https://determinate.systems/nix-installer/  
-https://direnv.net/docs/installation.html  
+1. Install [Nix](https://determinate.systems/nix-installer/) and optionally [direnv](https://direnv.net/docs/installation.html).
 
 2. Clone and enter the project:
 ```
@@ -63,6 +68,7 @@ nix develop
 ```
 
 4. Setup build files:
+> You only need to run this before your first build and when `CMakeLists.txt` changes.
 ```
 cmake -B build
 ```
@@ -72,7 +78,3 @@ cmake -B build
 cmake --build build
 ./build/raylib-game
 ```
-
-### Unix without Nix
-You of course do not need to use the nix dev shell, but it is recommended. As long as you
-have CMake, Ninja, and a C23 compiler you should be able to compile and run this project.
