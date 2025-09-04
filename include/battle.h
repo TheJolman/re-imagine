@@ -5,10 +5,7 @@
 
 #pragma once
 
-#include "mon.h"
 #include "raylib.h"
-
-// TODO: Use linked list for managing assets
 
 typedef struct
 {

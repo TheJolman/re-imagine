@@ -11,11 +11,12 @@
 #include <assert.h>
 #include <stdint.h>
 
-constexpr uint32_t WINDOW_MARGIN = 50;
-constexpr uint32_t TEXT_HEIGHT = 150;
-constexpr Color TINT = WHITE;
-constexpr float ROTATION = 0.0;
-constexpr float SCALE = 0.6f;
+// TODO: Move these somewhere better?
+static constexpr uint32_t WINDOW_MARGIN = 50;
+static constexpr uint32_t TEXT_HEIGHT = 150;
+static constexpr Color MON_TINT = WHITE;
+static constexpr float MON_ROTATION = 0.0;
+static constexpr float MON_SCALE = 0.6f;
 
 typedef enum
 {
@@ -75,10 +76,9 @@ static void action_menu_end()
 static void action_menu_display()
 {
     if (!action_menu)
-    {
         action_menu_create();
-    }
 
+    // Vertical line between text box and action menu
     DrawLine(battle_ui->text_box.x + battle_ui->text_box.width * 0.5f, battle_ui->text_box.y,
              battle_ui->text_box.x + battle_ui->text_box.width * 0.5f,
              battle_ui->text_box.y + battle_ui->text_box.height, GRAY);
@@ -106,17 +106,14 @@ static void init_battle_ui(void)
 
     battle_state = BATTLE_MENU;
 
+    // Initialize monsters (here froge is hardcoded in)
     if (!player_mon)
     {
         Result res = create_mon("froge");
         if (res.err)
-        {
             error_exit(1, "%s", res.err);
-        }
-        else
-        {
-            player_mon = (Mon *)res.value;
-        }
+
+        player_mon = (Mon *)res.value;
         player_mon->hp = 100;
         load_mon_texture(player_mon, BACK);
     }
@@ -125,13 +122,9 @@ static void init_battle_ui(void)
     {
         Result res = create_mon("froge");
         if (res.err)
-        {
             error_exit(1, "%s", res.err);
-        }
-        else
-        {
-            enemy_mon = (Mon *)res.value;
-        }
+
+        enemy_mon = (Mon *)res.value;
         enemy_mon->hp = 80;
         load_mon_texture(enemy_mon, FRONT);
     }
@@ -139,16 +132,10 @@ static void init_battle_ui(void)
 
 static void render_mon(Mon *mon, Vector2 position)
 {
-    if (!mon)
+    if (!mon || !mon->texture || !IsTextureValid(*mon->texture))
         return;
 
-    if (!mon->texture)
-        return;
-
-    if (!IsTextureValid(*mon->texture))
-        return;
-
-    DrawTextureEx(*mon->texture, position, ROTATION, SCALE, TINT);
+    DrawTextureEx(*mon->texture, position, MON_ROTATION, MON_SCALE, MON_TINT);
 }
 
 static void render_text_box(void)
