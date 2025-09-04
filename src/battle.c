@@ -17,9 +17,6 @@ constexpr uint32_t TEXT_HEIGHT = 150;
 constexpr Color TINT = WHITE;
 constexpr float ROTATION = 0.0;
 constexpr float SCALE = 0.6f;
-constexpr uint32_t NUM_ITEMS = 4;
-constexpr uint32_t NUM_ROWS = 2;
-constexpr uint32_t NUM_COLS = 2;
 
 typedef struct
 {
@@ -46,76 +43,40 @@ static void attack_select() { battle_state = BATTLE_ATTACK; }
 static void items_select()  { battle_state = BATTLE_ITEMS; }
 static void run_select()    { battle_state = BATTLE_RUN; }
 static void switch_select() { battle_state = BATTLE_SWITCH; }
-
-static MenuItem attack_item = {"ATTACK", 0, 0, 20, DARKGRAY, attack_select};
-static MenuItem items_item =  {"ITEMS",  0, 0, 20, DARKGRAY, items_select};
-static MenuItem run_item =    {"RUN",    0, 0, 20, DARKGRAY, run_select};
-static MenuItem switch_item = {"SWITCH", 0, 0, 20, DARKGRAY, switch_select};
 // clang-format on
 
 Mon *player_mon = nullptr;
 Mon *enemy_mon = nullptr;
 BattleUI ui = {0};
 static bool battle_initialized = false;
+static Menu *action_menu = nullptr;
 
-static MenuItem action_items[NUM_ROWS][NUM_COLS];
-
-static void update_menu_item_positions()
+static void action_menu_create()
 {
-    float menu_start_x = ui.text_box.x + ui.text_box.width * 0.5f + 10;
-    float menu_start_y = ui.text_box.y + 30;
-    float item_spacing = 35;
+    const char *item_texts[] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
+    void (*select_callbacks[])(void) = {attack_select, items_select, run_select, switch_select};
+    MenuConfig config = {
+        .title = "BATTLE MENU",
+        .rect = {ui.text_box.x + ui.text_box.width * 0.5f + 10, ui.text_box.y + 30, 0, 0},
+        .font_size = 20,
+        .layout = MENU_LAYOUT_GRID,
+        .num_rows = 2,
+        .num_cols = 2,
+    };
 
-    attack_item.pos_x = menu_start_x;
-    attack_item.pos_y = menu_start_y;
-
-    items_item.pos_x = menu_start_x + 120;
-    items_item.pos_y = menu_start_y;
-
-    run_item.pos_x = menu_start_x;
-    run_item.pos_y = menu_start_y + item_spacing;
-
-    switch_item.pos_x = menu_start_x + 120;
-    switch_item.pos_y = menu_start_y + item_spacing;
-
-    action_items[0][0] = attack_item;
-    action_items[0][1] = items_item;
-    action_items[1][0] = run_item;
-    action_items[1][1] = switch_item;
-}
-
-GridMenu *action_menu = nullptr;
-GridMenu *attack_menu = nullptr;
-GridMenu *items_menu = nullptr;
-GridMenu *switch_menu = nullptr;
-
-static Result action_menu_create()
-{
-    Result res = grid_menu_create(NUM_ITEMS, NUM_ROWS, NUM_COLS);
+    Result res = menu_create(&config, item_texts, select_callbacks, 4);
     if (res.err)
-        return res;
-
-    GridMenu *menu = (GridMenu *)res.value;
-    for (uint32_t row = 0; row < NUM_ROWS; row++)
     {
-        for (uint32_t col = 0; col < NUM_COLS; col++)
-        {
-            uint32_t index = row * NUM_COLS + col;
-            if (index >= menu->num_items)
-            {
-                grid_menu_destroy(menu);
-                return (Result){.err = "Index out of bounds"};
-            }
-            menu->items[index] = &action_items[row][col];
-        }
+        error_log(res.err);
+        return;
     }
-    return (Result){.value = menu};
+    action_menu = (Menu *)res.value;
 }
 
 static void action_menu_end()
 {
     if (action_menu)
-        grid_menu_destroy(action_menu);
+        menu_destroy(action_menu);
 
     action_menu = nullptr;
 }
@@ -124,77 +85,14 @@ static void action_menu_display()
 {
     if (!action_menu)
     {
-        Result res = action_menu_create();
-        if (res.err)
-        {
-            error_log(res.err);
-            return;
-        }
-        action_menu = (GridMenu *)res.value;
+        action_menu_create();
     }
-
-    float menu_title_x = ui.text_box.x + ui.text_box.width * 0.5f + 10;
-    float menu_title_y = ui.text_box.y + 5;
-    DrawText("BATTLE MENU", menu_title_x, menu_title_y, 18, WHITE);
 
     DrawLine(ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y,
              ui.text_box.x + ui.text_box.width * 0.5f, ui.text_box.y + ui.text_box.height, GRAY);
-    for (uint32_t i = 0; i < action_menu->num_rows; i++)
-    {
-        for (uint32_t j = 0; j < action_menu->num_cols; j++)
-        {
-            MenuItem item = action_items[i][j];
-            if (item.text)
-            {
-                DrawText(item.text, item.pos_x, item.pos_y, item.font_size, item.color);
-            }
-        }
-    }
 
-    if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
-    {
-        if (action_menu->move_down)
-            action_menu->move_down(action_menu);
-    }
-    else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
-    {
-        if (action_menu->move_up)
-            action_menu->move_up(action_menu);
-    }
-    else if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A))
-    {
-        if (action_menu->move_left)
-            action_menu->move_left(action_menu);
-    }
-    else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D))
-    {
-        if (action_menu->move_right)
-            action_menu->move_right(action_menu);
-    }
-    else if (IsKeyPressed(KEY_ENTER))
-    {
-        if (action_menu->current_row < action_menu->num_rows &&
-            action_menu->current_col < action_menu->num_cols)
-        {
-            uint32_t index =
-                action_menu->current_row * action_menu->num_cols + action_menu->current_col;
-            if (index < action_menu->num_items && action_menu->items[index]->select)
-            {
-                action_menu->items[index]->select();
-                action_menu_end();
-                return;
-            }
-        }
-    }
-
-    if (action_menu->current_row < NUM_ROWS && action_menu->current_col < NUM_COLS)
-    {
-        MenuItem current_item = action_items[action_menu->current_row][action_menu->current_col];
-        constexpr int WIDTH = 120;
-        constexpr int HEIGHT = 30;
-        DrawRectangleLines(current_item.pos_x - 10, current_item.pos_y - 5, WIDTH, HEIGHT,
-                           DARKGRAY);
-    }
+    menu_draw(action_menu);
+    menu_handle_input(action_menu);
 }
 
 static void init_battle_ui(void)
@@ -208,7 +106,6 @@ static void init_battle_ui(void)
     ui.action_menu_pos = (Vector2){ui.text_box.x + 20, ui.text_box.y + 20};
     ui.status_bar_pos = (Vector2){ui.text_box.x + 20, ui.text_box.y + 80};
 
-    update_menu_item_positions();
     battle_state = BATTLE_MENU;
 
     if (!player_mon)
