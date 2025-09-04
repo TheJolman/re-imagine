@@ -30,7 +30,7 @@ git clone https://github.com/TheJolman/rpg-raylib.git
 cd raylib-game
 ```
 
-3. Load the required environment variables (requires Powershell):
+3. Load the required environment variables with PowerShell:
 ```
 . .\env.ps1
 ```
@@ -45,7 +45,7 @@ cmake -B build
 3. Build and run:
 ```sh
 cmake --build build
-.\build\raylib-game
+.\build\rpg-raylib.exe
 ```
 
 ## Quick Start - Linux/MacOS
@@ -76,5 +76,5 @@ cmake -B build
 4. Build and run:
 ```sh
 cmake --build build
-./build/raylib-game
+./build/rpg-raylib
 ```
