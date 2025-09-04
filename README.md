@@ -26,7 +26,7 @@ scoop install llvm cmake ninja
 
 2. Clone and enter the project:
 ```
-git clone https://github.com/TheJolman/raylib-game.git
+git clone https://github.com/TheJolman/rpg-raylib.git
 cd raylib-game
 ```
 
@@ -54,7 +54,7 @@ cmake --build build
 
 2. Clone and enter the project:
 ```
-git clone https://github.com/TheJolman/raylib-game.git
+git clone https://github.com/TheJolman/rpg-raylib.git
 cd raylib-game
 ```
 
