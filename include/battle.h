@@ -10,17 +10,8 @@
 #include "raylib.h"
 #include <stdint.h>
 
-typedef struct
-{
-    Rectangle text_box;
-    Vector2 player_mon_pos;
-    Vector2 enemy_mon_pos;
-    Vector2 action_menu_pos;
-    Vector2 status_bar_pos;
-} BattleUI;
-
 /**
- * @brief Configuration options for the battle UI
+ * @brief Read-only configuration options for the battle interface
  */
 typedef struct
 {
@@ -32,13 +23,25 @@ typedef struct
 } BattleUIConfig;
 
 /**
+ * @brief Calculated configuration options for the battle interface
+ */
+typedef struct
+{
+    Rectangle text_box;
+    Vector2 player_mon_pos;
+    Vector2 enemy_mon_pos;
+    Vector2 action_menu_pos;
+    Vector2 status_bar_pos;
+} BattleUILayout;
+
+/**
  * @brief Holds pointers to battle-related objects as well as the battle state.
  */
 typedef struct
 {
     Mon *player_mon;
     Mon *enemy_mon;
-    BattleUI *battle_ui;
+    BattleUILayout *battle_ui;
     bool initialized;
     Menu *action_menu;
     enum {

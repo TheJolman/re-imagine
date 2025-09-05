@@ -10,7 +10,7 @@
 #include "raylib.h"
 #include <assert.h>
 
-static const BattleUIConfig ui_config = {
+static constexpr BattleUIConfig ui_config = {
     .window_margin = 50,
     .text_height = 150,
     .mon_tint = WHITE,
@@ -19,6 +19,57 @@ static const BattleUIConfig ui_config = {
 };
 
 static BattleContext battle_ctx = {0};
+
+/**
+ * Calculates location of UI elements, loads monster assets into memory, and sets
+ * the initial state of the battle.
+ */
+static void init_battle_ui(void)
+{
+    battle_ctx.battle_ui = heap_list.malloc(sizeof(BattleUILayout));
+    if (!battle_ctx.battle_ui)
+    {
+        error_exit(1, "Could not allocate memory for BattleUI");
+    }
+
+    battle_ctx.battle_ui->text_box = (Rectangle){
+        ui_config.window_margin, screen.height - (ui_config.window_margin + ui_config.text_height),
+        screen.width - ui_config.window_margin * 2, ui_config.text_height};
+
+    // TODO: Get consistent asset sizes
+    // Set positions for menus and monsters
+    battle_ctx.battle_ui->player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
+    battle_ctx.battle_ui->enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
+    battle_ctx.battle_ui->action_menu_pos =
+        (Vector2){battle_ctx.battle_ui->text_box.x + 20, battle_ctx.battle_ui->text_box.y + 20};
+    battle_ctx.battle_ui->status_bar_pos =
+        (Vector2){battle_ctx.battle_ui->text_box.x + 20, battle_ctx.battle_ui->text_box.y + 80};
+
+    battle_ctx.state = BATTLE_MENU;
+
+    // Initialize monsters (here froge is hardcoded in)
+    if (!battle_ctx.player_mon)
+    {
+        Result res = create_mon("froge");
+        if (res.err)
+            error_exit(1, "%s", res.err);
+
+        battle_ctx.player_mon = (Mon *)res.value;
+        battle_ctx.player_mon->hp = 100;
+        load_mon_texture(battle_ctx.player_mon, BACK);
+    }
+
+    if (!battle_ctx.enemy_mon)
+    {
+        Result res = create_mon("froge");
+        if (res.err)
+            error_exit(1, "%s", res.err);
+
+        battle_ctx.enemy_mon = (Mon *)res.value;
+        battle_ctx.enemy_mon->hp = 80;
+        load_mon_texture(battle_ctx.enemy_mon, FRONT);
+    }
+}
 
 // clang-format off
 static void attack_select() { battle_ctx.state = BATTLE_ATTACK; }
@@ -77,56 +128,6 @@ static void action_menu_display()
     menu_handle_input(battle_ctx.action_menu);
 }
 
-/**
- * Initializes basic UI elements, loads monster assets into memory, and sets
- * the initial state of the battle.
- */
-static void init_battle_ui(void)
-{
-    battle_ctx.battle_ui = heap_list.malloc(sizeof(BattleUI));
-    if (!battle_ctx.battle_ui)
-    {
-        error_exit(1, "Could not allocate memory for BattleUI");
-    }
-
-    battle_ctx.battle_ui->text_box = (Rectangle){
-        ui_config.window_margin, screen.height - (ui_config.window_margin + ui_config.text_height),
-        screen.width - ui_config.window_margin * 2, ui_config.text_height};
-
-    // TODO: Get consistent asset sizes
-    // Set positions for menus and monsters
-    battle_ctx.battle_ui->player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
-    battle_ctx.battle_ui->enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
-    battle_ctx.battle_ui->action_menu_pos =
-        (Vector2){battle_ctx.battle_ui->text_box.x + 20, battle_ctx.battle_ui->text_box.y + 20};
-    battle_ctx.battle_ui->status_bar_pos =
-        (Vector2){battle_ctx.battle_ui->text_box.x + 20, battle_ctx.battle_ui->text_box.y + 80};
-
-    battle_ctx.state = BATTLE_MENU;
-
-    // Initialize monsters (here froge is hardcoded in)
-    if (!battle_ctx.player_mon)
-    {
-        Result res = create_mon("froge");
-        if (res.err)
-            error_exit(1, "%s", res.err);
-
-        battle_ctx.player_mon = (Mon *)res.value;
-        battle_ctx.player_mon->hp = 100;
-        load_mon_texture(battle_ctx.player_mon, BACK);
-    }
-
-    if (!battle_ctx.enemy_mon)
-    {
-        Result res = create_mon("froge");
-        if (res.err)
-            error_exit(1, "%s", res.err);
-
-        battle_ctx.enemy_mon = (Mon *)res.value;
-        battle_ctx.enemy_mon->hp = 80;
-        load_mon_texture(battle_ctx.enemy_mon, FRONT);
-    }
-}
 
 static void render_mon(Mon *mon, Vector2 position)
 {
