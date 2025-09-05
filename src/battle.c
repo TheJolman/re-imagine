@@ -8,7 +8,6 @@
 #include "battle.h"
 #include "map.h"
 #include "raylib.h"
-#include <assert.h>
 
 static constexpr BattleUIConfig ui_config = {
     .window_margin = 50,
