@@ -1,43 +1,14 @@
 /**
  * @file battle.c
  * @brief Battle system implementation
+ * Note that 'action_menu' refers to the top-level menu that includes 'attack', 'items', 'run', and
+ * 'switch' options.
  */
 
 #include "battle.h"
 #include "map.h"
-#include "menu.h"
-#include "mon.h"
 #include "raylib.h"
 #include <assert.h>
-#include <stdint.h>
-
-typedef struct
-{
-    uint32_t window_margin;
-    uint32_t text_height;
-    Color mon_tint;
-    float mon_rotation;
-    float mon_scale;
-} BattleUIConfig;
-
-typedef enum
-{
-    BATTLE_MENU,
-    BATTLE_ATTACK,
-    BATTLE_ITEMS,
-    BATTLE_RUN,
-    BATTLE_SWITCH,
-} BattleState;
-
-typedef struct
-{
-    Mon *player_mon;
-    Mon *enemy_mon;
-    BattleUI *battle_ui;
-    bool initialized;
-    Menu *action_menu;
-    BattleState state;
-} BattleContext;
 
 static const BattleUIConfig ui_config = {
     .window_margin = 50,
@@ -56,11 +27,14 @@ static void run_select()    { battle_ctx.state = BATTLE_RUN; }
 static void switch_select() { battle_ctx.state = BATTLE_SWITCH; }
 // clang-format on
 
+/**
+ * Initializes values for the top level action menu.
+ */
 static void action_menu_create()
 {
     const char *item_texts[] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
     void (*select_callbacks[])(void) = {attack_select, items_select, run_select, switch_select};
-    MenuConfig config = {
+    MenuConfig action_menu_config = {
         .title = "BATTLE MENU",
         .rect = {battle_ctx.battle_ui->text_box.x + battle_ctx.battle_ui->text_box.width * 0.5f +
                      10,
@@ -71,7 +45,7 @@ static void action_menu_create()
         .num_cols = 2,
     };
 
-    Result res = menu_create(&config, item_texts, select_callbacks, 4);
+    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, 4);
     if (res.err)
     {
         error_log(res.err);
@@ -103,6 +77,10 @@ static void action_menu_display()
     menu_handle_input(battle_ctx.action_menu);
 }
 
+/**
+ * Initializes basic UI elements, loads monster assets into memory, and sets
+ * the initial state of the battle.
+ */
 static void init_battle_ui(void)
 {
     battle_ctx.battle_ui = heap_list.malloc(sizeof(BattleUI));
@@ -116,6 +94,7 @@ static void init_battle_ui(void)
         screen.width - ui_config.window_margin * 2, ui_config.text_height};
 
     // TODO: Get consistent asset sizes
+    // Set positions for menus and monsters
     battle_ctx.battle_ui->player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
     battle_ctx.battle_ui->enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
     battle_ctx.battle_ui->action_menu_pos =
@@ -158,6 +137,9 @@ static void render_mon(Mon *mon, Vector2 position)
                   ui_config.mon_tint);
 }
 
+/**
+ * Renders text box on the bottom left of the screen.
+ */
 static void render_text_box(void)
 {
     DrawRectangleLines(battle_ctx.battle_ui->text_box.x, battle_ctx.battle_ui->text_box.y,
@@ -165,7 +147,11 @@ static void render_text_box(void)
                        WHITE);
 }
 
-static void render_action_menu(void)
+/**
+ * Renders menu on the bottom right of the screen. This menu might be the action menu or
+ * one of the submenus depending on the battle state.
+ */
+static void render_menu(void)
 {
     switch (battle_ctx.state)
     {
@@ -187,10 +173,14 @@ static void render_action_menu(void)
     }
 }
 
+/**
+ * Helper function for public function `battle_scene_render`. This just renders
+ * both monsters, text box, and action menu.
+ */
 static void render_battle_ui(void)
 {
     render_text_box();
-    render_action_menu();
+    render_menu();
 
     if (battle_ctx.player_mon)
         render_mon(battle_ctx.player_mon, battle_ctx.battle_ui->player_mon_pos);
