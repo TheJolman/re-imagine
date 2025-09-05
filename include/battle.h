@@ -5,8 +5,26 @@
 
 #pragma once
 
+#include "menu.h"
+#include "mon.h"
 #include "raylib.h"
+#include <stdint.h>
 
+/**
+ * @brief Read-only configuration options for the battle interface
+ */
+typedef struct
+{
+    uint32_t window_margin;
+    uint32_t text_height;
+    Color mon_tint;
+    float mon_rotation;
+    float mon_scale;
+} BattleUIConfig;
+
+/**
+ * @brief Calculated configuration options for the battle interface
+ */
 typedef struct
 {
     Rectangle text_box;
@@ -14,7 +32,27 @@ typedef struct
     Vector2 enemy_mon_pos;
     Vector2 action_menu_pos;
     Vector2 status_bar_pos;
-} BattleUI;
+} BattleUILayout;
+
+/**
+ * @brief Holds pointers to battle-related objects as well as the battle state.
+ */
+typedef struct
+{
+    Mon *player_mon;
+    Mon *enemy_mon;
+    BattleUILayout *battle_ui;
+    bool initialized;
+    Menu *action_menu;
+    enum
+    {
+        BATTLE_MENU,
+        BATTLE_ATTACK,
+        BATTLE_ITEMS,
+        BATTLE_RUN,
+        BATTLE_SWITCH,
+    } state;
+} BattleContext;
 
 /**
  * @brief Renders the battle scene interface
