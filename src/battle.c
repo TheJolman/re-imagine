@@ -127,7 +127,6 @@ static void action_menu_display()
     menu_handle_input(battle_ctx.action_menu);
 }
 
-
 static void render_mon(Mon *mon, Vector2 position)
 {
     if (!mon || !mon->texture || !IsTextureValid(*mon->texture))

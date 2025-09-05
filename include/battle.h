@@ -44,7 +44,8 @@ typedef struct
     BattleUILayout *battle_ui;
     bool initialized;
     Menu *action_menu;
-    enum {
+    enum
+    {
         BATTLE_MENU,
         BATTLE_ATTACK,
         BATTLE_ITEMS,
