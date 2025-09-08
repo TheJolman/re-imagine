@@ -2,7 +2,7 @@
 
 if command -v cppcheck &> /dev/null; then
     echo "Running cppcheck..."
-    cppcheck --project=build/compile_commands.json "$@"
+    cppcheck --project=build/compile_commands.json --suppress=normalCheckLevelMaxBranches "$@"
 else
     echo "Error: cppcheck not found in PATH"
     exit 1
