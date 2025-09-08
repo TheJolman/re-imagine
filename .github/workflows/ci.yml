@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    name: Run CI Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
