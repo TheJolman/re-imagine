@@ -6,6 +6,8 @@ project(rpg-raylib C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+option(STATIC_BUILD "Build a statically linked executable" OFF)
+
 # ----------  Version ----------
 find_package(Git REQUIRED)
 
@@ -65,6 +67,10 @@ endif()
 # ---------- Primary build target ----------
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
+endif()
+
+if(STATIC_BUILD)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif()
 
 add_executable(${PROJECT_NAME} ${SOURCES})
