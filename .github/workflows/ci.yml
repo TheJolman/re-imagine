@@ -1,23 +1,19 @@
 name: CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
+  push:
     branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/determinate-nix-action@v3
+      - uses: DeterminateSystems/nix-installer-action@main
       - name: Build project
-        run: nix develop --command bash -c "cmake -B build -S . && cmake --build build"
+        run: nix build .
       - name: Format check
         run: nix develop --command bash -c "./scripts/format.sh && git diff --exit-code"
-      - name: Check
+      - name: Static analysis check
         run: nix develop --command bash -c "./scripts/check.sh --error-exitcode=2"
