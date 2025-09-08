@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Build project
-        run: nix build .
+        run: nix develop --command bash -c "cmake -B build && cmake --build build"
       - name: Format check
         run: nix develop --command bash -c "./scripts/format.sh && git diff --exit-code"
       - name: Static analysis check
