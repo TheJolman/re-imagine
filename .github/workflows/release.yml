@@ -30,7 +30,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build libraylib-dev clang
+          sudo apt-get install -y build-essential cmake ninja-build clang
 
       - name: Install Dependencies (macOS)
         if: runner.os == 'macOS'
