@@ -19,7 +19,8 @@ RPG game built with raylib and C23.
 ### Development Environment
 
 - Development shell and environment variables defined in `nix/shell.nix` for Unix systems
-- Key dependencies: raylib
+- Environment variables defined in `env.ps1` for Windows.
+- Key dependencies: raylib 5.5
 - Debug build by default (`CMAKE_BUILD_TYPE=Debug`)
 
 ### Project Structure
@@ -59,16 +60,31 @@ assets/           # Game assets
 - 2D camera system with player following
 - Basic movement with WASD + Shift for speed boost
 - Battle scene with image rendering and UI for taking actions
-- CSV based map renderer (WIP)
+- CSV based map renderer
+
+### Memory Management
+
+This game uses a linked list based memory allocator that wraps `malloc` and `free`.
+- Use `heap_list.malloc` and `heap_list.free` instead of the equivalent functions from the
+  standard library. They work they same way.
+- `heap_list.free_all` frees all allocated memory and is registered with `atexit`.
+
+### Code Style
+
+- Style guidelines defined in `docs/naming-conventions.md`
+- Use allman style braces.
+- UI elements usually use a configuration struct to avoid excessive global state.
+- This project uses C23.
+    - Use `nullptr` over `NULL`.
+- Prefer integral types from `<stdint.h>` as this project is cross-platform.
 
 ## Your Role
+
 - If the user asks for clarification or an explanation about the project, do not modify any code.
 - If the user asks you to modify the code (bug fix, feature request, etc.) make
   sure the project builds after you make your changes.
-- You have access to `git` and `gh` commands. Use them to look at the log, issues, make
-  commits, switch branches, create worktrees, etc. Prefer rebasing over merging if pulling or
-  updating a feature branch. Only perform state-changing git commands upon request or after
-  asking the user. You can use read-only git commands without asking.
+- Use read-only git commands at will. Only perform state-changing git commands upon request or
+  after asking the user. Prefer rebasing over merging if pulling or updating a feature branch.
   - Make sure to run `cmake --build build --target format` before committing code.
 - Code can only be contributed to main via github pull request. Only create a
   pull request if explicitly asked to submit code.
