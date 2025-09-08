@@ -7,21 +7,83 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: rpg-raylib-linux
+            output_name: rpg-raylib
+          - os: macos-latest
+            asset_name: rpg-raylib-macos
+            output_name: rpg-raylib
+          - os: windows-latest
+            asset_name: rpg-raylib-windows.exe
+            output_name: rpg-raylib.exe
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
-      - name: Build statically linked binary
+      - name: Install Dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
-          nix develop --command cmake -B build -DSTATIC_BUILD=ON
-          nix develop --command cmake --build build
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build libraylib-dev clang
+
+      - name: Install Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install cmake ninja raylib
+
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install llvm ninja
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.bat
+          ./vcpkg/vcpkg install raylib:x64-windows-static
+
+      - name: Set Clang compilers
+        shell: bash
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          CMAKE_ARGS="-B build -G Ninja -DSTATIC_BUILD=ON"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$PWD/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
+          fi
+          cmake $CMAKE_ARGS
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Rename artifact
+        shell: bash
+        run: mv build/${{ matrix.output_name }} ${{ matrix.asset_name }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/rpg-raylib
+          files: artifacts/*/*
