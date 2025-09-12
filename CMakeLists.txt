@@ -8,7 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 option(STATIC_BUILD "Build a statically linked executable" OFF)
 
-# ----------  Version ----------
+# ----------  Get version from Git tag ----------
 find_package(Git REQUIRED)
 
 execute_process(
