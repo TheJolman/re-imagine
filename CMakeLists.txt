@@ -46,9 +46,6 @@ if(NOT raylib_FOUND)
   set(BUILD_EXAMPLES
       OFF
       CACHE BOOL "" FORCE)
-  set(BUILD_SHARED_LIBS
-      OFF
-      CACHE BOOL "" FORCE)
   if(WIN32)
     set(USE_MSVC_RUNTIME_LIBRARY_DLL
         ON
