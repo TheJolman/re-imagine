@@ -1,39 +1,36 @@
 {
   mkShellNoCC,
-  lib,
-  stdenv,
   cmake,
   pkg-config,
   ninja,
   gdb,
   raylib,
-  valgrind,
   lldb,
   llvmPackages_20,
   cppcheck,
   doxygen,
   cmake-format,
   cmake-lint,
+  glfw,
 }:
 mkShellNoCC {
-  packages =
-    [
-      cmake
-      pkg-config
-      ninja
-      llvmPackages_20.clang
-      gdb
-      lldb
-      llvmPackages_20.clang-tools
-      cppcheck
-      doxygen
-      cmake-format
-      cmake-lint
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) valgrind;
+  packages = [
+    cmake
+    pkg-config
+    ninja
+    llvmPackages_20.clang
+    gdb
+    lldb
+    llvmPackages_20.clang-tools
+    cppcheck
+    doxygen
+    cmake-format
+    cmake-lint
+  ];
 
   buildInputs = [
     raylib
+    glfw
   ];
 
   shellHook = ''
