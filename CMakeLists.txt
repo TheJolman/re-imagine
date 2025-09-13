@@ -8,17 +8,15 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 option(STATIC_BUILD "Build a statically linked executable" OFF)
 
-# ----------  Version ----------
+# ----------  Get version from Git tag ----------
 find_package(Git REQUIRED)
 
 execute_process(
   COMMAND ${GIT_EXECUTABLE} describe --tags --always --dirty
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   OUTPUT_VARIABLE GIT_VERSION
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-  ERROR_QUIET
-  RESULT_VARIABLE GIT_RESULT
-)
+  OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
+  RESULT_VARIABLE GIT_RESULT)
 
 if(NOT GIT_RESULT EQUAL "0")
   set(GIT_VERSION "unknown")
@@ -46,19 +44,31 @@ if(NOT raylib_FOUND)
   set(BUILD_EXAMPLES
       OFF
       CACHE BOOL "" FORCE)
-  set(BUILD_SHARED_LIBS
-      OFF
-      CACHE BOOL "" FORCE)
-  if(WIN32)
-    set(USE_MSVC_RUNTIME_LIBRARY_DLL
-        ON
-        CACHE BOOL "" FORCE)
+  set(PLATFOM
+      "Desktop"
+      CACHE BOOL "")
+
+  # Autodetect display server for raylib GLFW backend
+  if(UNIX AND NOT APPLE)
+    if(DEFINED ENV{WAYLAND_DISPLAY})
+      message(
+        STATUS "Wayland session detected, enabling Wayland backend for raylib.")
+      set(GLFW_BUILD_WAYLAND
+          ON
+          CACHE BOOL "")
+      set(GLFW_BUILD_X11
+          OFF
+          CACHE BOOL "")
+    else()
+      message(STATUS "Using X11 backend for raylib.")
+    endif()
   endif()
 
   FetchContent_Declare(
     raylib
     GIT_REPOSITORY https://github.com/raysan5/raylib.git
     GIT_TAG 5.5
+    GIT_SHALLOW ON
     GIT_PROGRESS TRUE)
 
   FetchContent_MakeAvailable(raylib)
