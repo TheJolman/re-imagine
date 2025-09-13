@@ -5,7 +5,7 @@ This game is being developed with VGDC@CSUF.
   
 Pitch: Pokemon-like top down rpg with a small story.  
 
-## Credits:
+## Credits
 ### Software:
 - Josh Holman
 -
