@@ -5,6 +5,16 @@ This game is being developed with VGDC@CSUF.
   
 Pitch: Pokemon-like top down rpg with a small story.  
 
+## Credits:
+### Software:
+- Josh Holman
+-
+-
+
+### Art:
+- Iris
+- Ethan
+
 ## Requirements
 
 - Recent version of Clang
