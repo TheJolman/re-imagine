@@ -21,23 +21,29 @@ typedef enum
     TITLE_SCREEN, ///< Showing the title screen
 } GameState;
 
-extern Player player;   ///< Global player instance
-extern Camera2D camera; ///< Global 2D camera for rendering
-extern GameState state; ///< Current game state
+/**
+ * @brief Holds pointers to game-related objects as well as the game state.
+ */
+typedef struct
+{
+    Player player;
+    Camera2D camera;
+    GameState state;
+} GameContext;
 
 /**
  * @brief Loads initial values on game startup
  *
  * Initializes the player, camera, and other game systems
  */
-void init_game(void);
+void game_init(void);
 
 /**
  * @brief Updates game variables before next frame is drawn
  *
  * Handles input, updates player position, and manages state transitions
  */
-void update_game(void);
+void game_update(void);
 
 /**
  * @brief Draws a single frame

@@ -11,11 +11,9 @@
 #include "map.h"
 #include "pause.h"
 
-Player player = {0};
-Camera2D camera = {0};
-GameState state = {0};
+GameContext ctx = {0};
 
-static void move_player(void)
+static void _move_player(void)
 {
     // Movement
     float moveSpeedModifier = 1.0f;
@@ -24,7 +22,7 @@ static void move_player(void)
         moveSpeedModifier = 2.0f;
     }
 
-    player.speed = player.base_speed * moveSpeedModifier;
+    ctx.player.speed = ctx.player.base_speed * moveSpeedModifier;
     Vector2 moveDirection = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W))
@@ -42,25 +40,25 @@ static void move_player(void)
     }
 
     // Calculate new position
-    Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
-                           player.position.y + moveDirection.y * player.speed};
+    Vector2 newPosition = {ctx.player.position.x + moveDirection.x * ctx.player.speed,
+                           ctx.player.position.y + moveDirection.y * ctx.player.speed};
 
-    player.position = newPosition;
+    ctx.player.position = newPosition;
 
     // Camera
-    camera.target = player.position;
+    ctx.camera.target = ctx.player.position;
 }
 
-static void handle_input(void)
+static void _handle_input(void)
 {
-    switch (state)
+    switch (ctx.state)
     {
     case FREE_ROAM:
-        move_player();
+        _move_player();
         if (IsKeyPressed(KEY_B))
-            state = BATTLE_SCENE;
+            ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
-            state = PAUSED;
+            ctx.state = PAUSED;
         break;
 
     case BATTLE_SCENE:
@@ -68,7 +66,7 @@ static void handle_input(void)
         {
             // NOTE: If concurencey is ever added should these be switched?
             battle_scene_end();
-            state = FREE_ROAM;
+            ctx.state = FREE_ROAM;
         }
         break;
 
@@ -76,7 +74,7 @@ static void handle_input(void)
         if (IsKeyPressed(KEY_ESCAPE))
         {
             pause_menu_end();
-            state = FREE_ROAM;
+            ctx.state = FREE_ROAM;
         }
         break;
 
@@ -92,35 +90,35 @@ static void handle_input(void)
     }
 }
 
-void init_game(void)
+void game_init(void)
 {
-    state = FREE_ROAM;
+    ctx.state = FREE_ROAM;
 
-    player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
-    player.base_speed = 5.0f;
-    player.speed = player.base_speed;
-    player.size = 30;
+    ctx.player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
+    ctx.player.base_speed = 5.0f;
+    ctx.player.speed = ctx.player.base_speed;
+    ctx.player.size = 30;
 
-    camera.target = player.position;
-    camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
-    camera.zoom = 1.0f;
+    ctx.camera.target = ctx.player.position;
+    ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
+    ctx.camera.zoom = 1.0f;
 }
 
-void update_game(void) { handle_input(); }
+void game_update(void) { _handle_input(); }
 
 void draw_game(Map *map)
 {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    switch (state)
+    switch (ctx.state)
     {
     case FREE_ROAM:
-        BeginMode2D(camera);
+        BeginMode2D(ctx.camera);
 
         map_draw(map);
         // Draw player
-        DrawCircleV(player.position, player.size / 2, RED);
+        DrawCircleV(ctx.player.position, ctx.player.size / 2, RED);
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
@@ -138,4 +136,4 @@ void draw_game(Map *map)
     EndDrawing();
 }
 
-void cleanup_game(void) {}
+void game_cleanup(void) {}

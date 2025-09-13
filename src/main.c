@@ -85,7 +85,7 @@ int main(int argc, const char **argv)
         error_exit(1, "failed to initialize window");
     }
     SetTargetFPS(60);
-    init_game();
+    game_init();
     SetExitKey(KEY_NULL);
 
     const char *file_path = "assets/map.csv";
@@ -100,7 +100,7 @@ int main(int argc, const char **argv)
     // Main game loop
     while (!WindowShouldClose())
     {
-        update_game();
+        game_update();
         draw_game(map);
     }
 
