@@ -8,7 +8,7 @@ Pitch: Pokemon-like top down rpg with a small story.
 ## Credits
 ### Software:
 - Josh Holman
--
+- Christian Carrillo
 -
 
 ### Art:
