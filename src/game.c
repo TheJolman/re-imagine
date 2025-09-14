@@ -7,10 +7,10 @@
 #include <raymath.h>
 
 #include "battle.h"
+#include "debug.h"
 #include "game.h"
 #include "map.h"
 #include "pause.h"
-#include "debug.h"
 
 GameContext ctx = {0};
 
@@ -113,6 +113,7 @@ void game_init(void)
 
     ctx.state = FREE_ROAM;
 
+    // ctx.player.position = (Vector2){GetScreenWidth() / 2, GetScreenHeight() / 2};
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
@@ -142,9 +143,12 @@ void game_draw()
 
         map_draw(ctx.map);
         // Draw player
-        // Can use `DrawTextureEx` if you want to use scale and rotation
-        DrawTexture(ctx.player.sprite.texture, ctx.player.position.x, ctx.player.position.y,
-                    ctx.player.sprite.tint);
+        Vector2 origin = {
+            (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
+            (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
+        };
+        DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, origin),
+                      ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
@@ -166,6 +170,4 @@ void game_draw()
     EndDrawing();
 }
 
-void game_cleanup(void) {
-    map_destroy(ctx.map);
-}
+void game_cleanup(void) { map_destroy(ctx.map); }
