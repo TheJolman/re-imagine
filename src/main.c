@@ -101,7 +101,7 @@ int main(int argc, const char **argv)
     while (!WindowShouldClose())
     {
         game_update();
-        draw_game(map);
+        game_draw(map);
     }
 
     map_destroy(map);

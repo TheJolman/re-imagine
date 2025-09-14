@@ -49,7 +49,7 @@ static void _move_player(void)
     ctx.camera.target = ctx.player.position;
 }
 
-static void _handle_input(void)
+static void _game_input_handler(void)
 {
     switch (ctx.state)
     {
@@ -104,9 +104,9 @@ void game_init(void)
     ctx.camera.zoom = 1.0f;
 }
 
-void game_update(void) { _handle_input(); }
+void game_update(void) { _game_input_handler(); }
 
-void draw_game(Map *map)
+void game_draw(Map *map)
 {
     BeginDrawing();
     ClearBackground(BLACK);

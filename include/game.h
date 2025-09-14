@@ -50,4 +50,4 @@ void game_update(void);
  *
  * @param map The map to render in the current frame
  */
-void draw_game(Map *map);
+void game_draw(Map *map);
