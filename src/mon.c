@@ -5,17 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
-static void loadOneTexture(char *imagePath, Texture2D *texture)
-{
-    Image image = LoadImage(imagePath);
-    *texture = LoadTextureFromImage(image);
-    UnloadImage(image);
-}
-
 void load_mon_texture(Mon *mon, MonTextureType textureType)
 {
     char imagePath[256];
-    Image image = {};
     if (!mon->name)
     {
         error_exit(1, "attempted to load texture of mon with no name");
@@ -31,9 +23,16 @@ void load_mon_texture(Mon *mon, MonTextureType textureType)
         break;
     }
 
-    image = LoadImage(imagePath);
-    *mon->texture = LoadTextureFromImage(image);
+    if (mon->sprite.texture.id > 0)
+    {
+        UnloadTexture(mon->sprite.texture);
+    }
+
+    Image image = LoadImage(imagePath);
+    mon->sprite.texture = LoadTextureFromImage(image);
     UnloadImage(image);
+
+    mon->textureType = textureType;
 }
 
 Result create_mon(char *name)
@@ -41,24 +40,24 @@ Result create_mon(char *name)
     Mon *mon = heap_list.malloc(sizeof(Mon));
     if (!mon)
     {
-        return (Result){.value = nullptr, .err = "Out of memory "};
+        return (Result){.value = nullptr, .err = "Out of memory"};
     }
 
     mon->name = heap_list.malloc(strlen(name) + 1);
     if (!mon->name)
     {
         heap_list.free(mon);
-        return (Result){.value = nullptr, .err = "Out of memory "};
+        return (Result){.value = nullptr, .err = "Out of memory"};
     }
     strcpy((char *)mon->name, name);
 
-    mon->texture = heap_list.malloc(sizeof(Texture2D));
-    if (!mon->texture)
-    {
-        heap_list.free((char *)mon->name);
-        heap_list.free(mon);
-        return (Result){.value = nullptr, .err = "Out of memory "};
-    }
+    mon->sprite = (Sprite){
+        .texture = {0},
+        .position = {0, 0},
+        .rotation = 0.0f,
+        .scale = 1.0f,
+        .tint = WHITE,
+    };
     mon->hp = 100;
     // TODO: Initialize other values
 
@@ -67,8 +66,10 @@ Result create_mon(char *name)
 
 void destroy_mon(Mon *mon)
 {
-    UnloadTexture(*mon->texture);
-    heap_list.free(mon->texture);
+    if (mon->sprite.texture.id > 0)
+    {
+        UnloadTexture(mon->sprite.texture);
+    }
     heap_list.free((char *)mon->name);
     heap_list.free(mon);
     mon = nullptr;

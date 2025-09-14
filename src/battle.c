@@ -129,10 +129,10 @@ static void _action_menu_display()
 
 static void _render_mon(Mon *mon, Vector2 position)
 {
-    if (!mon || !mon->texture || !IsTextureValid(*mon->texture))
+    if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    DrawTextureEx(*mon->texture, position, ui_config.mon_rotation, ui_config.mon_scale,
+    DrawTextureEx(mon->sprite.texture, position, ui_config.mon_rotation, ui_config.mon_scale,
                   ui_config.mon_tint);
 }
 
