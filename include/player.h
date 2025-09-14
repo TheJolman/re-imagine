@@ -6,6 +6,7 @@
 #pragma once
 
 #include "components.h"
+#include <raylib.h>
 
 /**
  * @brief Player character data structure
@@ -16,4 +17,5 @@ typedef struct Player
     Velocity velocity;     ///< Velocity vector
     float sprint_modifier; ///< Amount to increase speed by when sprinting
     float size;            ///< Size of the player collision box
+    Sprite sprite;
 } Player;

@@ -8,3 +8,12 @@ typedef struct
 } Velocity;
 
 typedef Vector2 Position;
+
+typedef struct
+{
+    Texture2D asset;
+    Position pos;
+    float rotation;
+    float scale;
+    Color tint;
+} Sprite;

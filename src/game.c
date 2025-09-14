@@ -19,6 +19,7 @@ static constexpr GameConfig cfg = {
     .player_initial_pos = (Vector2){100, 100},
     .player_size = 30,
     .camera_base_zoom = 1.0f,
+
 };
 
 static void _move_player(void)
@@ -106,6 +107,12 @@ void game_init(void)
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
+
+    ctx.player.sprite.asset = LoadTexture("assets/sample-assets/Texture/TX Player.png");
+    ctx.player.sprite.pos = ctx.player.position;
+    ctx.player.sprite.rotation = 0.0f;
+    ctx.player.sprite.tint = WHITE;
+    ctx.player.sprite.scale = 1.0f;
 
     ctx.camera.target = ctx.player.position;
     ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
