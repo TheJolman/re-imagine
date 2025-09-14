@@ -13,6 +13,13 @@
 
 GameContext ctx = {0};
 
+static constexpr GameConfig cfg = {
+    .player_base_speed = 5.0f,
+    .player_initial_pos = (Vector2){100, 100},
+    .player_size = 30,
+    .camera_base_zoom = 1.0f,
+};
+
 static void _move_player(void)
 {
     // Movement
@@ -94,14 +101,14 @@ void game_init(void)
 {
     ctx.state = FREE_ROAM;
 
-    ctx.player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
-    ctx.player.base_speed = 5.0f;
+    ctx.player.position = cfg.player_initial_pos;
+    ctx.player.base_speed = cfg.player_base_speed; // this feels redundant
     ctx.player.speed = ctx.player.base_speed;
-    ctx.player.size = 30;
+    ctx.player.size = cfg.player_size;
 
     ctx.camera.target = ctx.player.position;
     ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
-    ctx.camera.zoom = 1.0f;
+    ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
 void game_update(void) { _game_input_handler(); }

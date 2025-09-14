@@ -9,6 +9,17 @@
 #include "player.h"
 
 /**
+ * @brief Configuration options for game.c
+ */
+typedef struct
+{
+    Vector2 player_initial_pos;
+    float player_base_speed;
+    uint32_t player_size;
+    float camera_base_zoom;
+} GameConfig;
+
+/**
  * @brief Game state enumeration
  *
  * Represents the current state of the game for the state machine
