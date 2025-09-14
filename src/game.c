@@ -29,7 +29,7 @@ static void _move_player(void)
         moveSpeedModifier = 2.0f;
     }
 
-    ctx.player.speed = ctx.player.base_speed * moveSpeedModifier;
+    ctx.player.speed = cfg.player_base_speed * moveSpeedModifier;
     Vector2 moveDirection = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W))
@@ -102,8 +102,7 @@ void game_init(void)
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
-    ctx.player.base_speed = cfg.player_base_speed; // this feels redundant
-    ctx.player.speed = ctx.player.base_speed;
+    ctx.player.speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
 
     ctx.camera.target = ctx.player.position;
