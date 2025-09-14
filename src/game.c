@@ -108,8 +108,8 @@ void game_init(void)
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
 
-    ctx.player.sprite.asset = LoadTexture("assets/sample-assets/Texture/TX Player.png");
-    ctx.player.sprite.pos = ctx.player.position;
+    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/TX Player.png");
+    ctx.player.sprite.position = ctx.player.position;
     ctx.player.sprite.rotation = 0.0f;
     ctx.player.sprite.tint = WHITE;
     ctx.player.sprite.scale = 1.0f;
@@ -133,7 +133,9 @@ void game_draw(Map *map)
 
         map_draw(map);
         // Draw player
-        DrawCircleV(ctx.player.position, ctx.player.size / 2, RED);
+        // Can use `DrawTextureEx` if you want to use scale and rotation
+        DrawTexture(ctx.player.sprite.texture, ctx.player.position.x, ctx.player.position.y,
+                    ctx.player.sprite.tint);
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
