@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "components.h"
 #include "raylib.h"
 #include "utils.h"
 
@@ -32,7 +33,7 @@ typedef struct
 typedef struct
 {
     const char *name;           ///< Monster's name
-    Texture2D *texture;         ///< Current loaded texture
+    Sprite sprite;              ///< Monster's sprite
     MonTextureType textureType; ///< Type of currently loaded texture
     Move moves[4];              ///< Array of up to 4 moves
     unsigned hp;                ///< Current hit points

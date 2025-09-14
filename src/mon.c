@@ -3,7 +3,6 @@
 #include "raylib.h"
 #include "utils.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 static void loadOneTexture(char *imagePath, Texture2D *texture)
