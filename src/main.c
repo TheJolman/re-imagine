@@ -30,8 +30,8 @@
 #define GIT_VERSION "unknown"
 #endif
 
-constexpr Pixels screen_width_initial = 1200;
-constexpr Pixels screen_height_initial = 900;
+constexpr size_t screen_width_initial = 1200;
+constexpr size_t screen_height_initial = 900;
 
 /**
  * @returns true if target matches short_arg or long_arg.
