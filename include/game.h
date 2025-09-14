@@ -15,6 +15,7 @@ typedef struct
 {
     Vector2 player_initial_pos;
     float player_base_speed;
+    float player_sprint_modifier;
     uint32_t player_size;
     float camera_base_zoom;
 } GameConfig;

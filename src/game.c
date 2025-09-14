@@ -15,6 +15,7 @@ GameContext ctx = {0};
 
 static constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
+    .player_sprint_modifier = 2.0f,
     .player_initial_pos = (Vector2){100, 100},
     .player_size = 30,
     .camera_base_zoom = 1.0f,
@@ -22,37 +23,38 @@ static constexpr GameConfig cfg = {
 
 static void _move_player(void)
 {
-    // Movement
-    float moveSpeedModifier = 1.0f;
+    // Determine base speed and apply sprint modifier
+    float current_speed = cfg.player_base_speed;
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
-        moveSpeedModifier = 2.0f;
+        current_speed *= cfg.player_sprint_modifier;
     }
 
-    ctx.player.speed = cfg.player_base_speed * moveSpeedModifier;
-    Vector2 moveDirection = {0.0f, 0.0f};
-
+    // Get movement direction from input
+    Vector2 move_vector = {0};
     if (IsKeyDown(KEY_W))
-        moveDirection.y -= 1.0f;
+        move_vector.y -= 1.0f;
     if (IsKeyDown(KEY_S))
-        moveDirection.y += 1.0f;
+        move_vector.y += 1.0f;
     if (IsKeyDown(KEY_A))
-        moveDirection.x -= 1.0f;
+        move_vector.x -= 1.0f;
     if (IsKeyDown(KEY_D))
-        moveDirection.x += 1.0f;
+        move_vector.x += 1.0f;
 
-    if (moveDirection.x != 0.0f || moveDirection.y != 0.0f)
+    if (Vector2Length(move_vector) > 0.0f)
     {
-        moveDirection = Vector2Normalize(moveDirection);
+        // Normalize the vector to get a pure direction, then scale by speed
+        move_vector = Vector2Normalize(move_vector);
+        ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
+        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
+    }
+    else
+    {
+        // No movement input, so velocity is zero
+        ctx.player.velocity.vec = (Vector2){0};
     }
 
-    // Calculate new position
-    Vector2 newPosition = {ctx.player.position.x + moveDirection.x * ctx.player.speed,
-                           ctx.player.position.y + moveDirection.y * ctx.player.speed};
-
-    ctx.player.position = newPosition;
-
-    // Camera
+    // Camera always follows the player's position
     ctx.camera.target = ctx.player.position;
 }
 
@@ -102,7 +104,7 @@ void game_init(void)
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
-    ctx.player.speed = cfg.player_base_speed;
+    ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
 
     ctx.camera.target = ctx.player.position;
