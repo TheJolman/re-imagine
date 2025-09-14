@@ -10,6 +10,7 @@
 #include "game.h"
 #include "map.h"
 #include "pause.h"
+#include "debug.h"
 
 GameContext ctx = {0};
 
@@ -19,7 +20,6 @@ static constexpr GameConfig cfg = {
     .player_initial_pos = (Vector2){100, 100},
     .player_size = 30,
     .camera_base_zoom = 1.0f,
-
 };
 
 static void _move_player(void)
@@ -102,6 +102,15 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
+    const char *file_path = "assets/map.csv";
+    Result res = map_load_from_csv(file_path);
+    if (res.err)
+    {
+        error_exit(1, "%s", res.err);
+    }
+    ctx.map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
+
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
@@ -121,7 +130,7 @@ void game_init(void)
 
 void game_update(void) { _game_input_handler(); }
 
-void game_draw(Map *map)
+void game_draw()
 {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -131,7 +140,7 @@ void game_draw(Map *map)
     case FREE_ROAM:
         BeginMode2D(ctx.camera);
 
-        map_draw(map);
+        map_draw(ctx.map);
         // Draw player
         // Can use `DrawTextureEx` if you want to use scale and rotation
         DrawTexture(ctx.player.sprite.texture, ctx.player.position.x, ctx.player.position.y,
@@ -157,4 +166,6 @@ void game_draw(Map *map)
     EndDrawing();
 }
 
-void game_cleanup(void) {}
+void game_cleanup(void) {
+    map_destroy(ctx.map);
+}

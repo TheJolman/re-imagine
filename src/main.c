@@ -92,23 +92,15 @@ int main(int argc, const char **argv)
 
     game_init();
 
-    const char *file_path = "assets/map.csv";
-    Result res = map_load_from_csv(file_path);
-    if (res.err)
-    {
-        error_exit(1, "%s", res.err);
-    }
-    Map *map = (Map *)res.value;
-    debug_log("Map loaded with %u rows and %u cols", map->height, map->width);
 
     // Main game loop
     while (!WindowShouldClose())
     {
         game_update();
-        game_draw(map);
+        game_draw();
     }
 
-    map_destroy(map);
+    game_cleanup();
 
     CloseWindow();
     return 0;
