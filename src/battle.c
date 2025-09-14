@@ -36,6 +36,7 @@ static void _init_battle_ui(void)
                     GetScreenWidth() - ui_config.window_margin * 2, ui_config.text_height};
 
     // TODO: Get consistent asset sizes
+    // TODO: Make these resize as the window resizes
     // Set positions for menus and monsters
     battle_ctx.battle_ui->player_mon_pos =
         (Vector2){GetScreenWidth() * 0.6f, GetScreenHeight() * 0.35f};
