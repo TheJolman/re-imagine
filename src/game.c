@@ -115,7 +115,7 @@ void game_init(void)
     ctx.player.sprite.scale = 1.0f;
 
     ctx.camera.target = ctx.player.position;
-    ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
+    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
     ctx.camera.zoom = cfg.camera_base_zoom;
 }
 

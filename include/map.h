@@ -20,8 +20,6 @@ typedef struct
     Pixels height; ///< Screen height in pixels
 } Screen;
 
-extern Screen screen; ///< Global screen dimensions
-
 constexpr uint32_t MAP_MAX_ROWS = 100; ///< Maximum number of map rows
 constexpr uint32_t MAP_MAX_COLS = 100; ///< Maximum number of map columns
 constexpr uint32_t MAP_TILE_SIZE = 80; ///< Size of each tile in pixels
