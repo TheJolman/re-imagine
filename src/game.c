@@ -11,56 +11,64 @@
 #include "map.h"
 #include "pause.h"
 
-Player player = {0};
-Camera2D camera = {0};
-GameState state = {0};
+GameContext ctx = {0};
 
-static void move_player(void)
+static constexpr GameConfig cfg = {
+    .player_base_speed = 5.0f,
+    .player_sprint_modifier = 2.0f,
+    .player_initial_pos = (Vector2){100, 100},
+    .player_size = 30,
+    .camera_base_zoom = 1.0f,
+
+};
+
+static void _move_player(void)
 {
-    // Movement
-    float moveSpeedModifier = 1.0f;
+    // Determine base speed and apply sprint modifier
+    float current_speed = cfg.player_base_speed;
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
-        moveSpeedModifier = 2.0f;
+        current_speed *= cfg.player_sprint_modifier;
     }
 
-    player.speed = player.base_speed * moveSpeedModifier;
-    Vector2 moveDirection = {0.0f, 0.0f};
-
+    // Get movement direction from input
+    Vector2 move_vector = {0};
     if (IsKeyDown(KEY_W))
-        moveDirection.y -= 1.0f;
+        move_vector.y -= 1.0f;
     if (IsKeyDown(KEY_S))
-        moveDirection.y += 1.0f;
+        move_vector.y += 1.0f;
     if (IsKeyDown(KEY_A))
-        moveDirection.x -= 1.0f;
+        move_vector.x -= 1.0f;
     if (IsKeyDown(KEY_D))
-        moveDirection.x += 1.0f;
+        move_vector.x += 1.0f;
 
-    if (moveDirection.x != 0.0f || moveDirection.y != 0.0f)
+    if (Vector2Length(move_vector) > 0.0f)
     {
-        moveDirection = Vector2Normalize(moveDirection);
+        // Normalize the vector to get a pure direction, then scale by speed
+        move_vector = Vector2Normalize(move_vector);
+        ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
+        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
+    }
+    else
+    {
+        // No movement input, so velocity is zero
+        ctx.player.velocity.vec = (Vector2){0};
     }
 
-    // Calculate new position
-    Vector2 newPosition = {player.position.x + moveDirection.x * player.speed,
-                           player.position.y + moveDirection.y * player.speed};
-
-    player.position = newPosition;
-
-    // Camera
-    camera.target = player.position;
+    // Camera always follows the player's position
+    ctx.camera.target = ctx.player.position;
 }
 
-static void handle_input(void)
+static void _game_input_handler(void)
 {
-    switch (state)
+    switch (ctx.state)
     {
     case FREE_ROAM:
-        move_player();
+        _move_player();
         if (IsKeyPressed(KEY_B))
-            state = BATTLE_SCENE;
+            ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
-            state = PAUSED;
+            ctx.state = PAUSED;
         break;
 
     case BATTLE_SCENE:
@@ -68,7 +76,7 @@ static void handle_input(void)
         {
             // NOTE: If concurencey is ever added should these be switched?
             battle_scene_end();
-            state = FREE_ROAM;
+            ctx.state = FREE_ROAM;
         }
         break;
 
@@ -76,7 +84,7 @@ static void handle_input(void)
         if (IsKeyPressed(KEY_ESCAPE))
         {
             pause_menu_end();
-            state = FREE_ROAM;
+            ctx.state = FREE_ROAM;
         }
         break;
 
@@ -92,35 +100,42 @@ static void handle_input(void)
     }
 }
 
-void init_game(void)
+void game_init(void)
 {
-    state = FREE_ROAM;
+    ctx.state = FREE_ROAM;
 
-    player.position = (Vector2){(float)screen.width / 2, (float)screen.height / 2};
-    player.base_speed = 5.0f;
-    player.speed = player.base_speed;
-    player.size = 30;
+    ctx.player.position = cfg.player_initial_pos;
+    ctx.player.velocity.max_speed = cfg.player_base_speed;
+    ctx.player.size = cfg.player_size;
 
-    camera.target = player.position;
-    camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
-    camera.zoom = 1.0f;
+    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/TX Player.png");
+    ctx.player.sprite.position = ctx.player.position;
+    ctx.player.sprite.rotation = 0.0f;
+    ctx.player.sprite.tint = WHITE;
+    ctx.player.sprite.scale = 1.0f;
+
+    ctx.camera.target = ctx.player.position;
+    ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
+    ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
-void update_game(void) { handle_input(); }
+void game_update(void) { _game_input_handler(); }
 
-void draw_game(Map *map)
+void game_draw(Map *map)
 {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    switch (state)
+    switch (ctx.state)
     {
     case FREE_ROAM:
-        BeginMode2D(camera);
+        BeginMode2D(ctx.camera);
 
         map_draw(map);
         // Draw player
-        DrawCircleV(player.position, player.size / 2, RED);
+        // Can use `DrawTextureEx` if you want to use scale and rotation
+        DrawTexture(ctx.player.sprite.texture, ctx.player.position.x, ctx.player.position.y,
+                    ctx.player.sprite.tint);
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
@@ -138,4 +153,4 @@ void draw_game(Map *map)
     EndDrawing();
 }
 
-void cleanup_game(void) {}
+void game_cleanup(void) {}

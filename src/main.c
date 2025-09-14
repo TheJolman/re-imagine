@@ -48,6 +48,7 @@ bool match_arg(const char *target, const char *short_arg, const char *long_arg)
 
 int main(int argc, const char **argv)
 {
+    // ----------- Command line argument parsing -----------
     for (int i = 1; i < argc; i++)
     {
         if (match_arg(argv[i], "-v", "--version"))
@@ -71,6 +72,8 @@ int main(int argc, const char **argv)
         }
     }
 
+    // ----------- Game related stuff starts here -----------
+
     heap_list = heap_list_create();
     atexit(free_all);
 
@@ -85,7 +88,7 @@ int main(int argc, const char **argv)
         error_exit(1, "failed to initialize window");
     }
     SetTargetFPS(60);
-    init_game();
+    game_init();
     SetExitKey(KEY_NULL);
 
     const char *file_path = "assets/map.csv";
@@ -100,8 +103,8 @@ int main(int argc, const char **argv)
     // Main game loop
     while (!WindowShouldClose())
     {
-        update_game();
-        draw_game(map);
+        game_update();
+        game_draw(map);
     }
 
     map_destroy(map);

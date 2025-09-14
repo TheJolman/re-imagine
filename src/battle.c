@@ -23,7 +23,7 @@ static BattleContext battle_ctx = {0};
  * Calculates location of UI elements, loads monster assets into memory, and sets
  * the initial state of the battle.
  */
-static void init_battle_ui(void)
+static void _init_battle_ui(void)
 {
     battle_ctx.battle_ui = heap_list.malloc(sizeof(BattleUILayout));
     if (!battle_ctx.battle_ui)
@@ -71,19 +71,19 @@ static void init_battle_ui(void)
 }
 
 // clang-format off
-static void attack_select() { battle_ctx.state = BATTLE_ATTACK; }
-static void items_select()  { battle_ctx.state = BATTLE_ITEMS; }
-static void run_select()    { battle_ctx.state = BATTLE_RUN; }
-static void switch_select() { battle_ctx.state = BATTLE_SWITCH; }
+static void _attack_select() { battle_ctx.state = BATTLE_ATTACK; }
+static void _items_select()  { battle_ctx.state = BATTLE_ITEMS; }
+static void _run_select()    { battle_ctx.state = BATTLE_RUN; }
+static void _switch_select() { battle_ctx.state = BATTLE_SWITCH; }
 // clang-format on
 
 /**
  * Initializes values for the top level action menu.
  */
-static void action_menu_create()
+static void _action_menu_create()
 {
     const char *item_texts[] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
-    void (*select_callbacks[])(void) = {attack_select, items_select, run_select, switch_select};
+    void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
     MenuConfig action_menu_config = {
         .title = "BATTLE MENU",
         .rect = {battle_ctx.battle_ui->text_box.x + battle_ctx.battle_ui->text_box.width * 0.5f +
@@ -104,7 +104,7 @@ static void action_menu_create()
     battle_ctx.action_menu = (Menu *)res.value;
 }
 
-static void action_menu_end()
+static void _action_menu_end()
 {
     if (battle_ctx.action_menu)
         menu_destroy(battle_ctx.action_menu);
@@ -112,10 +112,10 @@ static void action_menu_end()
     battle_ctx.action_menu = nullptr;
 }
 
-static void action_menu_display()
+static void _action_menu_display()
 {
     if (!battle_ctx.action_menu)
-        action_menu_create();
+        _action_menu_create();
 
     // Vertical line between text box and action menu
     DrawLine(battle_ctx.battle_ui->text_box.x + battle_ctx.battle_ui->text_box.width * 0.5f,
@@ -127,19 +127,19 @@ static void action_menu_display()
     menu_handle_input(battle_ctx.action_menu);
 }
 
-static void render_mon(Mon *mon, Vector2 position)
+static void _render_mon(Mon *mon, Vector2 position)
 {
-    if (!mon || !mon->texture || !IsTextureValid(*mon->texture))
+    if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    DrawTextureEx(*mon->texture, position, ui_config.mon_rotation, ui_config.mon_scale,
+    DrawTextureEx(mon->sprite.texture, position, ui_config.mon_rotation, ui_config.mon_scale,
                   ui_config.mon_tint);
 }
 
 /**
- * Renders text box on the bottom left of the screen.
+ * Renders text box on the bottom of the screen.
  */
-static void render_text_box(void)
+static void _render_text_box(void)
 {
     DrawRectangleLines(battle_ctx.battle_ui->text_box.x, battle_ctx.battle_ui->text_box.y,
                        battle_ctx.battle_ui->text_box.width, battle_ctx.battle_ui->text_box.height,
@@ -150,12 +150,12 @@ static void render_text_box(void)
  * Renders menu on the bottom right of the screen. This menu might be the action menu or
  * one of the submenus depending on the battle state.
  */
-static void render_menu(void)
+static void _render_menu(void)
 {
     switch (battle_ctx.state)
     {
     case BATTLE_MENU:
-        action_menu_display();
+        _action_menu_display();
         break;
     case BATTLE_ATTACK:
         // attack_menuDisplay();
@@ -172,32 +172,24 @@ static void render_menu(void)
     }
 }
 
-/**
- * Helper function for public function `battle_scene_render`. This just renders
- * both monsters, text box, and action menu.
- */
-static void render_battle_ui(void)
-{
-    render_text_box();
-    render_menu();
-
-    if (battle_ctx.player_mon)
-        render_mon(battle_ctx.player_mon, battle_ctx.battle_ui->player_mon_pos);
-
-    if (battle_ctx.enemy_mon)
-        render_mon(battle_ctx.enemy_mon, battle_ctx.battle_ui->enemy_mon_pos);
-}
-
 void battle_scene_render(void)
 {
     if (!battle_ctx.initialized)
     {
-        init_battle_ui();
+        _init_battle_ui();
         battle_ctx.initialized = true;
     }
 
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
-    render_battle_ui();
+
+    _render_text_box();
+    _render_menu();
+
+    if (battle_ctx.player_mon)
+        _render_mon(battle_ctx.player_mon, battle_ctx.battle_ui->player_mon_pos);
+
+    if (battle_ctx.enemy_mon)
+        _render_mon(battle_ctx.enemy_mon, battle_ctx.battle_ui->enemy_mon_pos);
 }
 
 void battle_scene_end(void)
@@ -220,7 +212,7 @@ void battle_scene_end(void)
         battle_ctx.battle_ui = nullptr;
     }
 
-    action_menu_end();
+    _action_menu_end();
     battle_ctx.state = BATTLE_MENU;
     battle_ctx.initialized = false;
 }

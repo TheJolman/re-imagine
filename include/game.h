@@ -9,6 +9,18 @@
 #include "player.h"
 
 /**
+ * @brief Configuration options for game.c
+ */
+typedef struct
+{
+    Vector2 player_initial_pos;
+    float player_base_speed;
+    float player_sprint_modifier;
+    uint32_t player_size;
+    float camera_base_zoom;
+} GameConfig;
+
+/**
  * @brief Game state enumeration
  *
  * Represents the current state of the game for the state machine
@@ -21,27 +33,33 @@ typedef enum
     TITLE_SCREEN, ///< Showing the title screen
 } GameState;
 
-extern Player player;   ///< Global player instance
-extern Camera2D camera; ///< Global 2D camera for rendering
-extern GameState state; ///< Current game state
+/**
+ * @brief Holds pointers to game-related objects as well as the game state.
+ */
+typedef struct
+{
+    Player player;
+    Camera2D camera;
+    GameState state;
+} GameContext;
 
 /**
  * @brief Loads initial values on game startup
  *
  * Initializes the player, camera, and other game systems
  */
-void init_game(void);
+void game_init(void);
 
 /**
  * @brief Updates game variables before next frame is drawn
  *
  * Handles input, updates player position, and manages state transitions
  */
-void update_game(void);
+void game_update(void);
 
 /**
  * @brief Draws a single frame
  *
  * @param map The map to render in the current frame
  */
-void draw_game(Map *map);
+void game_draw(Map *map);
