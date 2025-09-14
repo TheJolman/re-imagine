@@ -48,6 +48,7 @@ bool match_arg(const char *target, const char *short_arg, const char *long_arg)
 
 int main(int argc, const char **argv)
 {
+    // ----------- Command line argument parsing -----------
     for (int i = 1; i < argc; i++)
     {
         if (match_arg(argv[i], "-v", "--version"))
@@ -70,6 +71,8 @@ int main(int argc, const char **argv)
                        argv[0]);
         }
     }
+
+    // ----------- Game related stuff starts here -----------
 
     heap_list = heap_list_create();
     atexit(free_all);
