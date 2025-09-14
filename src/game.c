@@ -150,6 +150,10 @@ void game_draw(Map *map)
         break;
     }
 
+#ifdef DEBUG
+    DrawFPS(10, 10);
+#endif
+
     EndDrawing();
 }
 
