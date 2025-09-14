@@ -30,8 +30,8 @@
 #define GIT_VERSION "unknown"
 #endif
 
-constexpr size_t screen_width_initial = 1200;
-constexpr size_t screen_height_initial = 900;
+constexpr size_t SCREEN_WIDTH_INITIAL = 1200;
+constexpr size_t SCREEN_HEIGHT_INITIAL = 900;
 
 /**
  * @returns true if target matches short_arg or long_arg.
@@ -75,11 +75,11 @@ int main(int argc, const char **argv)
     heap_list = heap_list_create();
     atexit(free_all);
 
-    debug_log("Game initiated with screen dimensions %dx%d", screen_width_initial,
-              screen_height_initial);
+    debug_log("Game initiated with screen dimensions %dx%d", SCREEN_WIDTH_INITIAL,
+              SCREEN_HEIGHT_INITIAL);
 
     SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
-    InitWindow(screen_width_initial, screen_height_initial, "Game!");
+    InitWindow(SCREEN_WIDTH_INITIAL, SCREEN_HEIGHT_INITIAL, "Game!");
     SetWindowMinSize(400, 300);
 
     if (!IsWindowReady())
