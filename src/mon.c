@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void load_mon_texture(Mon *mon, MonTextureType textureType)
+void load_mon_texture(Mon *mon, MonSpriteView textureType)
 {
     char imagePath[256];
     if (!mon->name)
@@ -32,7 +32,7 @@ void load_mon_texture(Mon *mon, MonTextureType textureType)
     mon->sprite.texture = LoadTextureFromImage(image);
     UnloadImage(image);
 
-    mon->textureType = textureType;
+    mon->sprite_view = textureType;
 }
 
 Result create_mon(char *name)

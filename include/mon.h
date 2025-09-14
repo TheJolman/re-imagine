@@ -16,7 +16,7 @@ typedef enum
 {
     FRONT, ///< Front-facing sprite (opponent's view)
     BACK   ///< Back-facing sprite (player's view)
-} MonTextureType;
+} MonSpriteView;
 
 /**
  * @brief A move/attack that a monster can perform
@@ -32,11 +32,11 @@ typedef struct
  */
 typedef struct
 {
-    const char *name;           ///< Monster's name
-    Sprite sprite;              ///< Monster's sprite
-    MonTextureType textureType; ///< Type of currently loaded texture
-    Move moves[4];              ///< Array of up to 4 moves
-    unsigned hp;                ///< Current hit points
+    const char *name;          ///< Monster's name
+    Sprite sprite;             ///< Monster's sprite
+    MonSpriteView sprite_view; ///< Determines if we get the front or back view
+    Move moves[4];             ///< Array of up to 4 moves
+    unsigned hp;               ///< Current hit points
 } Mon;
 
 /**
@@ -60,4 +60,4 @@ void destroy_mon(Mon *mon);
  * @param mon Pointer to the monster
  * @param textureType Type of texture to load (FRONT or BACK)
  */
-void load_mon_texture(Mon *mon, MonTextureType textureType);
+void load_mon_texture(Mon *mon, MonSpriteView textureType);
