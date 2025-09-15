@@ -7,6 +7,7 @@
 #include <raymath.h>
 
 #include "battle.h"
+#include "debug.h"
 #include "game.h"
 #include "map.h"
 #include "pause.h"
@@ -19,10 +20,9 @@ static constexpr GameConfig cfg = {
     .player_initial_pos = (Vector2){100, 100},
     .player_size = 30,
     .camera_base_zoom = 1.0f,
-
 };
 
-static void _move_player(void)
+static void _player_move(void)
 {
     // Determine base speed and apply sprint modifier
     float current_speed = cfg.player_base_speed;
@@ -59,12 +59,29 @@ static void _move_player(void)
     ctx.camera.target = ctx.player.position;
 }
 
+static void _player_draw(void)
+{
+    // Draw player
+    Vector2 sprite_center = {
+        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
+        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
+    };
+    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
+                  ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
+#ifdef DEBUG
+    DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
+             GetScreenHeight() * 10, ORANGE);
+    DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
+             (int)ctx.camera.target.y, ORANGE);
+#endif
+}
+
 static void _game_input_handler(void)
 {
     switch (ctx.state)
     {
     case FREE_ROAM:
-        _move_player();
+        _player_move();
         if (IsKeyPressed(KEY_B))
             ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
@@ -102,41 +119,49 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
+    const char *file_path = "assets/map.csv";
+    Result res = map_load_from_csv(file_path);
+    if (res.err)
+    {
+        error_exit(1, "%s", res.err);
+    }
+    ctx.map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
+
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
 
-    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/TX Player.png");
+    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
     ctx.player.sprite.position = ctx.player.position;
     ctx.player.sprite.rotation = 0.0f;
     ctx.player.sprite.tint = WHITE;
     ctx.player.sprite.scale = 1.0f;
 
     ctx.camera.target = ctx.player.position;
-    ctx.camera.offset = (Vector2){screen.width / 2.0f, screen.height / 2.0f};
+    // camera offset set in game_draw to handle window resizing
     ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
 void game_update(void) { _game_input_handler(); }
 
-void game_draw(Map *map)
+void game_draw()
 {
     BeginDrawing();
     ClearBackground(BLACK);
+
+    // Update camera offset each frame to handle window resizing
+    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
     switch (ctx.state)
     {
     case FREE_ROAM:
         BeginMode2D(ctx.camera);
 
-        map_draw(map);
-        // Draw player
-        // Can use `DrawTextureEx` if you want to use scale and rotation
-        DrawTexture(ctx.player.sprite.texture, ctx.player.position.x, ctx.player.position.y,
-                    ctx.player.sprite.tint);
-
+        map_draw(ctx.map);
+        _player_draw();
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;
@@ -150,7 +175,11 @@ void game_draw(Map *map)
         break;
     }
 
+#ifdef DEBUG
+    DrawFPS(10, 10);
+#endif
+
     EndDrawing();
 }
 
-void game_cleanup(void) {}
+void game_cleanup(void) { map_destroy(ctx.map); }

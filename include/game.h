@@ -41,6 +41,7 @@ typedef struct
     Player player;
     Camera2D camera;
     GameState state;
+    Map *map;
 } GameContext;
 
 /**
@@ -59,7 +60,10 @@ void game_update(void);
 
 /**
  * @brief Draws a single frame
- *
- * @param map The map to render in the current frame
  */
-void game_draw(Map *map);
+void game_draw(void);
+
+/**
+ * @brief Frees resources held in game.c
+ */
+void game_cleanup(void);

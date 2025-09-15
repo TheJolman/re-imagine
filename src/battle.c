@@ -6,7 +6,6 @@
  */
 
 #include "battle.h"
-#include "map.h"
 #include "raylib.h"
 
 static constexpr BattleUIConfig ui_config = {
@@ -31,14 +30,18 @@ static void _init_battle_ui(void)
         error_exit(1, "Could not allocate memory for BattleUI");
     }
 
-    battle_ctx.battle_ui->text_box = (Rectangle){
-        ui_config.window_margin, screen.height - (ui_config.window_margin + ui_config.text_height),
-        screen.width - ui_config.window_margin * 2, ui_config.text_height};
+    battle_ctx.battle_ui->text_box =
+        (Rectangle){ui_config.window_margin,
+                    GetScreenHeight() - (ui_config.window_margin + ui_config.text_height),
+                    GetScreenWidth() - ui_config.window_margin * 2, ui_config.text_height};
 
     // TODO: Get consistent asset sizes
+    // TODO: Make these resize as the window resizes
     // Set positions for menus and monsters
-    battle_ctx.battle_ui->player_mon_pos = (Vector2){screen.width * 0.6f, screen.height * 0.35f};
-    battle_ctx.battle_ui->enemy_mon_pos = (Vector2){screen.width * 0.05f, screen.height * 0.1f};
+    battle_ctx.battle_ui->player_mon_pos =
+        (Vector2){GetScreenWidth() * 0.6f, GetScreenHeight() * 0.35f};
+    battle_ctx.battle_ui->enemy_mon_pos =
+        (Vector2){GetScreenWidth() * 0.05f, GetScreenHeight() * 0.1f};
     battle_ctx.battle_ui->action_menu_pos =
         (Vector2){battle_ctx.battle_ui->text_box.x + 20, battle_ctx.battle_ui->text_box.y + 20};
     battle_ctx.battle_ui->status_bar_pos =

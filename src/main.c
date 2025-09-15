@@ -30,10 +30,8 @@
 #define GIT_VERSION "unknown"
 #endif
 
-Pixels screen_width = 1200;
-Pixels screen_height = 900;
-
-Screen screen = {0};
+constexpr size_t SCREEN_WIDTH_INITIAL = 1200;
+constexpr size_t SCREEN_HEIGHT_INITIAL = 900;
 
 /**
  * @returns true if target matches short_arg or long_arg.
@@ -77,37 +75,32 @@ int main(int argc, const char **argv)
     heap_list = heap_list_create();
     atexit(free_all);
 
-    screen.width = screen_width;
-    screen.height = screen_height;
+    debug_log("Game initiated with screen dimensions %dx%d", SCREEN_WIDTH_INITIAL,
+              SCREEN_HEIGHT_INITIAL);
 
-    debug_log("Game initiated with screen dimensions %dx%d", screen.width, screen.height);
+    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+    InitWindow(SCREEN_WIDTH_INITIAL, SCREEN_HEIGHT_INITIAL, "Game!");
+    SetWindowMinSize(400, 300);
 
-    InitWindow(screen.width, screen.height, "Game!");
     if (!IsWindowReady())
     {
         error_exit(1, "failed to initialize window");
     }
+
     SetTargetFPS(60);
-    game_init();
     SetExitKey(KEY_NULL);
 
-    const char *file_path = "assets/map.csv";
-    Result res = map_load_from_csv(file_path);
-    if (res.err)
-    {
-        error_exit(1, "%s", res.err);
-    }
-    Map *map = (Map *)res.value;
-    debug_log("Map loaded with %u rows and %u cols", map->height, map->width);
+    game_init();
+
 
     // Main game loop
     while (!WindowShouldClose())
     {
         game_update();
-        game_draw(map);
+        game_draw();
     }
 
-    map_destroy(map);
+    game_cleanup();
 
     CloseWindow();
     return 0;
