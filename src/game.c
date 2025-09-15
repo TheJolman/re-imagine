@@ -62,11 +62,11 @@ static void _player_move(void)
 static void _player_draw(void)
 {
     // Draw player
-    Vector2 origin = {
+    Vector2 sprite_center = {
         (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
         (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
     };
-    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, origin),
+    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
                   ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
 #ifdef DEBUG
     DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
@@ -141,7 +141,13 @@ void game_init(void)
     ctx.player.sprite.scale = 1.0f;
 
     ctx.camera.target = ctx.player.position;
-    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
+
+    Vector2 sprite_center = {
+        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
+        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
+    };
+    ctx.camera.offset = Vector2Subtract(
+        (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f}, sprite_center);
     ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
