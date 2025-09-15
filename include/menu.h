@@ -81,3 +81,4 @@ Result menu_create(const MenuConfig *config, const char **item_texts,
 void menu_destroy(Menu *menu);
 void menu_handle_input(Menu *menu);
 void menu_draw(const Menu *menu);
+void menu_update_layout(Menu *menu);
