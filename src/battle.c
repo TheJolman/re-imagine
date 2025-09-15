@@ -13,7 +13,7 @@ static constexpr BattleUIConfig cfg = {
     .text_height = 150,
     .mon_tint = WHITE,
     .mon_rotation = 0.0,
-    .mon_scale = 0.6f,
+    .mon_scale = 0.4f,
 
     .player_mon_x_margin = 300.0f,
     .player_mon_y_margin = 100.0f,
@@ -138,7 +138,7 @@ static void _action_menu_display()
     // Box at bottom of screen
     DrawRectangleLines(ctx.battle_ui->text_box.x, ctx.battle_ui->text_box.y,
                        ctx.battle_ui->text_box.width, ctx.battle_ui->text_box.height, WHITE);
-    // Vertical line that divides box into text box and action menu
+    // Vertical line that divides box into text box and action menu box
     DrawLine(ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
              ctx.battle_ui->text_box.y,
              ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
