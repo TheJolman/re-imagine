@@ -39,8 +39,8 @@ static constexpr struct
 } cfg = {1200, 900, 400, 300, 60};
 
 /**
- * @returns true if target matches short_arg or long_arg.
- * @returns false otherwise
+ * @returns true if target matches short_arg or long_arg and false otherwise.
+ *
  * If only short_arg or long_arg is needed, pass nullptr in place of the other.
  */
 static bool _match_arg(const char *target, const char *short_arg, const char *long_arg)
