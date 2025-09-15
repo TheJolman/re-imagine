@@ -21,9 +21,13 @@ typedef struct
     float mon_rotation;
     float mon_scale;
 
-    // Positions as a percentage of screen dimensions
-    Vector2 player_mon_pos_percent;
-    Vector2 enemy_mon_pos_percent;
+    // Y position as a fixed offset from the screen edge
+    float player_mon_y_margin;
+    float enemy_mon_y_margin;
+
+    // X position as a fixed offset from the screen edge
+    float player_mon_x_margin;
+    float enemy_mon_x_margin;
 
     // Offsets for UI elements within the text box
     Vector2 action_menu_pos_offset;

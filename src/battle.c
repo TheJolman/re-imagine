@@ -15,8 +15,11 @@ static constexpr BattleUIConfig cfg = {
     .mon_rotation = 0.0,
     .mon_scale = 0.6f,
 
-    .player_mon_pos_percent = {0.6f, 0.35f},
-    .enemy_mon_pos_percent = {0.05f, 0.1f},
+    .player_mon_x_margin = 300.0f,
+    .player_mon_y_margin = 100.0f,
+    .enemy_mon_x_margin = 100.0f,
+    .enemy_mon_y_margin = 300.0f,
+
     .action_menu_pos_offset = {20, 20},
     .status_bar_pos_offset = {20, 80},
     .action_menu_split_x_percent = 0.5f,
@@ -33,23 +36,20 @@ static BattleContext ctx = {0};
 static void _update_battle_layout(void)
 {
     ctx.battle_ui->text_box =
-        (Rectangle){
-            cfg.window_margin,
-            GetScreenHeight() - (cfg.window_margin + cfg.text_height),
-            GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
+        (Rectangle){cfg.window_margin, GetScreenHeight() - (cfg.window_margin + cfg.text_height),
+                    GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
 
-    ctx.battle_ui->player_mon_pos = (Vector2){
-        GetScreenWidth() * cfg.player_mon_pos_percent.x,
-        GetScreenHeight() * cfg.player_mon_pos_percent.y};
-    ctx.battle_ui->enemy_mon_pos = (Vector2){
-        GetScreenWidth() * cfg.enemy_mon_pos_percent.x,
-        GetScreenHeight() * cfg.enemy_mon_pos_percent.y};
-    ctx.battle_ui->action_menu_pos = (Vector2){
-        ctx.battle_ui->text_box.x + cfg.action_menu_pos_offset.x,
-        ctx.battle_ui->text_box.y + cfg.action_menu_pos_offset.y};
-    ctx.battle_ui->status_bar_pos = (Vector2){
-        ctx.battle_ui->text_box.x + cfg.status_bar_pos_offset.x,
-        ctx.battle_ui->text_box.y + cfg.status_bar_pos_offset.y};
+    ctx.battle_ui->player_mon_pos = (Vector2){GetScreenWidth() - cfg.player_mon_x_margin,
+                                              GetScreenHeight() * cfg.player_mon_y_margin};
+    ctx.battle_ui->enemy_mon_pos =
+        (Vector2){cfg.enemy_mon_x_margin, GetScreenHeight() * cfg.enemy_mon_y_margin};
+
+    ctx.battle_ui->action_menu_pos =
+        (Vector2){ctx.battle_ui->text_box.x + cfg.action_menu_pos_offset.x,
+                  ctx.battle_ui->text_box.y + cfg.action_menu_pos_offset.y};
+    ctx.battle_ui->status_bar_pos =
+        (Vector2){ctx.battle_ui->text_box.x + cfg.status_bar_pos_offset.x,
+                  ctx.battle_ui->text_box.y + cfg.status_bar_pos_offset.y};
 }
 
 /**
@@ -135,14 +135,26 @@ static void _action_menu_end()
 
 static void _action_menu_display()
 {
-    if (!ctx.action_menu)
-        _action_menu_create();
-
-    // Vertical line between text box and action menu
+    // Box at bottom of screen
+    DrawRectangleLines(ctx.battle_ui->text_box.x, ctx.battle_ui->text_box.y,
+                       ctx.battle_ui->text_box.width, ctx.battle_ui->text_box.height, WHITE);
+    // Vertical line that divides box into text box and action menu
     DrawLine(ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
              ctx.battle_ui->text_box.y,
              ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
              ctx.battle_ui->text_box.y + ctx.battle_ui->text_box.height, GRAY);
+
+    if (!ctx.action_menu)
+    {
+        _action_menu_create();
+    }
+
+    // Update menu position every frame to ensure it is responsive
+    ctx.action_menu->config.rect =
+        (Rectangle){ctx.battle_ui->text_box.x +
+                        ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
+                        cfg.action_menu_rect_offset.x,
+                    ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0};
 
     menu_draw(ctx.action_menu);
     menu_handle_input(ctx.action_menu);
@@ -153,18 +165,7 @@ static void _render_mon(Mon *mon, Vector2 position)
     if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    DrawTextureEx(mon->sprite.texture, position, cfg.mon_rotation, cfg.mon_scale,
-                  cfg.mon_tint);
-}
-
-/**
- * Renders text box on the bottom of the screen.
- */
-static void _render_text_box(void)
-{
-    DrawRectangleLines(ctx.battle_ui->text_box.x, ctx.battle_ui->text_box.y,
-                       ctx.battle_ui->text_box.width, ctx.battle_ui->text_box.height,
-                       WHITE);
+    DrawTextureEx(mon->sprite.texture, position, cfg.mon_rotation, cfg.mon_scale, cfg.mon_tint);
 }
 
 /**
