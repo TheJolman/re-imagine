@@ -114,6 +114,7 @@ void game_init(void)
     ctx.state = FREE_ROAM;
 
     // ctx.player.position = (Vector2){GetScreenWidth() / 2, GetScreenHeight() / 2};
+
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
@@ -149,6 +150,12 @@ void game_draw()
         };
         DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, origin),
                       ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
+#ifdef DEBUG
+        DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
+                 GetScreenHeight() * 10, ORANGE);
+        DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
+                 (int)ctx.camera.target.y, ORANGE);
+#endif
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
