@@ -113,6 +113,39 @@ static Result _vertical_menu_create(const MenuConfig *config, const char **item_
     return (Result){.value = menu};
 }
 
+static void _menu_calculate_layout(Menu *menu)
+{
+    // TODO: Parameterize these magic numbers
+    float item_spacing = 30;
+    float grid_item_width = 120;
+
+    if (menu->config.layout == MENU_LAYOUT_VERTICAL)
+    {
+        VerticalMenu *v_menu = (VerticalMenu *)menu->menu_type;
+        for (uint16_t i = 0; i < menu->num_items; i++)
+        {
+            v_menu->items[i].pos_x = menu->config.rect.x;
+            v_menu->items[i].pos_y = menu->config.rect.y + i * item_spacing;
+        }
+    }
+    else if (menu->config.layout == MENU_LAYOUT_GRID)
+    {
+        GridMenu *g_menu = (GridMenu *)menu->menu_type;
+        for (uint16_t i = 0; i < g_menu->num_rows; i++)
+        {
+            for (uint16_t j = 0; j < g_menu->num_cols; j++)
+            {
+                uint16_t index = i * g_menu->num_cols + j;
+                if (index < menu->num_items)
+                {
+                    g_menu->items[index]->pos_x = menu->config.rect.x + j * grid_item_width;
+                    g_menu->items[index]->pos_y = menu->config.rect.y + i * item_spacing;
+                }
+            }
+        }
+    }
+}
+
 // Generic Menu functions
 Result menu_create(const MenuConfig *config, const char **item_texts,
                    void (**select_callbacks)(void), const uint16_t num_items)
@@ -142,33 +175,7 @@ Result menu_create(const MenuConfig *config, const char **item_texts,
 
     menu->menu_type = res.value;
 
-    // Automatic layouting
-    float item_spacing = 30;
-    if (config->layout == MENU_LAYOUT_VERTICAL)
-    {
-        VerticalMenu *v_menu = (VerticalMenu *)menu->menu_type;
-        for (uint16_t i = 0; i < num_items; i++)
-        {
-            v_menu->items[i].pos_x = config->rect.x;
-            v_menu->items[i].pos_y = config->rect.y + i * item_spacing;
-        }
-    }
-    else if (config->layout == MENU_LAYOUT_GRID)
-    {
-        GridMenu *g_menu = (GridMenu *)menu->menu_type;
-        for (uint16_t i = 0; i < g_menu->num_rows; i++)
-        {
-            for (uint16_t j = 0; j < g_menu->num_cols; j++)
-            {
-                uint16_t index = i * g_menu->num_cols + j;
-                if (index < num_items)
-                {
-                    g_menu->items[index]->pos_x = config->rect.x + j * 120;
-                    g_menu->items[index]->pos_y = config->rect.y + i * item_spacing;
-                }
-            }
-        }
-    }
+    _menu_calculate_layout(menu);
 
     return (Result){.value = menu};
 }
@@ -277,4 +284,11 @@ void menu_draw(const Menu *menu)
             DrawRectangleLines(currentItem->pos_x - 10, currentItem->pos_y - 5, 120, 30, DARKGRAY);
         }
     }
+}
+
+void menu_update_layout(Menu *menu)
+{
+    if (!menu)
+        return;
+    _menu_calculate_layout(menu);
 }

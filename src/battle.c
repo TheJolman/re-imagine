@@ -40,9 +40,9 @@ static void _update_battle_layout(void)
                     GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
 
     ctx.battle_ui->player_mon_pos = (Vector2){GetScreenWidth() - cfg.player_mon_x_margin,
-                                              GetScreenHeight() * cfg.player_mon_y_margin};
+                                              GetScreenHeight() - cfg.player_mon_y_margin};
     ctx.battle_ui->enemy_mon_pos =
-        (Vector2){cfg.enemy_mon_x_margin, GetScreenHeight() * cfg.enemy_mon_y_margin};
+        (Vector2){cfg.enemy_mon_x_margin, GetScreenHeight() - cfg.enemy_mon_y_margin};
 
     ctx.battle_ui->action_menu_pos =
         (Vector2){ctx.battle_ui->text_box.x + cfg.action_menu_pos_offset.x,
@@ -156,6 +156,9 @@ static void _action_menu_display()
                         cfg.action_menu_rect_offset.x,
                     ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0};
 
+    // Recalculate item positions based on the new rect
+    menu_update_layout(ctx.action_menu);
+
     menu_draw(ctx.action_menu);
     menu_handle_input(ctx.action_menu);
 }
@@ -206,7 +209,6 @@ void battle_scene_render(void)
 
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
 
-    _render_text_box();
     _render_menu();
 
     if (ctx.player_mon)
