@@ -14,38 +14,55 @@ static constexpr BattleUIConfig cfg = {
     .mon_tint = WHITE,
     .mon_rotation = 0.0,
     .mon_scale = 0.6f,
+
+    .player_mon_pos_percent = {0.6f, 0.35f},
+    .enemy_mon_pos_percent = {0.05f, 0.1f},
+    .action_menu_pos_offset = {20, 20},
+    .status_bar_pos_offset = {20, 80},
+    .action_menu_split_x_percent = 0.5f,
+    .action_menu_rect_offset = {10, 30},
+    .action_menu_font_size = 20,
 };
 
 static BattleContext ctx = {0};
 
 /**
- * Calculates location of UI elements, loads monster assets into memory, and sets
- * the initial state of the battle.
+ * @brief Calculates the layout of UI elements based on the current window size.
+ * This should be called every frame to ensure the UI is responsive.
  */
-static void _init_battle_ui(void)
+static void _update_battle_layout(void)
+{
+    ctx.battle_ui->text_box =
+        (Rectangle){
+            cfg.window_margin,
+            GetScreenHeight() - (cfg.window_margin + cfg.text_height),
+            GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
+
+    ctx.battle_ui->player_mon_pos = (Vector2){
+        GetScreenWidth() * cfg.player_mon_pos_percent.x,
+        GetScreenHeight() * cfg.player_mon_pos_percent.y};
+    ctx.battle_ui->enemy_mon_pos = (Vector2){
+        GetScreenWidth() * cfg.enemy_mon_pos_percent.x,
+        GetScreenHeight() * cfg.enemy_mon_pos_percent.y};
+    ctx.battle_ui->action_menu_pos = (Vector2){
+        ctx.battle_ui->text_box.x + cfg.action_menu_pos_offset.x,
+        ctx.battle_ui->text_box.y + cfg.action_menu_pos_offset.y};
+    ctx.battle_ui->status_bar_pos = (Vector2){
+        ctx.battle_ui->text_box.x + cfg.status_bar_pos_offset.x,
+        ctx.battle_ui->text_box.y + cfg.status_bar_pos_offset.y};
+}
+
+/**
+ * @brief Performs one-time initialization for the battle scene.
+ * Loads monster assets into memory and sets the initial state of the battle.
+ */
+static void _init_battle_state(void)
 {
     ctx.battle_ui = heap_list.malloc(sizeof(BattleUILayout));
     if (!ctx.battle_ui)
     {
         error_exit(1, "Could not allocate memory for BattleUI");
     }
-
-    ctx.battle_ui->text_box =
-        (Rectangle){cfg.window_margin,
-                    GetScreenHeight() - (cfg.window_margin + cfg.text_height),
-                    GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
-
-    // TODO: Get consistent asset sizes
-    // TODO: Make these resize as the window resizes
-    // Set positions for menus and monsters
-    ctx.battle_ui->player_mon_pos =
-        (Vector2){GetScreenWidth() * 0.6f, GetScreenHeight() * 0.35f};
-    ctx.battle_ui->enemy_mon_pos =
-        (Vector2){GetScreenWidth() * 0.05f, GetScreenHeight() * 0.1f};
-    ctx.battle_ui->action_menu_pos =
-        (Vector2){ctx.battle_ui->text_box.x + 20, ctx.battle_ui->text_box.y + 20};
-    ctx.battle_ui->status_bar_pos =
-        (Vector2){ctx.battle_ui->text_box.x + 20, ctx.battle_ui->text_box.y + 80};
 
     ctx.state = BATTLE_MENU;
 
@@ -89,10 +106,11 @@ static void _action_menu_create()
     void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
     MenuConfig action_menu_config = {
         .title = "BATTLE MENU",
-        .rect = {ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f +
-                     10,
-                 ctx.battle_ui->text_box.y + 30, 0, 0},
-        .font_size = 20,
+        .rect = {ctx.battle_ui->text_box.x +
+                     ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
+                     cfg.action_menu_rect_offset.x,
+                 ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0},
+        .font_size = cfg.action_menu_font_size,
         .layout = MENU_LAYOUT_GRID,
         .num_rows = 2,
         .num_cols = 2,
@@ -179,9 +197,11 @@ void battle_scene_render(void)
 {
     if (!ctx.initialized)
     {
-        _init_battle_ui();
+        _init_battle_state();
         ctx.initialized = true;
     }
+
+    _update_battle_layout();
 
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
 
