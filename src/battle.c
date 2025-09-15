@@ -6,8 +6,10 @@
  */
 
 #include "battle.h"
+#include "menu.h"
 #include "raylib.h"
 
+// TODO: Enforce a minimum screen size
 static constexpr BattleUIConfig cfg = {
     .window_margin = 50,
     .text_height = 150,
@@ -15,10 +17,10 @@ static constexpr BattleUIConfig cfg = {
     .mon_rotation = 0.0,
     .mon_scale = 0.4f,
 
-    .player_mon_x_margin = 300.0f,
-    .player_mon_y_margin = 100.0f,
-    .enemy_mon_x_margin = 100.0f,
-    .enemy_mon_y_margin = 300.0f,
+    .player_mon_x_margin = 50.0f,
+    .player_mon_y_margin = 200.0f, // to be above text box
+    .enemy_mon_x_margin = 50.0f,
+    .enemy_mon_y_margin = 100.0f,
 
     .action_menu_pos_offset = {20, 20},
     .status_bar_pos_offset = {20, 80},
@@ -39,10 +41,22 @@ static void _update_battle_layout(void)
         (Rectangle){cfg.window_margin, GetScreenHeight() - (cfg.window_margin + cfg.text_height),
                     GetScreenWidth() - cfg.window_margin * 2, cfg.text_height};
 
-    ctx.battle_ui->player_mon_pos = (Vector2){GetScreenWidth() - cfg.player_mon_x_margin,
-                                              GetScreenHeight() - cfg.player_mon_y_margin};
-    ctx.battle_ui->enemy_mon_pos =
-        (Vector2){cfg.enemy_mon_x_margin, GetScreenHeight() - cfg.enemy_mon_y_margin};
+    // Calculate monster positions, accounting for sprite dimensions to respect margins
+    if (ctx.player_mon)
+    {
+        // Calculated from bottom right of screen
+        float player_w = ctx.player_mon->sprite.texture.width * cfg.mon_scale;
+        float player_h = ctx.player_mon->sprite.texture.height * cfg.mon_scale;
+        ctx.battle_ui->player_mon_pos =
+            (Vector2){GetScreenWidth() - cfg.player_mon_x_margin - player_w,
+                      GetScreenHeight() - cfg.player_mon_y_margin - player_h};
+    }
+
+    if (ctx.enemy_mon)
+    {
+        // Calculated from top-left corner of screen
+        ctx.battle_ui->enemy_mon_pos = (Vector2){cfg.enemy_mon_x_margin, cfg.enemy_mon_y_margin};
+    }
 
     ctx.battle_ui->action_menu_pos =
         (Vector2){ctx.battle_ui->text_box.x + cfg.action_menu_pos_offset.x,
