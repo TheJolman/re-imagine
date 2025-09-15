@@ -1,10 +1,9 @@
 #include "menu.h"
 #include "utils.h"
 #include <assert.h>
-#include <stdlib.h>
 
 // GridMenu functions
-static void grid_menu_left(const void *menu_ptr)
+static void _grid_menu_left(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
     if (menu->current_col > 0)
@@ -13,7 +12,7 @@ static void grid_menu_left(const void *menu_ptr)
         menu->current_col = menu->num_cols - 1;
 }
 
-static void grid_menu_right(const void *menu_ptr)
+static void _grid_menu_right(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
     if (menu->current_col < menu->num_cols - 1)
@@ -22,7 +21,7 @@ static void grid_menu_right(const void *menu_ptr)
         menu->current_col = 0;
 }
 
-static void grid_menu_up(const void *menu_ptr)
+static void _grid_menu_up(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
     if (menu->current_row > 0)
@@ -31,7 +30,7 @@ static void grid_menu_up(const void *menu_ptr)
         menu->current_row = menu->num_rows - 1;
 }
 
-static void grid_menu_down(const void *menu_ptr)
+static void _grid_menu_down(const void *menu_ptr)
 {
     GridMenu *menu = (GridMenu *)menu_ptr;
     if (menu->current_row < menu->num_rows - 1)
@@ -40,7 +39,7 @@ static void grid_menu_down(const void *menu_ptr)
         menu->current_row = 0;
 }
 
-static Result grid_menu_create(const MenuConfig *config, const char **item_texts,
+static Result _grid_menu_create(const MenuConfig *config, const char **item_texts,
                                void (**select_callbacks)(void), const uint16_t num_items)
 {
     GridMenu *menu = heap_list.malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
@@ -52,10 +51,10 @@ static Result grid_menu_create(const MenuConfig *config, const char **item_texts
     menu->num_cols = config->num_cols;
     menu->current_row = 0;
     menu->current_col = 0;
-    menu->move_left = grid_menu_left;
-    menu->move_right = grid_menu_right;
-    menu->move_down = grid_menu_down;
-    menu->move_up = grid_menu_up;
+    menu->move_left = _grid_menu_left;
+    menu->move_right = _grid_menu_right;
+    menu->move_down = _grid_menu_down;
+    menu->move_up = _grid_menu_up;
 
     for (uint16_t i = 0; i < num_items; i++)
     {
@@ -73,7 +72,7 @@ static Result grid_menu_create(const MenuConfig *config, const char **item_texts
 }
 
 // VerticalMenu functions
-static void vertical_menu_next(const void *menu_ptr)
+static void _vertical_menu_next(const void *menu_ptr)
 {
     VerticalMenu *menu = (VerticalMenu *)menu_ptr;
     if (menu->selected_item < menu->num_items - 1)
@@ -82,7 +81,7 @@ static void vertical_menu_next(const void *menu_ptr)
         menu->selected_item = 0;
 }
 
-static void vertical_menu_prev(const void *menu_ptr)
+static void _vertical_menu_prev(const void *menu_ptr)
 {
     VerticalMenu *menu = (VerticalMenu *)menu_ptr;
     if (menu->selected_item > 0)
@@ -91,7 +90,7 @@ static void vertical_menu_prev(const void *menu_ptr)
         menu->selected_item = menu->num_items - 1;
 }
 
-static Result vertical_menu_create(const MenuConfig *config, const char **item_texts,
+static Result _vertical_menu_create(const MenuConfig *config, const char **item_texts,
                                    void (**select_callbacks)(void), const uint16_t num_items)
 {
     VerticalMenu *menu = heap_list.malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
@@ -99,8 +98,8 @@ static Result vertical_menu_create(const MenuConfig *config, const char **item_t
         return (Result){.err = "Could not allocate memory for VerticalMenu"};
 
     menu->num_items = num_items;
-    menu->next_item = vertical_menu_next;
-    menu->prev_item = vertical_menu_prev;
+    menu->next_item = _vertical_menu_next;
+    menu->prev_item = _vertical_menu_prev;
     menu->selected_item = 0;
 
     for (uint16_t i = 0; i < num_items; i++)
@@ -128,11 +127,11 @@ Result menu_create(const MenuConfig *config, const char **item_texts,
     Result res;
     if (config->layout == MENU_LAYOUT_GRID)
     {
-        res = grid_menu_create(config, item_texts, select_callbacks, num_items);
+        res = _grid_menu_create(config, item_texts, select_callbacks, num_items);
     }
     else
     {
-        res = vertical_menu_create(config, item_texts, select_callbacks, num_items);
+        res = _vertical_menu_create(config, item_texts, select_callbacks, num_items);
     }
 
     if (res.err)
