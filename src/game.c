@@ -12,8 +12,6 @@
 #include "map.h"
 #include "pause.h"
 
-static GameContext ctx = {0};
-
 static constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
     .player_sprint_modifier = 2.0f,
@@ -21,6 +19,8 @@ static constexpr GameConfig cfg = {
     .player_size = 30,
     .camera_base_zoom = 1.0f,
 };
+
+static GameContext ctx = {0};
 
 static void _player_move(void)
 {
