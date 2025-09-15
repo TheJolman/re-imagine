@@ -23,7 +23,6 @@
 
 #include "debug.h"
 #include "game.h"
-#include "map.h"
 #include "utils.h"
 
 #ifndef GIT_VERSION
