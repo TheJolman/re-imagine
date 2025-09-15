@@ -81,7 +81,7 @@ int main(int argc, const char **argv)
     atexit(free_all);
 
     SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
-    InitWindow(cfg.screen_width_initial, cfg.screen_height_initial, "Game!");
+    InitWindow(cfg.screen_width_initial, cfg.screen_height_initial, argv[0]);
     SetWindowMinSize(cfg.screen_width_min, cfg.screen_height_min);
 
     if (!IsWindowReady())
