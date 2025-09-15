@@ -20,6 +20,19 @@ typedef struct
     Color mon_tint;
     float mon_rotation;
     float mon_scale;
+
+    // Positions as a percentage of screen dimensions
+    Vector2 player_mon_pos_percent;
+    Vector2 enemy_mon_pos_percent;
+
+    // Offsets for UI elements within the text box
+    Vector2 action_menu_pos_offset;
+    Vector2 status_bar_pos_offset;
+
+    // Config for the action menu itself
+    float action_menu_split_x_percent;
+    Vector2 action_menu_rect_offset;
+    uint32_t action_menu_font_size;
 } BattleUIConfig;
 
 /**
