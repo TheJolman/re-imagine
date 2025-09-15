@@ -141,13 +141,7 @@ void game_init(void)
     ctx.player.sprite.scale = 1.0f;
 
     ctx.camera.target = ctx.player.position;
-
-    Vector2 sprite_center = {
-        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
-        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
-    };
-    ctx.camera.offset = Vector2Subtract(
-        (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f}, sprite_center);
+    // camera offset set in game_draw to handle window resizing
     ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
@@ -157,6 +151,9 @@ void game_draw()
 {
     BeginDrawing();
     ClearBackground(BLACK);
+
+    // Update camera offset each frame to handle window resizing
+    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
     switch (ctx.state)
     {
