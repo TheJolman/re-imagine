@@ -12,7 +12,7 @@
 #include "map.h"
 #include "pause.h"
 
-GameContext ctx = {0};
+static GameContext ctx = {0};
 
 static constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
