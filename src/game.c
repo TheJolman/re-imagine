@@ -22,7 +22,7 @@ static constexpr GameConfig cfg = {
     .camera_base_zoom = 1.0f,
 };
 
-static void _move_player(void)
+static void _player_move(void)
 {
     // Determine base speed and apply sprint modifier
     float current_speed = cfg.player_base_speed;
@@ -59,12 +59,29 @@ static void _move_player(void)
     ctx.camera.target = ctx.player.position;
 }
 
+static void _player_draw(void)
+{
+    // Draw player
+    Vector2 origin = {
+        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
+        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
+    };
+    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, origin),
+                  ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
+#ifdef DEBUG
+    DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
+             GetScreenHeight() * 10, ORANGE);
+    DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
+             (int)ctx.camera.target.y, ORANGE);
+#endif
+}
+
 static void _game_input_handler(void)
 {
     switch (ctx.state)
     {
     case FREE_ROAM:
-        _move_player();
+        _player_move();
         if (IsKeyPressed(KEY_B))
             ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
@@ -113,8 +130,6 @@ void game_init(void)
 
     ctx.state = FREE_ROAM;
 
-    // ctx.player.position = (Vector2){GetScreenWidth() / 2, GetScreenHeight() / 2};
-
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
@@ -143,20 +158,7 @@ void game_draw()
         BeginMode2D(ctx.camera);
 
         map_draw(ctx.map);
-        // Draw player
-        Vector2 origin = {
-            (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
-            (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
-        };
-        DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, origin),
-                      ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
-#ifdef DEBUG
-        DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
-                 GetScreenHeight() * 10, ORANGE);
-        DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
-                 (int)ctx.camera.target.y, ORANGE);
-#endif
-
+        _player_draw();
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;
