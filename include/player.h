@@ -11,7 +11,7 @@
 /**
  * @brief Player character data structure
  */
-typedef struct Player
+typedef struct
 {
     Position position;     ///< Current position in world coordinates
     Velocity velocity;     ///< Velocity vector
