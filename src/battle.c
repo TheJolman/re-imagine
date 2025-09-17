@@ -47,7 +47,7 @@ static void _update_battle_layout(void)
         // Calculated from bottom right of screen
         float player_w = ctx.player_mon->sprite.texture.width * cfg.mon_scale;
         float player_h = ctx.player_mon->sprite.texture.height * cfg.mon_scale;
-        ctx.battle_ui->player_mon_pos =
+        ctx.player_mon->position =
             (Vector2){GetScreenWidth() - cfg.player_mon_x_margin - player_w,
                       GetScreenHeight() - cfg.player_mon_y_margin - player_h};
     }
@@ -55,7 +55,7 @@ static void _update_battle_layout(void)
     if (ctx.enemy_mon)
     {
         // Calculated from top-left corner of screen
-        ctx.battle_ui->enemy_mon_pos = (Vector2){cfg.enemy_mon_x_margin, cfg.enemy_mon_y_margin};
+        ctx.enemy_mon->position = (Vector2){cfg.enemy_mon_x_margin, cfg.enemy_mon_y_margin};
     }
 
     ctx.battle_ui->action_menu_pos =
@@ -177,12 +177,13 @@ static void _action_menu_display()
     menu_handle_input(ctx.action_menu);
 }
 
-static void _render_mon(Mon *mon, Vector2 position)
+static void _render_mon(Mon *mon)
 {
     if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    DrawTextureEx(mon->sprite.texture, position, cfg.mon_rotation, cfg.mon_scale, cfg.mon_tint);
+    DrawTextureEx(mon->sprite.texture, mon->position, cfg.mon_rotation, cfg.mon_scale,
+                  cfg.mon_tint);
 }
 
 /**
@@ -226,10 +227,10 @@ void battle_scene_render(void)
     _render_menu();
 
     if (ctx.player_mon)
-        _render_mon(ctx.player_mon, ctx.battle_ui->player_mon_pos);
+        _render_mon(ctx.player_mon);
 
     if (ctx.enemy_mon)
-        _render_mon(ctx.enemy_mon, ctx.battle_ui->enemy_mon_pos);
+        _render_mon(ctx.enemy_mon);
 }
 
 void battle_scene_end(void)

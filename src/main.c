@@ -3,7 +3,7 @@
  *   VGDC Game Project
  *
  *   <Game title>
- *   <Game description>
+ *   Top-down RPG with pokemon-inspired mechanics.
  *
  *   This game has been created using raylib (www.raylib.com)
  *
@@ -29,6 +29,9 @@
 #define GIT_VERSION "unknown"
 #endif
 
+/**
+ * Constants local to main.c
+ */
 static constexpr struct
 {
     size_t screen_width_initial;

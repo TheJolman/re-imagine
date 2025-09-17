@@ -34,6 +34,7 @@ typedef struct
 {
     const char *name;          ///< Monster's name
     Sprite sprite;             ///< Monster's sprite
+    Position position;         ///< Position to render sprite
     MonSpriteView sprite_view; ///< Determines if we get the front or back view
     Move moves[4];             ///< Array of up to 4 moves
     unsigned hp;               ///< Current hit points

@@ -45,8 +45,6 @@ typedef struct
 typedef struct
 {
     Rectangle text_box;
-    Vector2 player_mon_pos;
-    Vector2 enemy_mon_pos;
     Vector2 action_menu_pos;
     Vector2 status_bar_pos;
 } BattleUILayout;

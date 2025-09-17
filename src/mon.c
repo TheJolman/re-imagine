@@ -53,7 +53,6 @@ Result create_mon(char *name)
 
     mon->sprite = (Sprite){
         .texture = {0},
-        .position = {0, 0},
         .rotation = 0.0f,
         .scale = 1.0f,
         .tint = WHITE,

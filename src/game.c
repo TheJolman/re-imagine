@@ -135,7 +135,6 @@ void game_init(void)
     ctx.player.size = cfg.player_size;
 
     ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
-    ctx.player.sprite.position = ctx.player.position;
     ctx.player.sprite.rotation = 0.0f;
     ctx.player.sprite.tint = WHITE;
     ctx.player.sprite.scale = 1.0f;
