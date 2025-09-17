@@ -99,6 +99,9 @@ void map_draw(Map *map)
             case 2:
                 color = BLUE;
                 break;
+            case 3: 
+                color = RED;
+                break;
             default:
                 color = WHITE;
                 break;

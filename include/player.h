@@ -17,5 +17,6 @@ typedef struct Player
     Velocity velocity;     ///< Velocity vector
     float sprint_modifier; ///< Amount to increase speed by when sprinting
     float size;            ///< Size of the player collision box
+    Rectangle collision_box; ///< Calculated collision box
     Sprite sprite;
 } Player;
