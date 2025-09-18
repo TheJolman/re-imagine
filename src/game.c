@@ -1,3 +1,4 @@
+#define DEBUG
 /**
  * @file game.c
  * @brief Core game logic implementation
@@ -11,11 +12,12 @@
 #include "game.h"
 #include "map.h"
 #include "pause.h"
+#include <collision.h>
 
 static constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
     .player_sprint_modifier = 2.0f,
-    .player_initial_pos = (Vector2){100, 100},
+    .player_initial_pos = (Vector2){300, 300},
     .player_size = 30,
     .camera_base_zoom = 1.0f,
 };
@@ -24,8 +26,11 @@ static GameContext ctx = {0};
 
 static void _player_move(void)
 {
+    Vector2 prev_position = ctx.player.position;
     // Determine base speed and apply sprint modifier
     float current_speed = cfg.player_base_speed;
+
+
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
         current_speed *= cfg.player_sprint_modifier;
@@ -48,6 +53,15 @@ static void _player_move(void)
         move_vector = Vector2Normalize(move_vector);
         ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
         ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
+
+        update_player_collision_box(&ctx.player);
+        if (check_map_collision(ctx.map, ctx.player.collision_box))
+        {
+            // Hit wall - revert to previous position
+            ctx.player.position = prev_position;
+            ctx.player.velocity.vec = (Vector2){0};
+            update_player_collision_box(&ctx.player);
+        }
     }
     else
     {
@@ -73,6 +87,11 @@ static void _player_draw(void)
              GetScreenHeight() * 10, ORANGE);
     DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
              (int)ctx.camera.target.y, ORANGE);
+
+    
+    // Collision box debugging
+    DrawRectangleLinesEx(ctx.player.collision_box, 2.0f, GREEN);
+    
 #endif
 }
 
@@ -127,12 +146,14 @@ void game_init(void)
     }
     ctx.map = (Map *)res.value;
     debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
-
+    
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
     ctx.player.velocity.max_speed = cfg.player_base_speed;
     ctx.player.size = cfg.player_size;
+
+    update_player_collision_box(&ctx.player);
 
     ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
     ctx.player.sprite.position = ctx.player.position;
@@ -143,6 +164,8 @@ void game_init(void)
     ctx.camera.target = ctx.player.position;
     // camera offset set in game_draw to handle window resizing
     ctx.camera.zoom = cfg.camera_base_zoom;
+
+    
 }
 
 void game_update(void) { _game_input_handler(); }

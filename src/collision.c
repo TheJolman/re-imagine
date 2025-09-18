@@ -45,8 +45,3 @@ bool check_map_collision(Map *map, Rectangle collision_box) {
 }
 
 
-void resolve_map_collsion(Map *map, Player *player, Vector2 prev_position){
-    // TODO: Implement collision handling 
-}
-
-
