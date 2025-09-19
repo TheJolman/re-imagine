@@ -6,7 +6,6 @@
 #pragma once
 
 #include "components.h"
-#include "raylib.h"
 #include "utils.h"
 
 /**
@@ -23,8 +22,8 @@ typedef enum
  */
 typedef struct
 {
-    const char *name;      ///< Name of the move
-    const unsigned damage; ///< Damage dealt by this move
+    const char *name;       ///< Name of the move
+    const HitPoints damage; ///< Damage dealt by this move
 } Move;
 
 /**
@@ -37,7 +36,7 @@ typedef struct
     Position position;         ///< Position to render sprite
     MonSpriteView sprite_view; ///< Determines if we get the front or back view
     Move moves[4];             ///< Array of up to 4 moves
-    unsigned hp;               ///< Current hit points
+    Health health;             ///< Max and current HP
 } Mon;
 
 /**
