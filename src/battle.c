@@ -88,7 +88,7 @@ static void _init_battle_state(void)
             error_exit(1, "%s", res.err);
 
         ctx.player_mon = (Mon *)res.value;
-        ctx.player_mon->hp = 100;
+        ctx.player_mon->health = (Health){100, 100};
         load_mon_texture(ctx.player_mon, BACK);
     }
 
@@ -99,7 +99,7 @@ static void _init_battle_state(void)
             error_exit(1, "%s", res.err);
 
         ctx.enemy_mon = (Mon *)res.value;
-        ctx.enemy_mon->hp = 80;
+        ctx.enemy_mon->health = (Health){100, 100};
         load_mon_texture(ctx.enemy_mon, FRONT);
     }
 }
@@ -107,7 +107,7 @@ static void _init_battle_state(void)
 // clang-format off
 static void _attack_select() { ctx.state = BATTLE_ATTACK; }
 static void _items_select()  { ctx.state = BATTLE_ITEMS; }
-static void _run_select()    { ctx.state = BATTLE_RUN; }
+static void _run_select()    { battle_scene_end(); }
 static void _switch_select() { ctx.state = BATTLE_SWITCH; }
 // clang-format on
 
@@ -198,16 +198,13 @@ static void _render_menu(void)
         _action_menu_display();
         break;
     case BATTLE_ATTACK:
-        // attack_menuDisplay();
+        // _attack_menu_display();
         break;
     case BATTLE_ITEMS:
-        // items_menuDisplay();
-        break;
-    case BATTLE_RUN:
-        // runMenuDisplay();
+        // _items_menu_display();
         break;
     case BATTLE_SWITCH:
-        // switch_menuDisplay();
+        // _switch_menu_display();
         break;
     }
 }

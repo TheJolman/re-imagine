@@ -64,7 +64,6 @@ typedef struct
         BATTLE_MENU,
         BATTLE_ATTACK,
         BATTLE_ITEMS,
-        BATTLE_RUN,
         BATTLE_SWITCH,
     } state;
 } BattleContext;
