@@ -6,6 +6,7 @@
  */
 
 #include "battle.h"
+#include "game.h"
 #include "menu.h"
 #include "raylib.h"
 
@@ -104,12 +105,14 @@ static void _init_battle_state(void)
     }
 }
 
-// clang-format off
 static void _attack_select() { ctx.state = BATTLE_ATTACK; }
-static void _items_select()  { ctx.state = BATTLE_ITEMS; }
-static void _run_select()    { battle_scene_end(); }
+static void _items_select() { ctx.state = BATTLE_ITEMS; }
+static void _run_select()
+{
+    battle_scene_end();
+    game_set_state(FREE_ROAM);
+}
 static void _switch_select() { ctx.state = BATTLE_SWITCH; }
-// clang-format on
 
 /**
  * Initializes values for the top level action menu.
