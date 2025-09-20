@@ -117,12 +117,10 @@ static void _switch_select() { ctx.state = BATTLE_SWITCH; }
 /**
  * Initializes values for the top level action menu.
  */
-static void _action_menu_create()
+static void _action_menu_create(const char *title, const char **item_texts, void (*select_callbacks[4])(void))
 {
-    const char *item_texts[] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
-    void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
     MenuConfig action_menu_config = {
-        .title = "BATTLE MENU",
+        .title = title,
         .rect = {ctx.battle_ui->text_box.x +
                      ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
                      cfg.action_menu_rect_offset.x,
@@ -163,7 +161,10 @@ static void _action_menu_display()
 
     if (!ctx.action_menu)
     {
-        _action_menu_create();
+        const char *title = "WHAT WILL YOU DO?";
+        const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
+        void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
+        _action_menu_create(title, item_texts, select_callbacks);
     }
 
     // Update menu position every frame to ensure it is responsive
