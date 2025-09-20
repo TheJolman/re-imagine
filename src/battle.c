@@ -32,6 +32,18 @@ static constexpr BattleUIConfig cfg = {
 
 static BattleContext ctx = {0};
 
+// ------------------------ Top level battle menu callbacks ------------------------ //
+static void _attack_select() { ctx.state = BATTLE_ATTACK; }
+static void _items_select() { ctx.state = BATTLE_ITEMS; }
+static void _run_select()
+{
+    battle_scene_end();
+    game_set_state(FREE_ROAM);
+}
+static void _switch_select() { ctx.state = BATTLE_SWITCH; }
+// ------------------------ Top level battle menu callbacks ------------------------ //
+
+
 /**
  * @brief Calculates the layout of UI elements based on the current window size.
  * This should be called every frame to ensure the UI is responsive.
@@ -65,6 +77,33 @@ static void _update_battle_layout(void)
     ctx.battle_ui->status_bar_pos =
         (Vector2){ctx.battle_ui->text_box.x + cfg.status_bar_pos_offset.x,
                   ctx.battle_ui->text_box.y + cfg.status_bar_pos_offset.y};
+}
+
+/**
+ * Initializes values for the top level action menu.
+ */
+static void _action_menu_create(const char *title, const char **item_texts,
+                                void (*select_callbacks[4])(void))
+{
+    MenuConfig action_menu_config = {
+        .title = title,
+        .rect = {ctx.battle_ui->text_box.x +
+                     ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
+                     cfg.action_menu_rect_offset.x,
+                 ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0},
+        .font_size = cfg.action_menu_font_size,
+        .layout = MENU_LAYOUT_GRID,
+        .num_rows = 2,
+        .num_cols = 2,
+    };
+
+    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, 4);
+    if (res.err)
+    {
+        error_log(res.err);
+        return;
+    }
+    ctx.action_menu = (Menu *)res.value;
 }
 
 /**
@@ -103,42 +142,13 @@ static void _init_battle_state(void)
         ctx.enemy_mon->health = (Health){100, 100};
         load_mon_texture(ctx.enemy_mon, FRONT);
     }
-}
 
-static void _attack_select() { ctx.state = BATTLE_ATTACK; }
-static void _items_select() { ctx.state = BATTLE_ITEMS; }
-static void _run_select()
-{
-    battle_scene_end();
-    game_set_state(FREE_ROAM);
-}
-static void _switch_select() { ctx.state = BATTLE_SWITCH; }
+    // Initialize action menu
+    const char *title = "WHAT WILL YOU DO?";
 
-/**
- * Initializes values for the top level action menu.
- */
-static void _action_menu_create(const char *title, const char **item_texts,
-                                void (*select_callbacks[4])(void))
-{
-    MenuConfig action_menu_config = {
-        .title = title,
-        .rect = {ctx.battle_ui->text_box.x +
-                     ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
-                     cfg.action_menu_rect_offset.x,
-                 ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0},
-        .font_size = cfg.action_menu_font_size,
-        .layout = MENU_LAYOUT_GRID,
-        .num_rows = 2,
-        .num_cols = 2,
-    };
-
-    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, 4);
-    if (res.err)
-    {
-        error_log(res.err);
-        return;
-    }
-    ctx.action_menu = (Menu *)res.value;
+    const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
+    void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
+    _action_menu_create(title, item_texts, select_callbacks);
 }
 
 static void _action_menu_end()
@@ -159,15 +169,6 @@ static void _action_menu_display()
              ctx.battle_ui->text_box.y,
              ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
              ctx.battle_ui->text_box.y + ctx.battle_ui->text_box.height, GRAY);
-
-    if (!ctx.action_menu)
-    {
-        const char *title = "WHAT WILL YOU DO?";
-        const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
-        void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select,
-                                            _switch_select};
-        _action_menu_create(title, item_texts, select_callbacks);
-    }
 
     // Update menu position every frame to ensure it is responsive
     ctx.action_menu->config.rect =
