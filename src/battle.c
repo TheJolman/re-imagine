@@ -26,7 +26,7 @@ static constexpr BattleUIConfig cfg = {
     .action_menu_pos_offset = {20, 20},
     .status_bar_pos_offset = {20, 80},
     .action_menu_split_x_percent = 0.5f,
-    .action_menu_rect_offset = {10, 30},
+    .action_menu_rect_offset = {15, 45},
     .action_menu_font_size = 20,
 };
 
@@ -117,7 +117,8 @@ static void _switch_select() { ctx.state = BATTLE_SWITCH; }
 /**
  * Initializes values for the top level action menu.
  */
-static void _action_menu_create(const char *title, const char **item_texts, void (*select_callbacks[4])(void))
+static void _action_menu_create(const char *title, const char **item_texts,
+                                void (*select_callbacks[4])(void))
 {
     MenuConfig action_menu_config = {
         .title = title,
@@ -163,7 +164,8 @@ static void _action_menu_display()
     {
         const char *title = "WHAT WILL YOU DO?";
         const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
-        void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
+        void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select,
+                                            _switch_select};
         _action_menu_create(title, item_texts, select_callbacks);
     }
 
