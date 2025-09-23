@@ -29,9 +29,9 @@ bool is_boundary(Map *map, uint32_t x, uint32_t y) {
 bool check_map_collision(Map *map, Rectangle collision_box) {
     // Tile coordinates that collision_box overlaps with
     uint32_t left_tile = (uint32_t)(collision_box.x / MAP_TILE_SIZE);
-    uint32_t right_tile = (uint32_t)(collision_box.x + collision_box.width - 1 / MAP_TILE_SIZE);
+    uint32_t right_tile = (uint32_t)((collision_box.x + collision_box.width - 1)/ MAP_TILE_SIZE);
     uint32_t top_tile = (uint32_t)(collision_box.y / MAP_TILE_SIZE);
-    uint32_t bottom_tile = (uint32_t)(collision_box.y + collision_box.height - 1 / MAP_TILE_SIZE);
+    uint32_t bottom_tile = (uint32_t)((collision_box.y + collision_box.height - 1) / MAP_TILE_SIZE);
 
     for (uint32_t x = left_tile; x <= right_tile; ++x) {
         for (uint32_t y = top_tile; y <= bottom_tile; ++y) {

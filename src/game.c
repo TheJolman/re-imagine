@@ -1,4 +1,3 @@
-#define DEBUG
 /**
  * @file game.c
  * @brief Core game logic implementation
