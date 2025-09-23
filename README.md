@@ -9,7 +9,7 @@ Pitch: Pokemon-like top down rpg with a small story.
 ### Software:
 - Josh Holman
 - Christian Carrillo
--
+- Brandon Martin Del Campo
 
 ### Art:
 - Iris
