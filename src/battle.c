@@ -3,6 +3,7 @@
  * @brief Battle system implementation
  * Note that 'action_menu' refers to the top-level menu that includes 'attack', 'items', 'run', and
  * 'switch' options.
+ * 'battle_menu' refers to the menu in some arbitrary state.
  */
 
 #include "battle.h"
@@ -42,6 +43,7 @@ static void _run_select()
     game_set_state(FREE_ROAM);
 }
 static void _switch_select() { ctx.state = BATTLE_SWITCH; }
+static void _menu_back_select() {}
 // ------------------------ Top level battle menu callbacks ------------------------ //
 
 /**
@@ -202,21 +204,27 @@ static void _render_mon(Mon *mon)
  */
 static void _battle_menu_draw(void)
 {
-    switch (ctx.state)
-    {
-    case BATTLE_MENU:
-        _action_menu_display();
-        break;
-    case BATTLE_ATTACK:
-        // _attack_menu_display();
-        break;
-    case BATTLE_ITEMS:
-        // _items_menu_display();
-        break;
-    case BATTLE_SWITCH:
-        // _switch_menu_display();
-        break;
-    }
+    /*
+     * 1) Get active menu by peeking the top of the menu stack
+     * 2) If there's no active menu, do nothing
+     * 3) If there is an active menu, draw it and handle it's input
+
+    */
+    // switch (ctx.state)
+    // {
+    // case BATTLE_MENU:
+    //     _action_menu_display();
+    //     break;
+    // case BATTLE_ATTACK:
+    //     // _attack_menu_display();
+    //     break;
+    // case BATTLE_ITEMS:
+    //     // _items_menu_display();
+    //     break;
+    // case BATTLE_SWITCH:
+    //     // _switch_menu_display();
+    //     break;
+    // }
 }
 
 void battle_scene_render(void)
