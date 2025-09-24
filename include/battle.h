@@ -37,6 +37,7 @@ typedef struct
     float action_menu_split_x_percent;
     Vector2 action_menu_rect_offset;
     uint32_t action_menu_font_size;
+
 } BattleUIConfig;
 
 /**
@@ -49,6 +50,8 @@ typedef struct
     Vector2 status_bar_pos;
 } BattleUILayout;
 
+constexpr uint32_t BATTLE_MENU_STACK_SIZE = 4;
+
 /**
  * @brief Holds pointers to battle-related objects as well as the battle state.
  */
@@ -58,7 +61,8 @@ typedef struct
     Mon *enemy_mon;
     BattleUILayout *battle_ui;
     bool initialized;
-    Menu *action_menu;
+    Menu *menu_stack[BATTLE_MENU_STACK_SIZE];
+    int32_t menu_stack_top;
     enum
     {
         BATTLE_MENU,

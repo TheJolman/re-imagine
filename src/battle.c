@@ -28,6 +28,7 @@ static constexpr BattleUIConfig cfg = {
     .action_menu_split_x_percent = 0.5f,
     .action_menu_rect_offset = {15, 45},
     .action_menu_font_size = 20,
+
 };
 
 static BattleContext ctx = {0};
@@ -119,6 +120,7 @@ static void _init_battle_state(void)
     }
 
     ctx.state = BATTLE_MENU;
+    ctx.menu_stack_top = -1;
 
     // Initialize monsters (here froge is hardcoded in)
     if (!ctx.player_mon)
