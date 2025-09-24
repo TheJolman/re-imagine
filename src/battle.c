@@ -44,7 +44,6 @@ static void _run_select()
 static void _switch_select() { ctx.state = BATTLE_SWITCH; }
 // ------------------------ Top level battle menu callbacks ------------------------ //
 
-
 /**
  * @brief Calculates the layout of UI elements based on the current window size.
  * This should be called every frame to ensure the UI is responsive.
@@ -84,7 +83,8 @@ static void _update_battle_layout(void)
  * Initializes values for the top level action menu.
  */
 static void _create_and_push_menu(const char *title, const char **item_texts,
-                                void (*select_callbacks[4])(void))
+                                  void (*select_callbacks[])(void), int num_items,
+                                  MenuLayoutType layout, int rows, int cols)
 {
     MenuConfig action_menu_config = {
         .title = title,
@@ -93,18 +93,19 @@ static void _create_and_push_menu(const char *title, const char **item_texts,
                      cfg.action_menu_rect_offset.x,
                  ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0},
         .font_size = cfg.action_menu_font_size,
-        .layout = MENU_LAYOUT_GRID,
-        .num_rows = 2,
-        .num_cols = 2,
+        .layout = layout,
+        .num_rows = rows,
+        .num_cols = cols,
     };
 
-    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, 4);
+    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, num_items);
     if (res.err)
     {
         error_log(res.err);
         return;
     }
-    ctx.action_menu = (Menu *)res.value;
+    ctx.menu_stack_top++;
+    ctx.menu_stack[ctx.menu_stack_top] = (Menu *)res.value;
 }
 
 /**
