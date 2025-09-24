@@ -83,7 +83,7 @@ static void _update_battle_layout(void)
 /**
  * Initializes values for the top level action menu.
  */
-static void _action_menu_create(const char *title, const char **item_texts,
+static void _create_and_push_menu(const char *title, const char **item_texts,
                                 void (*select_callbacks[4])(void))
 {
     MenuConfig action_menu_config = {
@@ -150,7 +150,7 @@ static void _init_battle_state(void)
 
     const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
     void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
-    _action_menu_create(title, item_texts, select_callbacks);
+    _create_and_push_menu(title, item_texts, select_callbacks);
 }
 
 static void _action_menu_end()
