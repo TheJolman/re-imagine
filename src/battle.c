@@ -200,7 +200,7 @@ static void _render_mon(Mon *mon)
  * Renders menu on the bottom right of the screen. This menu might be the action menu or
  * one of the submenus depending on the battle state.
  */
-static void _render_menu(void)
+static void _battle_menu_draw(void)
 {
     switch (ctx.state)
     {
@@ -231,7 +231,7 @@ void battle_scene_render(void)
 
     DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
 
-    _render_menu();
+    _battle_menu_draw();
 
     if (ctx.player_mon)
         _render_mon(ctx.player_mon);
