@@ -34,7 +34,6 @@ static constexpr BattleUIConfig cfg = {
 };
 
 static BattleContext ctx = {0};
-static Stack *menu_stack = nullptr;
 
 static void _create_and_push_menu(const char *title, const char **item_texts,
                                   void (*select_callbacks[])(void), int num_items,
@@ -49,7 +48,7 @@ static void _move_select()
 
 static void _menu_back_select()
 {
-    Menu *popped_menu = (Menu *)stack_pop(menu_stack);
+    Menu *popped_menu = (Menu *)stack_pop(ctx.menu_stack);
     if (popped_menu)
     {
         menu_destroy(popped_menu);
@@ -149,7 +148,7 @@ static void _create_and_push_menu(const char *title, const char **item_texts,
         error_log(res.err);
         return;
     }
-    stack_push(menu_stack, (Menu *)res.value);
+    stack_push(ctx.menu_stack, (Menu *)res.value);
 }
 
 /**
@@ -157,9 +156,9 @@ static void _create_and_push_menu(const char *title, const char **item_texts,
  */
 static void _destroy_all_menus()
 {
-    while (!stack_is_empty(menu_stack))
+    while (!stack_is_empty(ctx.menu_stack))
     {
-        Menu *menu = (Menu *)stack_pop(menu_stack);
+        Menu *menu = (Menu *)stack_pop(ctx.menu_stack);
         menu_destroy(menu);
     }
 }
@@ -176,8 +175,8 @@ static void _init_battle_state(void)
         error_exit(1, "Could not allocate memory for BattleUI");
     }
 
-    menu_stack = stack_create(BATTLE_MENU_STACK_SIZE);
-    if (!menu_stack)
+    ctx.menu_stack = stack_create(BATTLE_MENU_STACK_SIZE);
+    if (!ctx.menu_stack)
     {
         error_exit(1, "Could not allocate memory for menu stack");
     }
@@ -228,7 +227,7 @@ static void _render_mon(Mon *mon)
  */
 static void _render_active_menu(void)
 {
-    Menu *active_menu = (Menu *)stack_peek(menu_stack);
+    Menu *active_menu = (Menu *)stack_peek(ctx.menu_stack);
     if (active_menu == nullptr)
     {
         return; // Nothing to render
@@ -298,10 +297,10 @@ void battle_scene_end(void)
     }
 
     _destroy_all_menus();
-    if (menu_stack)
+    if (ctx.menu_stack)
     {
-        stack_destroy(menu_stack);
-        menu_stack = nullptr;
+        stack_destroy(ctx.menu_stack);
+        ctx.menu_stack = nullptr;
     }
 
     ctx.state = BATTLE_MENU;

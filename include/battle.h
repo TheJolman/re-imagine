@@ -74,6 +74,7 @@ typedef struct
     BattleUILayout *battle_ui;
     bool initialized;
     BattleMenuState state;
+    Stack *menu_stack;
 } BattleContext;
 
 /**
