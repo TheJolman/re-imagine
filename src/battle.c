@@ -10,6 +10,7 @@
 #include "game.h"
 #include "menu.h"
 #include "raylib.h"
+#include "stack.h"
 
 // TODO: Enforce a minimum screen size
 static constexpr BattleUIConfig cfg = {
@@ -33,18 +34,60 @@ static constexpr BattleUIConfig cfg = {
 };
 
 static BattleContext ctx = {0};
+static Stack *menu_stack = nullptr;
 
-// ------------------------ Top level battle menu callbacks ------------------------ //
-static void _attack_select() { ctx.state = BATTLE_ATTACK; }
-static void _items_select() { ctx.state = BATTLE_ITEMS; }
+static void _create_and_push_menu(const char *title, const char **item_texts,
+                                  void (*select_callbacks[])(void), int num_items,
+                                  MenuLayoutType layout, int rows, int cols);
+
+// ------------------------ Menu Callbacks ------------------------ //
+
+static void _move_select()
+{
+    // TODO: Implement move selection logic
+}
+
+static void _menu_back_select()
+{
+    Menu *popped_menu = (Menu *)stack_pop(menu_stack);
+    if (popped_menu)
+    {
+        menu_destroy(popped_menu);
+    }
+    // Return to the main menu state when backing out of a submenu
+    ctx.state = BATTLE_MENU;
+}
+
+static void _attack_select()
+{
+    ctx.state = BATTLE_ATTACK;
+    const char *title = "CHOOSE A MOVE";
+    // TODO: Get these from the monster's data
+    const char *item_texts[4] = {"TACKLE", "GROWL", "SPLASH", "BACK"};
+    void (*select_callbacks[])(void) = {_move_select, _move_select, _move_select,
+                                        _menu_back_select};
+    _create_and_push_menu(title, item_texts, select_callbacks, 4, MENU_LAYOUT_GRID, 2, 2);
+}
+
+static void _items_select()
+{
+    ctx.state = BATTLE_ITEMS;
+    // TODO: Implement items menu
+}
+
 static void _run_select()
 {
     battle_scene_end();
     game_set_state(FREE_ROAM);
 }
-static void _switch_select() { ctx.state = BATTLE_SWITCH; }
-static void _menu_back_select() {}
-// ------------------------ Top level battle menu callbacks ------------------------ //
+
+static void _switch_select()
+{
+    ctx.state = BATTLE_SWITCH;
+    // TODO: Implement switch menu
+}
+
+// ------------------------ Menu Callbacks ------------------------ //
 
 /**
  * @brief Calculates the layout of UI elements based on the current window size.
@@ -82,13 +125,13 @@ static void _update_battle_layout(void)
 }
 
 /**
- * Initializes values for the top level action menu.
+ * @brief Creates a new menu, configures it, and pushes it onto the menu stack.
  */
 static void _create_and_push_menu(const char *title, const char **item_texts,
                                   void (*select_callbacks[])(void), int num_items,
                                   MenuLayoutType layout, int rows, int cols)
 {
-    MenuConfig action_menu_config = {
+    MenuConfig menu_config = {
         .title = title,
         .rect = {ctx.battle_ui->text_box.x +
                      ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
@@ -100,14 +143,25 @@ static void _create_and_push_menu(const char *title, const char **item_texts,
         .num_cols = cols,
     };
 
-    Result res = menu_create(&action_menu_config, item_texts, select_callbacks, num_items);
+    Result res = menu_create(&menu_config, item_texts, select_callbacks, num_items);
     if (res.err)
     {
         error_log(res.err);
         return;
     }
-    ctx.menu_stack_top++;
-    ctx.menu_stack[ctx.menu_stack_top] = (Menu *)res.value;
+    stack_push(menu_stack, (Menu *)res.value);
+}
+
+/**
+ * @brief Destroys all menus currently on the stack.
+ */
+static void _destroy_all_menus()
+{
+    while (!stack_is_empty(menu_stack))
+    {
+        Menu *menu = (Menu *)stack_pop(menu_stack);
+        menu_destroy(menu);
+    }
 }
 
 /**
@@ -122,8 +176,13 @@ static void _init_battle_state(void)
         error_exit(1, "Could not allocate memory for BattleUI");
     }
 
+    menu_stack = stack_create(BATTLE_MENU_STACK_SIZE);
+    if (!menu_stack)
+    {
+        error_exit(1, "Could not allocate memory for menu stack");
+    }
+
     ctx.state = BATTLE_MENU;
-    ctx.menu_stack_top = -1;
 
     // Initialize monsters (here froge is hardcoded in)
     if (!ctx.player_mon)
@@ -148,45 +207,11 @@ static void _init_battle_state(void)
         load_mon_texture(ctx.enemy_mon, FRONT);
     }
 
-    // Initialize action menu
+    // Initialize the top-level action menu
     const char *title = "WHAT WILL YOU DO?";
-
     const char *item_texts[4] = {"ATTACK", "ITEMS", "RUN", "SWITCH"};
     void (*select_callbacks[])(void) = {_attack_select, _items_select, _run_select, _switch_select};
-    _create_and_push_menu(title, item_texts, select_callbacks);
-}
-
-static void _action_menu_end()
-{
-    if (ctx.action_menu)
-        menu_destroy(ctx.action_menu);
-
-    ctx.action_menu = nullptr;
-}
-
-static void _action_menu_display()
-{
-    // Box at bottom of screen
-    DrawRectangleLines(ctx.battle_ui->text_box.x, ctx.battle_ui->text_box.y,
-                       ctx.battle_ui->text_box.width, ctx.battle_ui->text_box.height, WHITE);
-    // Vertical line that divides box into text box and action menu box
-    DrawLine(ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
-             ctx.battle_ui->text_box.y,
-             ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
-             ctx.battle_ui->text_box.y + ctx.battle_ui->text_box.height, GRAY);
-
-    // Update menu position every frame to ensure it is responsive
-    ctx.action_menu->config.rect =
-        (Rectangle){ctx.battle_ui->text_box.x +
-                        ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
-                        cfg.action_menu_rect_offset.x,
-                    ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0};
-
-    // Recalculate item positions based on the new rect
-    menu_update_layout(ctx.action_menu);
-
-    menu_draw(ctx.action_menu);
-    menu_handle_input(ctx.action_menu);
+    _create_and_push_menu(title, item_texts, select_callbacks, 4, MENU_LAYOUT_GRID, 2, 2);
 }
 
 static void _render_mon(Mon *mon)
@@ -199,32 +224,36 @@ static void _render_mon(Mon *mon)
 }
 
 /**
- * Renders menu on the bottom right of the screen. This menu might be the action menu or
- * one of the submenus depending on the battle state.
+ * Renders the currently active menu on the bottom right of the screen.
  */
-static void _battle_menu_draw(void)
+static void _render_active_menu(void)
 {
-    /*
-     * 1) Get active menu by peeking the top of the menu stack
-     * 2) If there's no active menu, do nothing
-     * 3) If there is an active menu, draw it and handle it's input
+    Menu *active_menu = (Menu *)stack_peek(menu_stack);
+    if (active_menu == nullptr)
+    {
+        return; // Nothing to render
+    }
 
-    */
-    // switch (ctx.state)
-    // {
-    // case BATTLE_MENU:
-    //     _action_menu_display();
-    //     break;
-    // case BATTLE_ATTACK:
-    //     // _attack_menu_display();
-    //     break;
-    // case BATTLE_ITEMS:
-    //     // _items_menu_display();
-    //     break;
-    // case BATTLE_SWITCH:
-    //     // _switch_menu_display();
-    //     break;
-    // }
+    // Box at bottom of screen
+    DrawRectangleLines(ctx.battle_ui->text_box.x, ctx.battle_ui->text_box.y,
+                       ctx.battle_ui->text_box.width, ctx.battle_ui->text_box.height, WHITE);
+    // Vertical line that divides box into text box and action menu box
+    DrawLine(ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
+             ctx.battle_ui->text_box.y,
+             ctx.battle_ui->text_box.x + ctx.battle_ui->text_box.width * 0.5f,
+             ctx.battle_ui->text_box.y + ctx.battle_ui->text_box.height, GRAY);
+
+    // Update menu position every frame to ensure it is responsive
+    active_menu->config.rect =
+        (Rectangle){ctx.battle_ui->text_box.x +
+                        ctx.battle_ui->text_box.width * cfg.action_menu_split_x_percent +
+                        cfg.action_menu_rect_offset.x,
+                    ctx.battle_ui->text_box.y + cfg.action_menu_rect_offset.y, 0, 0};
+
+    // Recalculate item positions based on the new rect and handle input
+    menu_update_layout(active_menu);
+    menu_draw(active_menu);
+    menu_handle_input(active_menu);
 }
 
 void battle_scene_render(void)
@@ -237,9 +266,10 @@ void battle_scene_render(void)
 
     _update_battle_layout();
 
-    DrawText("Battle scene is active!\nPress B to go back!", 50, 50, 20, DARKGRAY);
+    DrawText("Battle scene is active!
+Press B to go back!", 50, 50, 20, DARKGRAY);
 
-    _battle_menu_draw();
+    _render_active_menu();
 
     if (ctx.player_mon)
         _render_mon(ctx.player_mon);
@@ -268,7 +298,13 @@ void battle_scene_end(void)
         ctx.battle_ui = nullptr;
     }
 
-    _action_menu_end();
+    _destroy_all_menus();
+    if (menu_stack)
+    {
+        stack_destroy(menu_stack);
+        menu_stack = nullptr;
+    }
+
     ctx.state = BATTLE_MENU;
     ctx.initialized = false;
 }

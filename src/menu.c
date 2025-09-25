@@ -40,7 +40,7 @@ static void _grid_menu_down(const void *menu_ptr)
 }
 
 static Result _grid_menu_create(const MenuConfig *config, const char **item_texts,
-                               void (**select_callbacks)(void), const uint16_t num_items)
+                                void (**select_callbacks)(void), const uint16_t num_items)
 {
     GridMenu *menu = heap_list.malloc(sizeof(GridMenu) + num_items * sizeof(MenuItem *));
     if (!menu)
@@ -91,7 +91,7 @@ static void _vertical_menu_prev(const void *menu_ptr)
 }
 
 static Result _vertical_menu_create(const MenuConfig *config, const char **item_texts,
-                                   void (**select_callbacks)(void), const uint16_t num_items)
+                                    void (**select_callbacks)(void), const uint16_t num_items)
 {
     VerticalMenu *menu = heap_list.malloc(sizeof(VerticalMenu) + num_items * sizeof(MenuItem));
     if (!menu)

@@ -62,8 +62,6 @@ typedef struct
     Mon *enemy_mon;
     BattleUILayout *battle_ui;
     bool initialized;
-    Menu *menu_stack[BATTLE_MENU_STACK_SIZE];
-    int32_t menu_stack_top;
     enum
     {
         BATTLE_MENU,
