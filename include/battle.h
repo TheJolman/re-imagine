@@ -54,6 +54,17 @@ typedef struct
 constexpr uint32_t BATTLE_MENU_STACK_SIZE = 4;
 
 /**
+ * @brief State battle menu is in
+ */
+typedef enum
+{
+    BATTLE_MENU,
+    BATTLE_ATTACK,
+    BATTLE_ITEMS,
+    BATTLE_SWITCH,
+} BattleMenuState;
+
+/**
  * @brief Holds pointers to battle-related objects as well as the battle state.
  */
 typedef struct
@@ -62,13 +73,7 @@ typedef struct
     Mon *enemy_mon;
     BattleUILayout *battle_ui;
     bool initialized;
-    enum
-    {
-        BATTLE_MENU,
-        BATTLE_ATTACK,
-        BATTLE_ITEMS,
-        BATTLE_SWITCH,
-    } state;
+    BattleMenuState state;
 } BattleContext;
 
 /**

@@ -266,8 +266,7 @@ void battle_scene_render(void)
 
     _update_battle_layout();
 
-    DrawText("Battle scene is active!
-Press B to go back!", 50, 50, 20, DARKGRAY);
+    DrawText("Battle scene is active! Press B to go back!", 50, 50, 20, DARKGRAY);
 
     _render_active_menu();
 
