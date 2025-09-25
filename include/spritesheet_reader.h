@@ -5,11 +5,14 @@
 
 typedef struct {
     Texture2D atlas;
-    int framePerSecond;
+    int framesPerSecond;
+    float timeStarted;
     int spriteH;
     Rectangle* rectangles;
-    int RectanglesLength;
+    int rectanglesLength;
 } SpriteAnimation;
 
-void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 origin, floa
-t rotation, Color tint);
+SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rectangle rectangles[], int length);
+void DisposeSpriteAnimation(SpriteAnimation animation);
+void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 origin, float rotation, Color tint);
+ 

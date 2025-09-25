@@ -9,8 +9,10 @@
 #include "battle.h"
 #include "debug.h"
 #include "game.h"
+#include "player.h"
 #include "map.h"
 #include "pause.h"
+
 
 static constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
@@ -20,7 +22,7 @@ static constexpr GameConfig cfg = {
     .camera_base_zoom = 1.0f,
 };
 
-static GameContext ctx = {0};
+GameContext ctx = {0};
 
 static void _player_move(void)
 {

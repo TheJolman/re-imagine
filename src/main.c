@@ -83,7 +83,8 @@ int main(int argc, const char **argv)
     heap_list = heap_list_create();
     atexit(free_all);
 
-    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+    SetWindowState( FLAG_VSYNC_HINT);
+    
     InitWindow(cfg.screen_width_initial, cfg.screen_height_initial, argv[0]);
     SetWindowMinSize(cfg.screen_width_min, cfg.screen_height_min);
 
@@ -94,7 +95,7 @@ int main(int argc, const char **argv)
 
     debug_log("Game initiated with screen dimensions %dx%d", cfg.screen_width_initial,
               cfg.screen_height_initial);
-
+    ToggleFullscreen();
     SetTargetFPS(cfg.fps_target);
     SetExitKey(KEY_NULL);
 
