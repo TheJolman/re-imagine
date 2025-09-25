@@ -31,6 +31,7 @@ static constexpr BattleUIConfig cfg = {
     .action_menu_rect_offset = {15, 45},
     .action_menu_font_size = 20,
 
+    .battle_menu_stack_size = 4,
 };
 
 static BattleContext ctx = {0};
@@ -175,7 +176,7 @@ static void _init_battle_state(void)
         error_exit(1, "Could not allocate memory for BattleUI");
     }
 
-    ctx.menu_stack = stack_create(BATTLE_MENU_STACK_SIZE);
+    ctx.menu_stack = stack_create(cfg.battle_menu_stack_size);
     if (!ctx.menu_stack)
     {
         error_exit(1, "Could not allocate memory for menu stack");

@@ -39,6 +39,7 @@ typedef struct
     Vector2 action_menu_rect_offset;
     uint32_t action_menu_font_size;
 
+    uint32_t battle_menu_stack_size;
 } BattleUIConfig;
 
 /**
@@ -50,8 +51,6 @@ typedef struct
     Vector2 action_menu_pos;
     Vector2 status_bar_pos;
 } BattleUILayout;
-
-constexpr uint32_t BATTLE_MENU_STACK_SIZE = 4;
 
 /**
  * @brief State battle menu is in
