@@ -22,7 +22,7 @@ static constexpr GameConfig cfg = {
     .camera_base_zoom = 1.0f,
 };
 
-GameContext ctx = {0};
+static GameContext ctx = {0};
 
 static void _player_move(void)
 {
@@ -121,6 +121,9 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
+    //CreatePlayerSpriteAnimation();
+    CreatePlayerSpriteAnimation();
+    
     const char *file_path = "assets/map.csv";
     Result res = map_load_from_csv(file_path);
     if (res.err)
@@ -152,7 +155,7 @@ void game_draw()
 {
     BeginDrawing();
     ClearBackground(BLACK);
-
+    
     // Update camera offset each frame to handle window resizing
     ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
@@ -160,7 +163,7 @@ void game_draw()
     {
     case FREE_ROAM:
         BeginMode2D(ctx.camera);
-
+        //UpdatePlayerDrawFrame();
         map_draw(ctx.map);
         _player_draw();
         EndMode2D();

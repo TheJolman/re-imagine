@@ -72,3 +72,4 @@ void game_set_state(GameState state);
  * @brief Frees resources held in game.c
  */
 void game_cleanup(void);
+

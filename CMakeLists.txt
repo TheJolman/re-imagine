@@ -33,7 +33,9 @@ set(SOURCES
     src/battle.c
     src/map.c
     src/mon.c
-    src/menu.c)
+    src/menu.c
+    src/player.c
+    src/spritesheet_reader.c)
 
 # Raylib graphics library
 find_package(raylib 5.5 QUIET)

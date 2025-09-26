@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "components.h"
 #include <raylib.h>
+#include "components.h"
+
 
 /**
  * @brief Player character data structure
@@ -19,3 +20,7 @@ typedef struct
     float size;            ///< Size of the player collision box
     Sprite sprite;
 } Player;
+
+void UpdatePlayerDrawFrame(void);
+
+void CreatePlayerSpriteAnimation(void);
