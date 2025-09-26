@@ -87,7 +87,7 @@ static void _switch_select()
     // TODO: Implement switch menu
 }
 
-// ------------------------ Menu Callbacks ------------------------ //
+// ------------------------ End Menu Callbacks ------------------------ //
 
 /**
  * @brief Calculates the layout of UI elements based on the current window size.
