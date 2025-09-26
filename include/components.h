@@ -1,6 +1,8 @@
 #pragma once
 
 #include "raylib.h"
+#include "stdint.h"
+
 typedef struct
 {
     Vector2 vec;
@@ -16,3 +18,10 @@ typedef struct
     float scale;
     Color tint;
 } Sprite;
+
+typedef uint32_t HitPoints;
+
+typedef struct
+{
+    HitPoints current, max;
+} Health;

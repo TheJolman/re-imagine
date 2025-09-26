@@ -6,7 +6,6 @@
 #pragma once
 
 #include "components.h"
-#include "raylib.h"
 #include "utils.h"
 
 /**
@@ -19,12 +18,23 @@ typedef enum
 } MonSpriteView;
 
 /**
+ * @brief The "type" of a monster or move. Currenly one of 'rock', 'paper', or 'scissors'
+ */
+typedef enum
+{
+    TYPE_ROCK,
+    TYPE_PAPER,
+    TYPE_SCISSORS,
+} MonType;
+
+/**
  * @brief A move/attack that a monster can perform
  */
 typedef struct
 {
-    const char *name;      ///< Name of the move
-    const unsigned damage; ///< Damage dealt by this move
+    const char *name;       ///< Name of the move
+    const HitPoints damage; ///< Damage dealt by this move
+    MonType type;
 } Move;
 
 /**
@@ -37,7 +47,8 @@ typedef struct
     Position position;         ///< Position to render sprite
     MonSpriteView sprite_view; ///< Determines if we get the front or back view
     Move moves[4];             ///< Array of up to 4 moves
-    unsigned hp;               ///< Current hit points
+    Health health;             ///< Max and current HP
+    MonType type;
 } Mon;
 
 /**

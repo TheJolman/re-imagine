@@ -64,6 +64,11 @@ void game_update(void);
 void game_draw(void);
 
 /**
+ * @brief allows other modules to set the game state
+ */
+void game_set_state(GameState state);
+
+/**
  * @brief Frees resources held in game.c
  */
 void game_cleanup(void);

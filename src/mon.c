@@ -57,7 +57,7 @@ Result create_mon(char *name)
         .scale = 1.0f,
         .tint = WHITE,
     };
-    mon->hp = 100;
+    mon->health = (Health){100, 100};
     // TODO: Initialize other values
 
     return (Result){.value = mon, .err = nullptr};

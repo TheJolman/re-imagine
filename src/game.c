@@ -181,4 +181,6 @@ void game_draw()
     EndDrawing();
 }
 
+void game_set_state(GameState state) { ctx.state = state; }
+
 void game_cleanup(void) { map_destroy(ctx.map); }
