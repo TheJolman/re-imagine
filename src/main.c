@@ -39,7 +39,7 @@ static constexpr struct
     size_t screen_width_min;
     size_t screen_height_min;
     size_t fps_target;
-} cfg = {1200, 900, 400, 300, 60};
+} VideoDisplaySettings = {1200, 900, 400, 300, 60};
 
 /**
  * @returns true if target matches short_arg or long_arg and false otherwise.
@@ -85,18 +85,18 @@ int main(int argc, const char **argv)
 
     SetWindowState( FLAG_VSYNC_HINT);
     
-    InitWindow(cfg.screen_width_initial, cfg.screen_height_initial, argv[0]);
-    SetWindowMinSize(cfg.screen_width_min, cfg.screen_height_min);
+    InitWindow(VideoDisplaySettings.screen_width_initial, VideoDisplaySettings.screen_height_initial, argv[0]);
+    SetWindowMinSize(VideoDisplaySettings.screen_width_min, VideoDisplaySettings.screen_height_min);
 
     if (!IsWindowReady())
     {
         error_exit(1, "failed to initialize window");
     }
 
-    debug_log("Game initiated with screen dimensions %dx%d", cfg.screen_width_initial,
-              cfg.screen_height_initial);
+    debug_log("Game initiated with screen dimensions %dx%d", VideoDisplaySettings.screen_width_initial,
+              VideoDisplaySettings.screen_height_initial);
     ToggleFullscreen();
-    SetTargetFPS(cfg.fps_target);
+    SetTargetFPS(VideoDisplaySettings.fps_target);
     SetExitKey(KEY_NULL);
 
     game_init();
@@ -107,7 +107,7 @@ int main(int argc, const char **argv)
         game_update();
         game_draw();
     }
-
+    
     game_cleanup();
 
     CloseWindow();

@@ -14,69 +14,14 @@
 #include "pause.h"
 
 
-static constexpr GameConfig cfg = {
-    .player_base_speed = 5.0f,
-    .player_sprint_modifier = 2.0f,
-    .player_initial_pos = (Vector2){100, 100},
-    .player_size = 30,
-    .camera_base_zoom = 1.0f,
-};
 
-static GameContext ctx = {0};
 
-static void _player_move(void)
-{
-    // Determine base speed and apply sprint modifier
-    float current_speed = cfg.player_base_speed;
-    if (IsKeyDown(KEY_LEFT_SHIFT))
-    {
-        current_speed *= cfg.player_sprint_modifier;
-    }
+// Global game context I think it shouldnt be static
+GameContext ctx = {0};
 
-    // Get movement direction from input
-    Vector2 move_vector = {0};
-    if (IsKeyDown(KEY_W))
-        move_vector.y -= 1.0f;
-    if (IsKeyDown(KEY_S))
-        move_vector.y += 1.0f;
-    if (IsKeyDown(KEY_A))
-        move_vector.x -= 1.0f;
-    if (IsKeyDown(KEY_D))
-        move_vector.x += 1.0f;
 
-    if (Vector2Length(move_vector) > 0.0f)
-    {
-        // Normalize the vector to get a pure direction, then scale by speed
-        move_vector = Vector2Normalize(move_vector);
-        ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
-    }
-    else
-    {
-        // No movement input, so velocity is zero
-        ctx.player.velocity.vec = (Vector2){0};
-    }
 
-    // Camera always follows the player's position
-    ctx.camera.target = ctx.player.position;
-}
 
-static void _player_draw(void)
-{
-    // Draw player
-    Vector2 sprite_center = {
-        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
-        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
-    };
-    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
-                  ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
-#ifdef DEBUG
-    DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
-             GetScreenHeight() * 10, ORANGE);
-    DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
-             (int)ctx.camera.target.y, ORANGE);
-#endif
-}
 
 static void _game_input_handler(void)
 {

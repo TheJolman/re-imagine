@@ -9,6 +9,7 @@
 #include "components.h"
 
 
+
 /**
  * @brief Player character data structure
  */
@@ -22,5 +23,6 @@ typedef struct
 } Player;
 
 void UpdatePlayerDrawFrame(void);
-
 void CreatePlayerSpriteAnimation(void);
+void _player_move(void);
+void _player_draw(void);
