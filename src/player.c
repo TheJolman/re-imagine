@@ -1,6 +1,7 @@
 #include "player.h"
 #include <raylib.h>
 #include <raymath.h>
+#include "components.h"
 #include "spritesheet_reader.h"
 #include "game.h"	
 #include "debug.h"
@@ -12,6 +13,7 @@ SpriteAnimation _walk_right_animation;
 SpriteAnimation _walk_left_animation;
 SpriteAnimation _walk_up_animation;
 SpriteAnimation _walk_down_animation;
+SpriteAnimation _idle_animation;
 SpriteAnimation _animation = { 0 };
 
 
@@ -19,25 +21,27 @@ SpriteAnimation _animation = { 0 };
 void CreatePlayerSpriteAnimation(void)
 {
     _player_sprite_sheet = LoadTexture("assets/sample-assets/Texture/mario.png");
+    _idle_animation = CreateSpriteAnimation(_player_sprite_sheet, 1, (Rectangle[]) {
+        (Rectangle){32, 0, 32, 32},}, 1);    
 	_walk_right_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
-		(Rectangle){0, 0, 32, 32},
-		(Rectangle){32, 0, 32, 32},
-		(Rectangle){64, 0, 32, 32},
-	}, 3);
-	_walk_left_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
-		(Rectangle){0, 32, 32, 32},
-		(Rectangle){32, 32, 32, 32},
-		(Rectangle){64, 32, 32, 32},
-	}, 3);		
-	_walk_up_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
-		(Rectangle){0, 64, 32, 32},
-		(Rectangle){32, 64, 32, 32},
-		(Rectangle){64, 64, 32, 32},
-	}, 3);
-	_walk_down_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
 		(Rectangle){0, 96, 32, 32},
 		(Rectangle){32, 96, 32, 32},
 		(Rectangle){64, 96, 32, 32},
+	}, 2);
+	_walk_left_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
+		(Rectangle){0, 64, 32, 32},
+		(Rectangle){32, 64, 32, 32},
+		(Rectangle){64, 64, 32, 32},
+	}, 2);		
+	_walk_up_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
+		(Rectangle){0, 32, 32, 32},
+		(Rectangle){32, 32, 32, 32},
+		(Rectangle){64, 32, 32, 32},
+	}, 3);
+	_walk_down_animation = CreateSpriteAnimation(_player_sprite_sheet, 3, (Rectangle[]) {
+		(Rectangle){0, 0, 32, 32},
+		(Rectangle){32, 0, 32, 32},
+		(Rectangle){64, 0, 32, 32},
 	}, 3);
 
 }
@@ -51,7 +55,7 @@ void UpdatePlayerDrawFrame(Vector2 positionw)
 
     // Destination rectangle in world coordinates (centered on player.position)
     float size = (float)ctx.player.size;
-    Rectangle dest = { positionw.x - size*0.5f, positionw.y - size*0.5f, size, size };
+    Rectangle dest = { positionw.x - size*0.5f, positionw.y - size*0.5f, size*2, size*2 };
 
     // origin is the point in dest that will be aligned with dest.x/y when drawing;
     // use the center so rotation/placement is correct
@@ -65,12 +69,12 @@ void _player_draw(void)
     // Draw player
     
     Vector2 sprite_center = {
-        (float)32 ,
-        (float)32 ,
+        (float)32/2 ,
+        (float)32/2 ,
 
     };
     
-    UpdatePlayerDrawFrame(ctx.player.position);
+    UpdatePlayerDrawFrame( Vector2Add(ctx.player.position, sprite_center));
 
    /*DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
                   ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
@@ -80,8 +84,8 @@ void _player_draw(void)
     DrawDebugInfo();
     DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
              GetScreenHeight() * 10, ORANGE);
-    DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
-             (int)ctx.camera.target.y, ORANGE);
+    //DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
+             //(int)ctx.camera.target.y, ORANGE);
    
 #endif
 }
@@ -149,6 +153,7 @@ void _player_move(void)
     {
         // No movement input, so velocity is zero
         ctx.player.velocity.vec = (Vector2){0};
+        _animation = _idle_animation;
     }
 
     // Camera always follows the player's position
