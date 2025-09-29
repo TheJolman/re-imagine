@@ -22,7 +22,8 @@ typedef struct
     Sprite sprite;
 } Player;
 
-void UpdatePlayerDrawFrame(void);
+void UpdatePlayerDrawFrame(Vector2 positionw);
 void CreatePlayerSpriteAnimation(void);
 void _player_move(void);
 void _player_draw(void);
+void DrawDebugInfo(void);

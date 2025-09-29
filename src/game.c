@@ -111,6 +111,7 @@ void game_draw()
         //UpdatePlayerDrawFrame();
         map_draw(ctx.map);
         _player_draw();
+        
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;
