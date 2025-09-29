@@ -5,10 +5,8 @@
 
 #pragma once
 
-#include <raylib.h>
 #include "components.h"
-
-
+#include <raylib.h>
 
 /**
  * @brief Player character data structure

@@ -28,11 +28,11 @@ typedef struct
 
 typedef struct SpriteAnimation
 {
-	Texture2D atlas;
+    Texture2D atlas;
     Texture2D curremtFrame;
-	int framesPerSecond;
-	float timeStarted;
+    int framesPerSecond;
+    float timeStarted;
 
-	Rectangle* rectangles;
-	int rectanglesLength;
+    Rectangle *rectangles;
+    int rectanglesLength;
 } SpriteAnimation;

@@ -9,19 +9,12 @@
 #include "battle.h"
 #include "debug.h"
 #include "game.h"
-#include "player.h"
 #include "map.h"
 #include "pause.h"
-
-
-
+#include "player.h"
 
 // Global game context I think it shouldnt be static
 GameContext ctx = {0};
-
-
-
-
 
 static void _game_input_handler(void)
 {
@@ -66,9 +59,9 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
-    //CreatePlayerSpriteAnimation();
+    // CreatePlayerSpriteAnimation();
     CreatePlayerSpriteAnimation();
-    
+
     const char *file_path = "assets/map.csv";
     Result res = map_load_from_csv(file_path);
     if (res.err)
@@ -100,7 +93,7 @@ void game_draw()
 {
     BeginDrawing();
     ClearBackground(BLACK);
-    
+
     // Update camera offset each frame to handle window resizing
     ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
@@ -108,10 +101,10 @@ void game_draw()
     {
     case FREE_ROAM:
         BeginMode2D(ctx.camera);
-        //UpdatePlayerDrawFrame();
+        // UpdatePlayerDrawFrame();
         map_draw(ctx.map);
         _player_draw();
-        
+
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;

@@ -44,7 +44,6 @@ typedef struct
     Map *map;
 } GameContext;
 
-
 extern GameContext ctx;
 constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
@@ -81,4 +80,3 @@ void game_set_state(GameState state);
  * @brief Frees resources held in game.c
  */
 void game_cleanup(void);
-

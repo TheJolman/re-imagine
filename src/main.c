@@ -83,9 +83,10 @@ int main(int argc, const char **argv)
     heap_list = heap_list_create();
     atexit(free_all);
 
-    SetWindowState( FLAG_VSYNC_HINT);
-    
-    InitWindow(VideoDisplaySettings.screen_width_initial, VideoDisplaySettings.screen_height_initial, argv[0]);
+    SetWindowState(FLAG_VSYNC_HINT);
+
+    InitWindow(VideoDisplaySettings.screen_width_initial,
+               VideoDisplaySettings.screen_height_initial, argv[0]);
     SetWindowMinSize(VideoDisplaySettings.screen_width_min, VideoDisplaySettings.screen_height_min);
 
     if (!IsWindowReady())
@@ -93,7 +94,8 @@ int main(int argc, const char **argv)
         error_exit(1, "failed to initialize window");
     }
 
-    debug_log("Game initiated with screen dimensions %dx%d", VideoDisplaySettings.screen_width_initial,
+    debug_log("Game initiated with screen dimensions %dx%d",
+              VideoDisplaySettings.screen_width_initial,
               VideoDisplaySettings.screen_height_initial);
     ToggleFullscreen();
     SetTargetFPS(VideoDisplaySettings.fps_target);
@@ -107,7 +109,7 @@ int main(int argc, const char **argv)
         game_update();
         game_draw();
     }
-    
+
     game_cleanup();
 
     CloseWindow();

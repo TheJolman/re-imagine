@@ -1,10 +1,11 @@
 #pragma once
 
-#include <raylib.h>
 #include "components.h"
+#include <raylib.h>
 
-
-SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rectangle rectangles[], int length);
+SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rectangle rectangles[],
+                                      int length);
 void DisposeSpriteAnimation(SpriteAnimation animation);
-void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 origin, float rotation, Color tint,float scale);
+void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 origin,
+                            float rotation, Color tint, float scale);
 Texture2D GetSpriteAnimationCurrentFrame(const SpriteAnimation *animation, Rectangle *outSource);
