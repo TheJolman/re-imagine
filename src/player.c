@@ -22,28 +22,28 @@ void CreatePlayerSpriteAnimation(void)
                                                 (Rectangle){32, 0, 32, 32},
                                             },
                                             1);
-    _walk_right_animation = CreateSpriteAnimation(_player_sprite_sheet, 3,
+    _walk_right_animation = CreateSpriteAnimation(_player_sprite_sheet, 6,
                                                   (Rectangle[]){
                                                       (Rectangle){0, 96, 32, 32},
                                                       (Rectangle){32, 96, 32, 32},
                                                       (Rectangle){64, 96, 32, 32},
                                                   },
                                                   2);
-    _walk_left_animation = CreateSpriteAnimation(_player_sprite_sheet, 3,
+    _walk_left_animation = CreateSpriteAnimation(_player_sprite_sheet, 6,
                                                  (Rectangle[]){
                                                      (Rectangle){0, 64, 32, 32},
                                                      (Rectangle){32, 64, 32, 32},
                                                      (Rectangle){64, 64, 32, 32},
                                                  },
                                                  2);
-    _walk_up_animation = CreateSpriteAnimation(_player_sprite_sheet, 3,
+    _walk_up_animation = CreateSpriteAnimation(_player_sprite_sheet, 6,
                                                (Rectangle[]){
                                                    (Rectangle){0, 32, 32, 32},
                                                    (Rectangle){32, 32, 32, 32},
                                                    (Rectangle){64, 32, 32, 32},
                                                },
                                                3);
-    _walk_down_animation = CreateSpriteAnimation(_player_sprite_sheet, 3,
+    _walk_down_animation = CreateSpriteAnimation(_player_sprite_sheet, 6,
                                                  (Rectangle[]){
                                                      (Rectangle){0, 0, 32, 32},
                                                      (Rectangle){32, 0, 32, 32},
