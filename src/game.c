@@ -14,18 +14,18 @@
 #include "player.h"
 
 // Global game context I think it shouldnt be static
-GameContext ctx = {0};
+GameContext Game_ctx = {0};
 
 static void _game_input_handler(void)
 {
-    switch (ctx.state)
+    switch (Game_ctx.state)
     {
     case FREE_ROAM:
         _player_move();
         if (IsKeyPressed(KEY_B))
-            ctx.state = BATTLE_SCENE;
+            Game_ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
-            ctx.state = PAUSED;
+            Game_ctx.state = PAUSED;
         break;
 
     case BATTLE_SCENE:
@@ -33,7 +33,7 @@ static void _game_input_handler(void)
         {
             // NOTE: If concurencey is ever added should these be switched?
             battle_scene_end();
-            ctx.state = FREE_ROAM;
+            Game_ctx.state = FREE_ROAM;
         }
         break;
 
@@ -41,7 +41,7 @@ static void _game_input_handler(void)
         if (IsKeyPressed(KEY_ESCAPE))
         {
             pause_menu_end();
-            ctx.state = FREE_ROAM;
+            Game_ctx.state = FREE_ROAM;
         }
         break;
 
@@ -68,23 +68,23 @@ void game_init(void)
     {
         error_exit(1, "%s", res.err);
     }
-    ctx.map = (Map *)res.value;
-    debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
+    Game_ctx.map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);
 
-    ctx.state = FREE_ROAM;
+    Game_ctx.state = FREE_ROAM;
 
-    ctx.player.position = cfg.player_initial_pos;
-    ctx.player.velocity.max_speed = cfg.player_base_speed;
-    ctx.player.size = cfg.player_size;
+    Game_ctx.player.position = cfg.player_initial_pos;
+    Game_ctx.player.velocity.max_speed = cfg.player_base_speed;
+    Game_ctx.player.size = cfg.player_size;
 
-    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
-    ctx.player.sprite.rotation = 0.0f;
-    ctx.player.sprite.tint = WHITE;
-    ctx.player.sprite.scale = 1.0f;
+    Game_ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
+    Game_ctx.player.sprite.rotation = 0.0f;
+    Game_ctx.player.sprite.tint = WHITE;
+    Game_ctx.player.sprite.scale = 1.0f;
 
-    ctx.camera.target = ctx.player.position;
+    Game_ctx.camera.target = Game_ctx.player.position;
     // camera offset set in game_draw to handle window resizing
-    ctx.camera.zoom = cfg.camera_base_zoom;
+    Game_ctx.camera.zoom = cfg.camera_base_zoom;
 }
 
 void game_update(void) { _game_input_handler(); }
@@ -95,14 +95,14 @@ void game_draw()
     ClearBackground(BLACK);
 
     // Update camera offset each frame to handle window resizing
-    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
+    Game_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
-    switch (ctx.state)
+    switch (Game_ctx.state)
     {
     case FREE_ROAM:
-        BeginMode2D(ctx.camera);
+        BeginMode2D(Game_ctx.camera);
         // UpdatePlayerDrawFrame();
-        map_draw(ctx.map);
+        map_draw(Game_ctx.map);
         _player_draw();
 
         EndMode2D();
@@ -125,6 +125,4 @@ void game_draw()
     EndDrawing();
 }
 
-void game_set_state(GameState state) { ctx.state = state; }
-
-void game_cleanup(void) { map_destroy(ctx.map); }
+void game_cleanup(void) { map_destroy(Game_ctx.map); }

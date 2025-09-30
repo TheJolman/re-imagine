@@ -61,14 +61,14 @@ void UpdatePlayerDrawFrame(Vector2 positionw)
         return; // nothing to draw
 
     // Destination rectangle in world coordinates (centered on player.position)
-    float size = (float)ctx.player.size;
+    float size = (float)Game_ctx.player.size;
     Rectangle dest = {positionw.x - size * 0.5f, positionw.y - size * 0.5f, size * 2, size * 2};
 
     // origin is the point in dest that will be aligned with dest.x/y when drawing;
     // use the center so rotation/placement is correct
     Vector2 origin = {dest.width * 0.5f, dest.height * 0.5f};
 
-    DrawTexturePro(atlas, src, dest, origin, ctx.player.sprite.rotation, ctx.player.sprite.tint);
+    DrawTexturePro(atlas, src, dest, origin, Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.tint);
 }
 
 void _player_draw(void)
@@ -81,18 +81,18 @@ void _player_draw(void)
 
     };
 
-    UpdatePlayerDrawFrame(Vector2Add(ctx.player.position, sprite_center));
+    UpdatePlayerDrawFrame(Vector2Add(Game_ctx.player.position, sprite_center));
 
-    /*DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
-                   ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
+    /*DrawTextureEx(Game_ctx.player.sprite.texture, Vector2Subtract(Game_ctx.player.position, sprite_center),
+                   Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.scale, Game_ctx.player.sprite.tint);
                    */
 
 #ifdef DEBUG
     DrawDebugInfo();
-    DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
+    DrawLine((int)Game_ctx.camera.target.x, -GetScreenHeight() * 10, (int)Game_ctx.camera.target.x,
              GetScreenHeight() * 10, ORANGE);
-    // DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
-    //(int)ctx.camera.target.y, ORANGE);
+    // DrawLine(-GetScreenWidth() * 10, (int)Game_ctx.camera.target.y, GetScreenWidth() * 10,
+    //(int)Game_ctx.camera.target.y, ORANGE);
 
 #endif
 }
@@ -103,9 +103,9 @@ void DrawDebugInfo(void)
     char playerPosText[64];
     char cameraPosText[64];
 
-    sprintf(playerPosText, "Player Pos: (%.2f, %.2f)", ctx.player.position.x,
-            ctx.player.position.y);
-    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", ctx.camera.target.x, ctx.camera.target.y);
+    sprintf(playerPosText, "Player Pos: (%.2f, %.2f)", Game_ctx.player.position.x,
+            Game_ctx.player.position.y);
+    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", Game_ctx.camera.target.x, Game_ctx.camera.target.y);
 
     // Draw text to screen (top-left corner)
     DrawText(playerPosText, 10, 10, 20, RED);
@@ -153,16 +153,16 @@ void _player_move(void)
     {
         // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
-        ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
+        Game_ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
+        Game_ctx.player.position = Vector2Add(Game_ctx.player.position, Game_ctx.player.velocity.vec);
     }
     else
     {
         // No movement input, so velocity is zero
-        ctx.player.velocity.vec = (Vector2){0};
+        Game_ctx.player.velocity.vec = (Vector2){0};
         _animation = _idle_animation;
     }
 
     // Camera always follows the player's position
-    ctx.camera.target = ctx.player.position;
+    Game_ctx.camera.target = Game_ctx.player.position;
 }

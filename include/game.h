@@ -44,7 +44,7 @@ typedef struct
     Map *map;
 } GameContext;
 
-extern GameContext ctx;
+extern GameContext Game_ctx;
 constexpr GameConfig cfg = {
     .player_base_speed = 5.0f,
     .player_sprint_modifier = 2.0f,
