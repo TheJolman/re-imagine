@@ -11,81 +11,21 @@
 #include "game.h"
 #include "map.h"
 #include "pause.h"
+#include "player.h"
 
-static constexpr GameConfig cfg = {
-    .player_base_speed = 5.0f,
-    .player_sprint_modifier = 2.0f,
-    .player_initial_pos = (Vector2){100, 100},
-    .player_size = 30,
-    .camera_base_zoom = 1.0f,
-};
-
-static GameContext ctx = {0};
-
-static void _player_move(void)
-{
-    // Determine base speed and apply sprint modifier
-    float current_speed = cfg.player_base_speed;
-    if (IsKeyDown(KEY_LEFT_SHIFT))
-    {
-        current_speed *= cfg.player_sprint_modifier;
-    }
-
-    // Get movement direction from input
-    Vector2 move_vector = {0};
-    if (IsKeyDown(KEY_W))
-        move_vector.y -= 1.0f;
-    if (IsKeyDown(KEY_S))
-        move_vector.y += 1.0f;
-    if (IsKeyDown(KEY_A))
-        move_vector.x -= 1.0f;
-    if (IsKeyDown(KEY_D))
-        move_vector.x += 1.0f;
-
-    if (Vector2Length(move_vector) > 0.0f)
-    {
-        // Normalize the vector to get a pure direction, then scale by speed
-        move_vector = Vector2Normalize(move_vector);
-        ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
-    }
-    else
-    {
-        // No movement input, so velocity is zero
-        ctx.player.velocity.vec = (Vector2){0};
-    }
-
-    // Camera always follows the player's position
-    ctx.camera.target = ctx.player.position;
-}
-
-static void _player_draw(void)
-{
-    // Draw player
-    Vector2 sprite_center = {
-        (float)ctx.player.sprite.texture.width * ctx.player.sprite.scale / 2.0f,
-        (float)ctx.player.sprite.texture.height * ctx.player.sprite.scale / 2.0f,
-    };
-    DrawTextureEx(ctx.player.sprite.texture, Vector2Subtract(ctx.player.position, sprite_center),
-                  ctx.player.sprite.rotation, ctx.player.sprite.scale, ctx.player.sprite.tint);
-#ifdef DEBUG
-    DrawLine((int)ctx.camera.target.x, -GetScreenHeight() * 10, (int)ctx.camera.target.x,
-             GetScreenHeight() * 10, ORANGE);
-    DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
-             (int)ctx.camera.target.y, ORANGE);
-#endif
-}
+// Global game context I think it shouldnt be static
+GameContext Game_ctx = {0};
 
 static void _game_input_handler(void)
 {
-    switch (ctx.state)
+    switch (Game_ctx.state)
     {
     case FREE_ROAM:
         _player_move();
         if (IsKeyPressed(KEY_B))
-            ctx.state = BATTLE_SCENE;
+            Game_ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
-            ctx.state = PAUSED;
+            Game_ctx.state = PAUSED;
         break;
 
     case BATTLE_SCENE:
@@ -93,7 +33,7 @@ static void _game_input_handler(void)
         {
             // NOTE: If concurencey is ever added should these be switched?
             battle_scene_end();
-            ctx.state = FREE_ROAM;
+            Game_ctx.state = FREE_ROAM;
         }
         break;
 
@@ -101,7 +41,7 @@ static void _game_input_handler(void)
         if (IsKeyPressed(KEY_ESCAPE))
         {
             pause_menu_end();
-            ctx.state = FREE_ROAM;
+            Game_ctx.state = FREE_ROAM;
         }
         break;
 
@@ -119,29 +59,32 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
+    // CreatePlayerSpriteAnimation();
+    CreatePlayerSpriteAnimation();
+
     const char *file_path = "assets/map.csv";
     Result res = map_load_from_csv(file_path);
     if (res.err)
     {
         error_exit(1, "%s", res.err);
     }
-    ctx.map = (Map *)res.value;
-    debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
+    Game_ctx.map = (Map *)res.value;
+    debug_log("Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);
 
-    ctx.state = FREE_ROAM;
+    Game_ctx.state = FREE_ROAM;
 
-    ctx.player.position = cfg.player_initial_pos;
-    ctx.player.velocity.max_speed = cfg.player_base_speed;
-    ctx.player.size = cfg.player_size;
+    Game_ctx.player.position = Game_cfg.player_initial_pos;
+    Game_ctx.player.velocity.max_speed = Game_cfg.player_base_speed;
+    Game_ctx.player.size = Game_cfg.player_size;
 
-    ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
-    ctx.player.sprite.rotation = 0.0f;
-    ctx.player.sprite.tint = WHITE;
-    ctx.player.sprite.scale = 1.0f;
+    Game_ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
+    Game_ctx.player.sprite.rotation = 0.0f;
+    Game_ctx.player.sprite.tint = WHITE;
+    Game_ctx.player.sprite.scale = 1.0f;
 
-    ctx.camera.target = ctx.player.position;
+    Game_ctx.camera.target = Game_ctx.player.position;
     // camera offset set in game_draw to handle window resizing
-    ctx.camera.zoom = cfg.camera_base_zoom;
+    Game_ctx.camera.zoom = Game_cfg.camera_base_zoom;
 }
 
 void game_update(void) { _game_input_handler(); }
@@ -152,15 +95,16 @@ void game_draw()
     ClearBackground(BLACK);
 
     // Update camera offset each frame to handle window resizing
-    ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
+    Game_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
-    switch (ctx.state)
+    switch (Game_ctx.state)
     {
     case FREE_ROAM:
-        BeginMode2D(ctx.camera);
-
-        map_draw(ctx.map);
+        BeginMode2D(Game_ctx.camera);
+        // UpdatePlayerDrawFrame();
+        map_draw(Game_ctx.map);
         _player_draw();
+
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, DARKGRAY);
         break;
@@ -181,6 +125,4 @@ void game_draw()
     EndDrawing();
 }
 
-void game_set_state(GameState state) { ctx.state = state; }
-
-void game_cleanup(void) { map_destroy(ctx.map); }
+void game_cleanup(void) { map_destroy(Game_ctx.map); }

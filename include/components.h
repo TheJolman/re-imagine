@@ -25,3 +25,14 @@ typedef struct
 {
     HitPoints current, max;
 } Health;
+
+typedef struct SpriteAnimation
+{
+    Texture2D atlas;
+    Texture2D curremtFrame;
+    int framesPerSecond;
+    float timeStarted;
+
+    Rectangle *rectangles;
+    int rectanglesLength;
+} SpriteAnimation;

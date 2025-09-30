@@ -19,3 +19,9 @@ typedef struct
     float size;            ///< Size of the player collision box
     Sprite sprite;
 } Player;
+
+void UpdatePlayerDrawFrame(Vector2 positionw);
+void CreatePlayerSpriteAnimation(void);
+void _player_move(void);
+void _player_draw(void);
+void DrawDebugInfo(void);

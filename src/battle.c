@@ -78,7 +78,7 @@ static void _items_select()
 static void _run_select()
 {
     battle_scene_end();
-    game_set_state(FREE_ROAM);
+    Game_ctx.state = FREE_ROAM;
 }
 
 static void _switch_select()
