@@ -45,7 +45,7 @@ typedef struct
 } GameContext;
 
 extern GameContext Game_ctx;
-constexpr GameConfig cfg = {
+constexpr GameConfig Game_cfg = {
     .player_base_speed = 5.0f,
     .player_sprint_modifier = 2.0f,
     .player_initial_pos = (Vector2){100, 100},

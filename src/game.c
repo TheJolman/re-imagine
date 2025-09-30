@@ -73,9 +73,9 @@ void game_init(void)
 
     Game_ctx.state = FREE_ROAM;
 
-    Game_ctx.player.position = cfg.player_initial_pos;
-    Game_ctx.player.velocity.max_speed = cfg.player_base_speed;
-    Game_ctx.player.size = cfg.player_size;
+    Game_ctx.player.position = Game_cfg.player_initial_pos;
+    Game_ctx.player.velocity.max_speed = Game_cfg.player_base_speed;
+    Game_ctx.player.size = Game_cfg.player_size;
 
     Game_ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
     Game_ctx.player.sprite.rotation = 0.0f;
@@ -84,7 +84,7 @@ void game_init(void)
 
     Game_ctx.camera.target = Game_ctx.player.position;
     // camera offset set in game_draw to handle window resizing
-    Game_ctx.camera.zoom = cfg.camera_base_zoom;
+    Game_ctx.camera.zoom = Game_cfg.camera_base_zoom;
 }
 
 void game_update(void) { _game_input_handler(); }

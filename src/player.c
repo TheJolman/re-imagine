@@ -116,10 +116,10 @@ void _player_move(void)
 {
 
     // Determine base speed and apply sprint modifier
-    float current_speed = cfg.player_base_speed;
+    float current_speed = Game_cfg.player_base_speed;
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
-        current_speed *= cfg.player_sprint_modifier;
+        current_speed *= Game_cfg.player_sprint_modifier;
     }
 
     // Get movement direction from input
