@@ -1,9 +1,9 @@
 #include "player.h"
+#include "collision.h"
 #include "components.h"
 #include "debug.h"
 #include "game.h"
 #include "spritesheet_reader.h"
-#include "collision.h"
 #include <raylib.h>
 #include <raymath.h>
 
@@ -69,7 +69,8 @@ void UpdatePlayerDrawFrame(Vector2 positionw)
     // use the center so rotation/placement is correct
     Vector2 origin = {dest.width * 0.5f, dest.height * 0.5f};
 
-    DrawTexturePro(atlas, src, dest, origin, Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.tint);
+    DrawTexturePro(atlas, src, dest, origin, Game_ctx.player.sprite.rotation,
+                   Game_ctx.player.sprite.tint);
 }
 
 void _player_draw(void)
@@ -84,8 +85,9 @@ void _player_draw(void)
 
     UpdatePlayerDrawFrame(Vector2Add(Game_ctx.player.position, sprite_center));
 
-    /*DrawTextureEx(Game_ctx.player.sprite.texture, Vector2Subtract(Game_ctx.player.position, sprite_center),
-                   Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.scale, Game_ctx.player.sprite.tint);
+    /*DrawTextureEx(Game_ctx.player.sprite.texture, Vector2Subtract(Game_ctx.player.position,
+       sprite_center), Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.scale,
+       Game_ctx.player.sprite.tint);
                    */
 
 #ifdef DEBUG
@@ -106,7 +108,8 @@ void DrawDebugInfo(void)
 
     sprintf(playerPosText, "Player Pos: (%.2f, %.2f)", Game_ctx.player.position.x,
             Game_ctx.player.position.y);
-    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", Game_ctx.camera.target.x, Game_ctx.camera.target.y);
+    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", Game_ctx.camera.target.x,
+            Game_ctx.camera.target.y);
 
     // Draw text to screen (top-left corner)
     DrawText(playerPosText, 10, 10, 20, RED);
@@ -115,7 +118,7 @@ void DrawDebugInfo(void)
 
 void _player_move(void)
 {
-    Vector2 prev_position = ctx.player.position; // stored for collision handling
+    Vector2 prev_position = Game_ctx.player.position; // stored for collision handling
 
     // Determine base speed and apply sprint modifier
     float current_speed = Game_cfg.player_base_speed;
@@ -153,7 +156,7 @@ void _player_move(void)
 
     if (Vector2Length(move_vector) > 0.0f)
     {
-       // Normalize the vector to get a pure direction, then scale by speed
+        // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
         Game_ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
 
@@ -182,6 +185,7 @@ void _player_move(void)
         // Update final velocity based on actual movement
         Vector2 actual_movement = Vector2Subtract(Game_ctx.player.position, prev_position);
         Game_ctx.player.velocity.vec = actual_movement;
+    }
     else
     {
         // No movement input, so velocity is zero
