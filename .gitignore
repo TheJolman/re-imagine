@@ -12,3 +12,5 @@ vgcore.*
 docs/html
 docs/latex
 .vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
