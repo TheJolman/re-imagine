@@ -25,7 +25,9 @@ static GameContext ctx = {0};
 
 static void _player_move(void)
 {
-    Vector2 prev_position = ctx.player.position;
+
+    Vector2 prev_position = ctx.player.position; // stored for collision handling
+
     // Determine base speed and apply sprint modifier
     float current_speed = cfg.player_base_speed;
 
@@ -46,24 +48,36 @@ static void _player_move(void)
     if (IsKeyDown(KEY_D))
         move_vector.x += 1.0f;
 
-    if (Vector2Length(move_vector) > 0.0f)
-    {
+    if (Vector2Length(move_vector) > 0.0f) {
         // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
         ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        ctx.player.position = Vector2Add(ctx.player.position, ctx.player.velocity.vec);
-
+        
+        // Solution for sliding: check X and Y positions separately 
+        // Try x-axis movement first
+        ctx.player.position.x += ctx.player.velocity.vec.x;
         update_player_collision_box(&ctx.player);
-        if (check_map_collision(ctx.map, ctx.player.collision_box))
-        {
-            // Hit wall - revert to previous position
-            ctx.player.position = prev_position;
-            ctx.player.velocity.vec = (Vector2){0};
+
+        if (check_map_collision(ctx.map, ctx.player.collision_box)) {
+            // x axis collision --> revert x position
+            ctx.player.position.x = prev_position.x;
             update_player_collision_box(&ctx.player);
         }
-    }
-    else
-    {
+
+        // Now check Y axis
+        ctx.player.position.y += ctx.player.velocity.vec.y;
+        update_player_collision_box(&ctx.player);
+
+        if (check_map_collision(ctx.map, ctx.player.collision_box)) {
+            ctx.player.position.y = prev_position.y;
+            update_player_collision_box(&ctx.player);
+        }
+
+        // Update final velocity based on actual movement
+        Vector2 actual_movement = Vector2Subtract(ctx.player.position, prev_position);
+        ctx.player.velocity.vec = actual_movement;
+
+    } else {
         // No movement input, so velocity is zero
         ctx.player.velocity.vec = (Vector2){0};
     }

@@ -18,13 +18,14 @@ int16_t get_tile_value(Map *map, uint32_t x, uint32_t y) {
     if (x >= map->width || y >= map->height) { 
         return 3; 
     }
-
     return map->data[y * map->width + x]; // 2D point to 1D array 
 }
 
 bool is_boundary(Map *map, uint32_t x, uint32_t y) {
-    return get_tile_value(map, x, y) == 3;
+    return get_tile_value(map, x, y) == 3;   // currently just using 3 as boundary
 }
+
+
 
 bool check_map_collision(Map *map, Rectangle collision_box) {
     // Tile coordinates that collision_box overlaps with
