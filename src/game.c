@@ -31,7 +31,6 @@ static void _player_move(void)
     // Determine base speed and apply sprint modifier
     float current_speed = cfg.player_base_speed;
 
-
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
         current_speed *= cfg.player_sprint_modifier;
@@ -48,17 +47,19 @@ static void _player_move(void)
     if (IsKeyDown(KEY_D))
         move_vector.x += 1.0f;
 
-    if (Vector2Length(move_vector) > 0.0f) {
+    if (Vector2Length(move_vector) > 0.0f)
+    {
         // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
         ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        
-        // Solution for sliding: check X and Y positions separately 
+
+        // Solution for sliding: check X and Y positions separately
         // Try x-axis movement first
         ctx.player.position.x += ctx.player.velocity.vec.x;
         update_player_collision_box(&ctx.player);
 
-        if (check_map_collision(ctx.map, ctx.player.collision_box)) {
+        if (check_map_collision(ctx.map, ctx.player.collision_box))
+        {
             // x axis collision --> revert x position
             ctx.player.position.x = prev_position.x;
             update_player_collision_box(&ctx.player);
@@ -68,7 +69,8 @@ static void _player_move(void)
         ctx.player.position.y += ctx.player.velocity.vec.y;
         update_player_collision_box(&ctx.player);
 
-        if (check_map_collision(ctx.map, ctx.player.collision_box)) {
+        if (check_map_collision(ctx.map, ctx.player.collision_box))
+        {
             ctx.player.position.y = prev_position.y;
             update_player_collision_box(&ctx.player);
         }
@@ -76,8 +78,9 @@ static void _player_move(void)
         // Update final velocity based on actual movement
         Vector2 actual_movement = Vector2Subtract(ctx.player.position, prev_position);
         ctx.player.velocity.vec = actual_movement;
-
-    } else {
+    }
+    else
+    {
         // No movement input, so velocity is zero
         ctx.player.velocity.vec = (Vector2){0};
     }
@@ -101,10 +104,9 @@ static void _player_draw(void)
     DrawLine(-GetScreenWidth() * 10, (int)ctx.camera.target.y, GetScreenWidth() * 10,
              (int)ctx.camera.target.y, ORANGE);
 
-    
     // Collision box debugging
     DrawRectangleLinesEx(ctx.player.collision_box, 2.0f, GREEN);
-    
+
 #endif
 }
 
@@ -159,7 +161,7 @@ void game_init(void)
     }
     ctx.map = (Map *)res.value;
     debug_log("Map loaded with %u rows and %u cols", ctx.map->height, ctx.map->width);
-    
+
     ctx.state = FREE_ROAM;
 
     ctx.player.position = cfg.player_initial_pos;
@@ -177,8 +179,6 @@ void game_init(void)
     ctx.camera.target = ctx.player.position;
     // camera offset set in game_draw to handle window resizing
     ctx.camera.zoom = cfg.camera_base_zoom;
-
-    
 }
 
 void game_update(void) { _game_input_handler(); }

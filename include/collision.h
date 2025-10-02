@@ -1,13 +1,13 @@
 #pragma once
 
-#include "raylib.h"
-#include <stdint.h>
-#include <stdbool.h>
-#include "player.h"
 #include "map.h"
+#include "player.h"
+#include "raylib.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /**
- * @brief Updates player collision box based on their current position 
+ * @brief Updates player collision box based on their current position
  * @param player Pointer to player
  */
 void update_player_collision_box(Player *player);
@@ -18,7 +18,7 @@ void update_player_collision_box(Player *player);
  * @param map Pointer to map
  * @param x x coordinate in tile unite
  * @param y y coordinate in tile units
- * @return The tile value 
+ * @return The tile value
  */
 int16_t get_tile_value(Map *map, uint32_t x, uint32_t y);
 
