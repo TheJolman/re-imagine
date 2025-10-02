@@ -3,7 +3,7 @@
  *   VGDC Game Project
  *
  *   <Game title>
- *   <Game description>
+ *   Top-down RPG with pokemon-inspired mechanics.
  *
  *   This game has been created using raylib (www.raylib.com)
  *
@@ -29,6 +29,9 @@
 #define GIT_VERSION "unknown"
 #endif
 
+/**
+ * Constants local to main.c
+ */
 static constexpr struct
 {
     size_t screen_width_initial;
@@ -36,7 +39,7 @@ static constexpr struct
     size_t screen_width_min;
     size_t screen_height_min;
     size_t fps_target;
-} cfg = {1200, 900, 400, 300, 60};
+} VideoDisplaySettings = {1200, 900, 400, 300, 60};
 
 /**
  * @returns true if target matches short_arg or long_arg and false otherwise.
@@ -80,19 +83,22 @@ int main(int argc, const char **argv)
     heap_list = heap_list_create();
     atexit(free_all);
 
-    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
-    InitWindow(cfg.screen_width_initial, cfg.screen_height_initial, argv[0]);
-    SetWindowMinSize(cfg.screen_width_min, cfg.screen_height_min);
+    SetWindowState(FLAG_VSYNC_HINT);
+
+    InitWindow(VideoDisplaySettings.screen_width_initial,
+               VideoDisplaySettings.screen_height_initial, argv[0]);
+    SetWindowMinSize(VideoDisplaySettings.screen_width_min, VideoDisplaySettings.screen_height_min);
 
     if (!IsWindowReady())
     {
         error_exit(1, "failed to initialize window");
     }
 
-    debug_log("Game initiated with screen dimensions %dx%d", cfg.screen_width_initial,
-              cfg.screen_height_initial);
-
-    SetTargetFPS(cfg.fps_target);
+    debug_log("Game initiated with screen dimensions %dx%d",
+              VideoDisplaySettings.screen_width_initial,
+              VideoDisplaySettings.screen_height_initial);
+    ToggleFullscreen();
+    SetTargetFPS(VideoDisplaySettings.fps_target);
     SetExitKey(KEY_NULL);
 
     game_init();

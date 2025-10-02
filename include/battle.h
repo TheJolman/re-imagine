@@ -8,6 +8,7 @@
 #include "menu.h"
 #include "mon.h"
 #include "raylib.h"
+#include "stack.h"
 #include <stdint.h>
 
 /**
@@ -37,6 +38,8 @@ typedef struct
     float action_menu_split_x_percent;
     Vector2 action_menu_rect_offset;
     uint32_t action_menu_font_size;
+
+    uint32_t battle_menu_stack_size;
 } BattleUIConfig;
 
 /**
@@ -45,11 +48,20 @@ typedef struct
 typedef struct
 {
     Rectangle text_box;
-    Vector2 player_mon_pos;
-    Vector2 enemy_mon_pos;
     Vector2 action_menu_pos;
     Vector2 status_bar_pos;
 } BattleUILayout;
+
+/**
+ * @brief State battle menu is in
+ */
+typedef enum
+{
+    BATTLE_MENU,
+    BATTLE_ATTACK,
+    BATTLE_ITEMS,
+    BATTLE_SWITCH,
+} BattleMenuState;
 
 /**
  * @brief Holds pointers to battle-related objects as well as the battle state.
@@ -60,15 +72,8 @@ typedef struct
     Mon *enemy_mon;
     BattleUILayout *battle_ui;
     bool initialized;
-    Menu *action_menu;
-    enum
-    {
-        BATTLE_MENU,
-        BATTLE_ATTACK,
-        BATTLE_ITEMS,
-        BATTLE_RUN,
-        BATTLE_SWITCH,
-    } state;
+    BattleMenuState state;
+    Stack *menu_stack;
 } BattleContext;
 
 /**

@@ -11,7 +11,7 @@
 /**
  * @brief Player character data structure
  */
-typedef struct Player
+typedef struct
 {
     Position position;       ///< Current position in world coordinates
     Velocity velocity;       ///< Velocity vector
@@ -20,3 +20,9 @@ typedef struct Player
     Rectangle collision_box; ///< Calculated collision box
     Sprite sprite;
 } Player;
+
+void UpdatePlayerDrawFrame(Vector2 positionw);
+void CreatePlayerSpriteAnimation(void);
+void _player_move(void);
+void _player_draw(void);
+void DrawDebugInfo(void);

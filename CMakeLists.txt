@@ -27,13 +27,16 @@ set(SOURCES
     src/main.c
     src/utils.c
     src/list.c
+    src/stack.c
     src/game.c
     src/pause.c
     src/battle.c
     src/map.c
     src/mon.c
     src/menu.c
-    src/collision.c)
+    src/collision.c
+    src/player.c
+    src/spritesheet_reader.c)
 
 # Raylib graphics library
 find_package(raylib 5.5 QUIET)

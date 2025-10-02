@@ -53,12 +53,11 @@ Result create_mon(char *name)
 
     mon->sprite = (Sprite){
         .texture = {0},
-        .position = {0, 0},
         .rotation = 0.0f,
         .scale = 1.0f,
         .tint = WHITE,
     };
-    mon->hp = 100;
+    mon->health = (Health){100, 100};
     // TODO: Initialize other values
 
     return (Result){.value = mon, .err = nullptr};

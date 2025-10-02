@@ -44,6 +44,14 @@ typedef struct
     Map *map;
 } GameContext;
 
+extern GameContext Game_ctx;
+constexpr GameConfig Game_cfg = {
+    .player_base_speed = 5.0f,
+    .player_sprint_modifier = 2.0f,
+    .player_initial_pos = (Vector2){100, 100},
+    .player_size = 30,
+    .camera_base_zoom = 1.0f,
+};
 /**
  * @brief Loads initial values on game startup
  *
@@ -62,6 +70,11 @@ void game_update(void);
  * @brief Draws a single frame
  */
 void game_draw(void);
+
+/**
+ * @brief allows other modules to set the game state
+ */
+void game_set_state(GameState state);
 
 /**
  * @brief Frees resources held in game.c
