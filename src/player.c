@@ -1,4 +1,5 @@
 #include "player.h"
+#include "collision.h"
 #include "components.h"
 #include "debug.h"
 #include "game.h"
@@ -68,7 +69,8 @@ void UpdatePlayerDrawFrame(Vector2 positionw)
     // use the center so rotation/placement is correct
     Vector2 origin = {dest.width * 0.5f, dest.height * 0.5f};
 
-    DrawTexturePro(atlas, src, dest, origin, Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.tint);
+    DrawTexturePro(atlas, src, dest, origin, Game_ctx.player.sprite.rotation,
+                   Game_ctx.player.sprite.tint);
 }
 
 void _player_draw(void)
@@ -83,8 +85,9 @@ void _player_draw(void)
 
     UpdatePlayerDrawFrame(Vector2Add(Game_ctx.player.position, sprite_center));
 
-    /*DrawTextureEx(Game_ctx.player.sprite.texture, Vector2Subtract(Game_ctx.player.position, sprite_center),
-                   Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.scale, Game_ctx.player.sprite.tint);
+    /*DrawTextureEx(Game_ctx.player.sprite.texture, Vector2Subtract(Game_ctx.player.position,
+       sprite_center), Game_ctx.player.sprite.rotation, Game_ctx.player.sprite.scale,
+       Game_ctx.player.sprite.tint);
                    */
 
 #ifdef DEBUG
@@ -105,7 +108,8 @@ void DrawDebugInfo(void)
 
     sprintf(playerPosText, "Player Pos: (%.2f, %.2f)", Game_ctx.player.position.x,
             Game_ctx.player.position.y);
-    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", Game_ctx.camera.target.x, Game_ctx.camera.target.y);
+    sprintf(cameraPosText, "Camera Pos: (%.2f, %.2f)", Game_ctx.camera.target.x,
+            Game_ctx.camera.target.y);
 
     // Draw text to screen (top-left corner)
     DrawText(playerPosText, 10, 10, 20, RED);
@@ -114,6 +118,7 @@ void DrawDebugInfo(void)
 
 void _player_move(void)
 {
+    Vector2 prev_position = Game_ctx.player.position; // stored for collision handling
 
     // Determine base speed and apply sprint modifier
     float current_speed = Game_cfg.player_base_speed;
@@ -154,7 +159,32 @@ void _player_move(void)
         // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
         Game_ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        Game_ctx.player.position = Vector2Add(Game_ctx.player.position, Game_ctx.player.velocity.vec);
+
+        // Solution for sliding: check X and Y positions separately
+        // Try x-axis movement first
+        Game_ctx.player.position.x += Game_ctx.player.velocity.vec.x;
+        update_player_collision_box(&Game_ctx.player);
+
+        if (check_map_collision(Game_ctx.map, Game_ctx.player.collision_box))
+        {
+            // x axis collision --> revert x position
+            Game_ctx.player.position.x = prev_position.x;
+            update_player_collision_box(&Game_ctx.player);
+        }
+
+        // Now check Y axis
+        Game_ctx.player.position.y += Game_ctx.player.velocity.vec.y;
+        update_player_collision_box(&Game_ctx.player);
+
+        if (check_map_collision(Game_ctx.map, Game_ctx.player.collision_box))
+        {
+            Game_ctx.player.position.y = prev_position.y;
+            update_player_collision_box(&Game_ctx.player);
+        }
+
+        // Update final velocity based on actual movement
+        Vector2 actual_movement = Vector2Subtract(Game_ctx.player.position, prev_position);
+        Game_ctx.player.velocity.vec = actual_movement;
     }
     else
     {

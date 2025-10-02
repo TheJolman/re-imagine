@@ -34,6 +34,7 @@ set(SOURCES
     src/map.c
     src/mon.c
     src/menu.c
+    src/collision.c
     src/player.c
     src/spritesheet_reader.c)
 
