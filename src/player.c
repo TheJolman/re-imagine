@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "game.h"
 #include "spritesheet_reader.h"
+#include "collision.h"
 #include <raylib.h>
 #include <raymath.h>
 
@@ -114,6 +115,7 @@ void DrawDebugInfo(void)
 
 void _player_move(void)
 {
+    Vector2 prev_position = ctx.player.position; // stored for collision handling
 
     // Determine base speed and apply sprint modifier
     float current_speed = Game_cfg.player_base_speed;
@@ -151,11 +153,35 @@ void _player_move(void)
 
     if (Vector2Length(move_vector) > 0.0f)
     {
-        // Normalize the vector to get a pure direction, then scale by speed
+       // Normalize the vector to get a pure direction, then scale by speed
         move_vector = Vector2Normalize(move_vector);
         Game_ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
-        Game_ctx.player.position = Vector2Add(Game_ctx.player.position, Game_ctx.player.velocity.vec);
-    }
+
+        // Solution for sliding: check X and Y positions separately
+        // Try x-axis movement first
+        Game_ctx.player.position.x += Game_ctx.player.velocity.vec.x;
+        update_player_collision_box(&Game_ctx.player);
+
+        if (check_map_collision(Game_ctx.map, Game_ctx.player.collision_box))
+        {
+            // x axis collision --> revert x position
+            Game_ctx.player.position.x = prev_position.x;
+            update_player_collision_box(&Game_ctx.player);
+        }
+
+        // Now check Y axis
+        Game_ctx.player.position.y += Game_ctx.player.velocity.vec.y;
+        update_player_collision_box(&Game_ctx.player);
+
+        if (check_map_collision(Game_ctx.map, Game_ctx.player.collision_box))
+        {
+            Game_ctx.player.position.y = prev_position.y;
+            update_player_collision_box(&Game_ctx.player);
+        }
+
+        // Update final velocity based on actual movement
+        Vector2 actual_movement = Vector2Subtract(Game_ctx.player.position, prev_position);
+        Game_ctx.player.velocity.vec = actual_movement;
     else
     {
         // No movement input, so velocity is zero
