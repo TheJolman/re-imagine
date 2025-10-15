@@ -1,9 +1,10 @@
 #include "spritesheet_reader.h"
 #include "raylib.h"
+#include "utils.h"
 #include <stdlib.h>
 
-SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rectangle rectangles[],
-                                      int length)
+SpriteAnimation create_sprite_animation(Texture2D atlas, int framesPerSecond,
+                                        Rectangle rectangles[], int length)
 {
     SpriteAnimation spriteAnimation = {.atlas = atlas,
                                        .framesPerSecond = framesPerSecond,
@@ -11,10 +12,10 @@ SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rect
                                        .rectangles = NULL,
                                        .rectanglesLength = length};
 
-    Rectangle *mem = (Rectangle *)malloc(sizeof(Rectangle) * length);
+    Rectangle *mem = (Rectangle *)heap_list.malloc(sizeof(Rectangle) * length);
     if (mem == NULL)
     {
-        TraceLog(LOG_FATAL, "No memory for CreateSpriteAnimation");
+        TraceLog(LOG_FATAL, "No memory for create_sprite_animation");
         spriteAnimation.rectanglesLength = 0;
         return spriteAnimation;
     }
@@ -29,10 +30,10 @@ SpriteAnimation CreateSpriteAnimation(Texture2D atlas, int framesPerSecond, Rect
     return spriteAnimation;
 }
 
-void DisposeSpriteAnimation(SpriteAnimation animation) { free(animation.rectangles); }
+void dispose_sprite_animation(SpriteAnimation animation) { heap_list.free(animation.rectangles); }
 
-void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 origin,
-                            float rotation, Color tint, float scale)
+void draw_sprite_animation_pro(SpriteAnimation animation, Rectangle dest, Vector2 origin,
+                               float rotation, Color tint, float scale)
 {
     int index = (int)((GetTime() - animation.timeStarted) * animation.framesPerSecond) %
                 animation.rectanglesLength;
@@ -41,7 +42,7 @@ void DrawSpriteAnimationPro(SpriteAnimation animation, Rectangle dest, Vector2 o
 
     DrawTexturePro(animation.atlas, source, dest, origin, rotation, tint);
 }
-Texture2D GetSpriteAnimationCurrentFrame(const SpriteAnimation *animation, Rectangle *outSource)
+Texture2D get_sprite_animation_current_frame(const SpriteAnimation *animation, Rectangle *outSource)
 {
     if (animation == NULL || animation->rectanglesLength == 0 || animation->rectangles == NULL)
     {

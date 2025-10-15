@@ -19,10 +19,11 @@ typedef struct
     float size;              ///< Size of the player collision box
     Rectangle collision_box; ///< Calculated collision box
     Sprite sprite;
+    Texture2D sprite_sheet; ///< Sprite sheet texture for animations
 } Player;
 
-void UpdatePlayerDrawFrame(Vector2 positionw);
-void CreatePlayerSpriteAnimation(void);
+void update_player_draw_frame(Vector2 positionw);
+void create_player_sprite_animation(void);
 void _player_move(void);
 void _player_draw(void);
-void DrawDebugInfo(void);
+void draw_debug_info(void);

@@ -29,7 +29,7 @@ typedef struct
 typedef struct SpriteAnimation
 {
     Texture2D atlas;
-    Texture2D curremtFrame;
+    Texture2D currentFrame;
     int framesPerSecond;
     float timeStarted;
 
