@@ -6,7 +6,7 @@
   git,
 }:
 llvmPackages_20.stdenv.mkDerivation {
-  pname = "rpg-raylib";
+  pname = "re-imagine";
   version = "0.1.0";
   src = ../.;
 

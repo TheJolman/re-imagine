@@ -13,7 +13,7 @@ RPG game built with raylib and C23.
 - **Build/run commands**:
   ```bash
   nix develop --command cmake --build build
-  nix develop --command ./build/rpg-raylib
+  nix develop --command ./build/re-imagine
   ```
 
 ### Development Environment

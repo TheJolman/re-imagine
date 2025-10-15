@@ -30,8 +30,8 @@ See [`README.md`](./../README.md) for details on setting up the project.
 5. Test your changes by building and running the game:
    ```sh
    cmake --build build
-   ./build/rpg-raylib  # Unix
-   .\build\rpg-raylib  # Windows
+   ./build/re-imagine
+   .\build\re-imagine  # Windows
    ```
 
 ### Submitting Changes
@@ -110,7 +110,7 @@ git push origin v0.1.0
 
 ## Getting Help
 
-- Check existing [GitHub issues](https://github.com/TheJolman/rpg-raylib/issues)
+- Check existing [GitHub issues](https://github.com/TheJolman/re-imagine/issues)
 - Review project documentation in `docs/`
 - Look at `CLAUDE.md` for AI assistant context
 
