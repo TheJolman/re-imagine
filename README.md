@@ -64,7 +64,7 @@ cmake --build build
 
 2. Clone and enter the project:
 ```
-git clone https://github.com/TheJolman/rpg-raylib.git
+git clone https://github.com/TheJolman/re-imagine.git
 cd re-imagine
 ```
 
@@ -86,5 +86,5 @@ cmake -B build
 4. Build and run:
 ```sh
 cmake --build build
-./build/rpg-raylib
+./build/re-imagine
 ```
