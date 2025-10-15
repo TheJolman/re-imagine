@@ -13,7 +13,7 @@ PlayerAnimations anims = {};
 // SpriteAnimation _walk_up_animation;
 // SpriteAnimation _walk_down_animation;
 // SpriteAnimation _idle_animation;
-SpriteAnimation curr_animation = {0};
+// SpriteAnimation curr_animation = {0};
 
 void create_player_sprite_animation(void)
 {
@@ -57,7 +57,7 @@ void update_player_draw_frame(Vector2 positionw)
 {
     // Get current frame source rect and atlas
     Rectangle src;
-    Texture2D atlas = get_sprite_animation_current_frame(&curr_animation, &src);
+    Texture2D atlas = get_sprite_animation_current_frame(anims.current, &src);
     if (atlas.id == 0)
         return; // nothing to draw
 
@@ -132,26 +132,26 @@ void _player_move(void)
     if (IsKeyDown(KEY_W))
     {
         move_vector.y -= 1.0f;
-        curr_animation = anims.up;
+        anims.current = &anims.up;
     }
 
     if (IsKeyDown(KEY_S))
     {
         move_vector.y += 1.0f;
-        curr_animation = anims.down;
+        anims.current = &anims.down;
     }
 
     if (IsKeyDown(KEY_A))
     {
         move_vector.x -= 1.0f;
-        curr_animation = anims.left;
+        anims.current = &anims.left;
     }
 
     if (IsKeyDown(KEY_D))
     {
 
         move_vector.x += 1.0f;
-        curr_animation = anims.right;
+        anims.current = &anims.right;
     }
 
     if (Vector2Length(move_vector) > 0.0f)
@@ -190,7 +190,7 @@ void _player_move(void)
     {
         // No movement input, so velocity is zero
         Game_ctx.player.velocity.vec = (Vector2){0};
-        curr_animation = anims.idle;
+        anims.current = &anims.idle;
     }
 
     // Camera always follows the player's position
