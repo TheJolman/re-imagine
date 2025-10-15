@@ -36,3 +36,16 @@ typedef struct SpriteAnimation
     Rectangle *rectangles;
     int rectanglesLength;
 } SpriteAnimation;
+
+/**
+ * Container for various player animations
+ */
+typedef struct
+{
+    SpriteAnimation right;
+    SpriteAnimation left;
+    SpriteAnimation up;
+    SpriteAnimation down;
+    SpriteAnimation idle;
+    SpriteAnimation *current;
+} PlayerAnimations;

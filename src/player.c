@@ -7,56 +7,57 @@
 #include <raylib.h>
 #include <raymath.h>
 
-SpriteAnimation _walk_right_animation;
-SpriteAnimation _walk_left_animation;
-SpriteAnimation _walk_up_animation;
-SpriteAnimation _walk_down_animation;
-SpriteAnimation _idle_animation;
-SpriteAnimation _animation = {0};
+PlayerAnimations anims = {};
+// SpriteAnimation _walk_right_animation;
+// SpriteAnimation _walk_left_animation;
+// SpriteAnimation _walk_up_animation;
+// SpriteAnimation _walk_down_animation;
+// SpriteAnimation _idle_animation;
+SpriteAnimation curr_animation = {0};
 
 void create_player_sprite_animation(void)
 {
     Game_ctx.player.sprite_sheet = LoadTexture("assets/sample-assets/Texture/mario.png");
-    _idle_animation = create_sprite_animation(Game_ctx.player.sprite_sheet, 1,
-                                              (Rectangle[]){
-                                                  (Rectangle){32, 0, 32, 32},
-                                              },
-                                              1);
-    _walk_right_animation = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
-                                                    (Rectangle[]){
-                                                        (Rectangle){0, 96, 32, 32},
-                                                        (Rectangle){32, 96, 32, 32},
-                                                        (Rectangle){64, 96, 32, 32},
-                                                    },
-                                                    2);
-    _walk_left_animation = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
-                                                   (Rectangle[]){
-                                                       (Rectangle){0, 64, 32, 32},
-                                                       (Rectangle){32, 64, 32, 32},
-                                                       (Rectangle){64, 64, 32, 32},
-                                                   },
-                                                   2);
-    _walk_up_animation = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
-                                                 (Rectangle[]){
-                                                     (Rectangle){0, 32, 32, 32},
-                                                     (Rectangle){32, 32, 32, 32},
-                                                     (Rectangle){64, 32, 32, 32},
-                                                 },
-                                                 3);
-    _walk_down_animation = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
-                                                   (Rectangle[]){
-                                                       (Rectangle){0, 0, 32, 32},
-                                                       (Rectangle){32, 0, 32, 32},
-                                                       (Rectangle){64, 0, 32, 32},
-                                                   },
-                                                   3);
+    anims.idle = create_sprite_animation(Game_ctx.player.sprite_sheet, 1,
+                                         (Rectangle[]){
+                                             (Rectangle){32, 0, 32, 32},
+                                         },
+                                         1);
+    anims.right = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
+                                          (Rectangle[]){
+                                              (Rectangle){0, 96, 32, 32},
+                                              (Rectangle){32, 96, 32, 32},
+                                              (Rectangle){64, 96, 32, 32},
+                                          },
+                                          2);
+    anims.left = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
+                                         (Rectangle[]){
+                                             (Rectangle){0, 64, 32, 32},
+                                             (Rectangle){32, 64, 32, 32},
+                                             (Rectangle){64, 64, 32, 32},
+                                         },
+                                         2);
+    anims.up = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
+                                       (Rectangle[]){
+                                           (Rectangle){0, 32, 32, 32},
+                                           (Rectangle){32, 32, 32, 32},
+                                           (Rectangle){64, 32, 32, 32},
+                                       },
+                                       3);
+    anims.down = create_sprite_animation(Game_ctx.player.sprite_sheet, 6,
+                                         (Rectangle[]){
+                                             (Rectangle){0, 0, 32, 32},
+                                             (Rectangle){32, 0, 32, 32},
+                                             (Rectangle){64, 0, 32, 32},
+                                         },
+                                         3);
 }
 
 void update_player_draw_frame(Vector2 positionw)
 {
     // Get current frame source rect and atlas
     Rectangle src;
-    Texture2D atlas = get_sprite_animation_current_frame(&_animation, &src);
+    Texture2D atlas = get_sprite_animation_current_frame(&curr_animation, &src);
     if (atlas.id == 0)
         return; // nothing to draw
 
@@ -131,26 +132,26 @@ void _player_move(void)
     if (IsKeyDown(KEY_W))
     {
         move_vector.y -= 1.0f;
-        _animation = _walk_up_animation;
+        curr_animation = anims.up;
     }
 
     if (IsKeyDown(KEY_S))
     {
         move_vector.y += 1.0f;
-        _animation = _walk_down_animation;
+        curr_animation = anims.down;
     }
 
     if (IsKeyDown(KEY_A))
     {
         move_vector.x -= 1.0f;
-        _animation = _walk_left_animation;
+        curr_animation = anims.left;
     }
 
     if (IsKeyDown(KEY_D))
     {
 
         move_vector.x += 1.0f;
-        _animation = _walk_right_animation;
+        curr_animation = anims.right;
     }
 
     if (Vector2Length(move_vector) > 0.0f)
@@ -189,7 +190,7 @@ void _player_move(void)
     {
         // No movement input, so velocity is zero
         Game_ctx.player.velocity.vec = (Vector2){0};
-        _animation = _idle_animation;
+        curr_animation = anims.idle;
     }
 
     // Camera always follows the player's position
