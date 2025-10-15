@@ -8,12 +8,6 @@
 #include <raymath.h>
 
 PlayerAnimations anims = {};
-// SpriteAnimation _walk_right_animation;
-// SpriteAnimation _walk_left_animation;
-// SpriteAnimation _walk_up_animation;
-// SpriteAnimation _walk_down_animation;
-// SpriteAnimation _idle_animation;
-// SpriteAnimation curr_animation = {0};
 
 void create_player_sprite_animation(void)
 {
