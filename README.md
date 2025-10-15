@@ -1,4 +1,4 @@
-# Raylib Game Project
+# RE: Imagine (part of the RE: Universe)
 
 A cross-platform game developed with Raylib, C23, and CMake.  
 This game is being developed with VGDC@CSUF.  
@@ -36,8 +36,8 @@ scoop install llvm cmake ninja
 
 2. Clone and enter the project:
 ```
-git clone https://github.com/TheJolman/rpg-raylib.git
-cd raylib-game
+git clone https://github.com/TheJolman/re-imagine.git
+cd re-imagine
 ```
 
 3. Load the required environment variables with PowerShell:
@@ -55,7 +55,7 @@ cmake -B build
 3. Build and run:
 ```sh
 cmake --build build
-.\build\rpg-raylib.exe
+.\build\re-imagine.exe
 ```
 
 ## Quick Start - Linux/MacOS
@@ -65,7 +65,7 @@ cmake --build build
 2. Clone and enter the project:
 ```
 git clone https://github.com/TheJolman/rpg-raylib.git
-cd raylib-game
+cd re-imagine
 ```
 
 3. Enter dev shell:
