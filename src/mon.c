@@ -2,9 +2,9 @@
 #include "debug.h"
 #include "raylib.h"
 #include "utils.h"
+#include <cjson/cJSON.h>
 #include <stdio.h>
 #include <string.h>
-#include <cjson/cJSON.h>
 
 void load_mon_texture(Mon *mon, MonSpriteView textureType)
 {
@@ -13,14 +13,13 @@ void load_mon_texture(Mon *mon, MonSpriteView textureType)
     {
         error_exit(1, "attempted to load texture of mon with no name");
     }
+    snprintf(imagePath, sizeof(imagePath), "assets/%s/sprite.png", mon->name);
 
     switch (textureType)
     {
     case FRONT:
-        snprintf(imagePath, sizeof(imagePath), "assets/%s-front.png", mon->name);
         break;
     case BACK:
-        snprintf(imagePath, sizeof(imagePath), "assets/%s-back.png", mon->name);
         break;
     }
 
