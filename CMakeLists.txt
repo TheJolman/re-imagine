@@ -92,7 +92,7 @@ endif()
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_definitions(${PROJECT_NAME} PRIVATE GIT_VERSION="${GIT_VERSION}")
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib cjson)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 if(WIN32)
