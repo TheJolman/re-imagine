@@ -59,8 +59,7 @@ static void _game_input_handler(void)
 
 void game_init(void)
 {
-    // CreatePlayerSpriteAnimation();
-    CreatePlayerSpriteAnimation();
+    create_player_sprite_animation();
 
     const char *file_path = "assets/map.csv";
     Result res = map_load_from_csv(file_path);
@@ -77,7 +76,6 @@ void game_init(void)
     Game_ctx.player.velocity.max_speed = Game_cfg.player_base_speed;
     Game_ctx.player.size = Game_cfg.player_size;
 
-    Game_ctx.player.sprite.texture = LoadTexture("assets/sample-assets/Texture/player-cropped.png");
     Game_ctx.player.sprite.rotation = 0.0f;
     Game_ctx.player.sprite.tint = WHITE;
     Game_ctx.player.sprite.scale = 1.0f;
