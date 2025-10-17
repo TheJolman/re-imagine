@@ -4,6 +4,7 @@
 #include "utils.h"
 #include <stdio.h>
 #include <string.h>
+#include <cjson/cJSON.h>
 
 void load_mon_texture(Mon *mon, MonSpriteView textureType)
 {
@@ -35,7 +36,7 @@ void load_mon_texture(Mon *mon, MonSpriteView textureType)
     mon->sprite_view = textureType;
 }
 
-Result create_mon(char *name)
+Result create_mon(char *name, unsigned level)
 {
     Mon *mon = heap_list.malloc(sizeof(Mon));
     if (!mon)
@@ -58,6 +59,7 @@ Result create_mon(char *name)
         .tint = WHITE,
     };
     mon->health = (Health){100, 100};
+    mon->level = level;
     // TODO: Initialize other values
 
     return (Result){.value = mon, .err = nullptr};

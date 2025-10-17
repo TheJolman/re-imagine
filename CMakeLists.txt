@@ -78,6 +78,9 @@ if(NOT raylib_FOUND)
   FetchContent_MakeAvailable(raylib)
 endif()
 
+# ---------- cJSON dependency ----------
+find_package(cJSON 1.7 REQUIRED)
+
 # ---------- Primary build target ----------
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)

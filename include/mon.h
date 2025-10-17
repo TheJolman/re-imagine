@@ -43,6 +43,7 @@ typedef struct
 typedef struct
 {
     const char *name;          ///< Monster's name
+    unsigned level;
     Sprite sprite;             ///< Monster's sprite
     Position position;         ///< Position to render sprite
     MonSpriteView sprite_view; ///< Determines if we get the front or back view
