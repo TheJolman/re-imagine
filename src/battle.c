@@ -103,8 +103,8 @@ static void _update_battle_layout(void)
     if (ctx.player_mon)
     {
         // Calculated from bottom right of screen
-        float player_w = ctx.player_mon->sprite.texture.width * cfg.mon_scale;
-        float player_h = ctx.player_mon->sprite.texture.height * cfg.mon_scale;
+        float player_w = ctx.player_mon->sprite.source.width * cfg.mon_scale;
+        float player_h = ctx.player_mon->sprite.source.height * cfg.mon_scale;
         ctx.player_mon->position =
             (Vector2){GetScreenWidth() - cfg.player_mon_x_margin - player_w,
                       GetScreenHeight() - cfg.player_mon_y_margin - player_h};
@@ -219,8 +219,15 @@ static void _render_mon(Mon *mon)
     if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    DrawTextureEx(mon->sprite.texture, mon->position, cfg.mon_rotation, cfg.mon_scale,
-                  cfg.mon_tint);
+    Rectangle dest = {
+        mon->position.x,
+        mon->position.y,
+        mon->sprite.source.width * cfg.mon_scale,
+        mon->sprite.source.height * cfg.mon_scale
+    };
+
+    DrawTexturePro(mon->sprite.texture, mon->sprite.source, dest,
+                   (Vector2){0, 0}, cfg.mon_rotation, cfg.mon_tint);
 }
 
 /**

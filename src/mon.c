@@ -13,13 +13,15 @@ void load_mon_texture(Mon *mon, MonSpriteView textureType)
     {
         error_exit(1, "attempted to load texture of mon with no name");
     }
-    snprintf(imagePath, sizeof(imagePath), "assets/%s/sprite.png", mon->name);
+    snprintf(imagePath, sizeof(imagePath), "assets/monsters/%s/sprite.png", mon->name);
 
     switch (textureType)
     {
     case FRONT:
+        mon->sprite.source = (Rectangle){0, 0, 1024, 1024};
         break;
     case BACK:
+        mon->sprite.source = (Rectangle){1024, 0, 1024, 1024};
         break;
     }
 
@@ -53,6 +55,7 @@ Result create_mon(char *name, unsigned level)
 
     mon->sprite = (Sprite){
         .texture = {0},
+        .source = {0, 0, 0, 0},
         .rotation = 0.0f,
         .scale = 1.0f,
         .tint = WHITE,
