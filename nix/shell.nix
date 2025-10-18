@@ -12,6 +12,7 @@
   cmake-format,
   cmake-lint,
   glfw,
+  cjson
 }:
 mkShellNoCC {
   packages = [
@@ -31,6 +32,7 @@ mkShellNoCC {
   buildInputs = [
     raylib
     glfw
+    cjson
   ];
 
   shellHook = ''
