@@ -14,6 +14,7 @@ typedef Vector2 Position;
 typedef struct
 {
     Texture2D texture;
+    Rectangle source;
     float rotation;
     float scale;
     Color tint;

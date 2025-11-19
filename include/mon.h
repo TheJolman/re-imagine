@@ -28,6 +28,16 @@ typedef enum
 } MonType;
 
 /**
+ * @brief Monster stats (attack, defence, speed)
+ */
+typedef struct
+{
+    uint32_t attack;
+    uint32_t defence;
+    uint32_t speed;
+} Stats;
+
+/**
  * @brief A move/attack that a monster can perform
  */
 typedef struct
@@ -43,21 +53,25 @@ typedef struct
 typedef struct
 {
     const char *name;          ///< Monster's name
+    unsigned level;
     Sprite sprite;             ///< Monster's sprite
     Position position;         ///< Position to render sprite
     MonSpriteView sprite_view; ///< Determines if we get the front or back view
     Move moves[4];             ///< Array of up to 4 moves
     Health health;             ///< Max and current HP
     MonType type;
+    Stats base_stats;          ///< Base stats (hp handled separately in health)
+    Stats stats_gained_on_level; ///< Stats gained per level up
 } Mon;
 
 /**
  * @brief Creates a new monster with the given name
  *
  * @param name The name of the monster to create
+ * @param level The level of the monster to create
  * @return Result containing the created monster or error information
  */
-Result create_mon(char *name);
+Result create_mon(char *name, unsigned level);
 
 /**
  * @brief Destroys a monster and frees its resources
@@ -73,3 +87,11 @@ void destroy_mon(Mon *mon);
  * @param textureType Type of texture to load (FRONT or BACK)
  */
 void load_mon_texture(Mon *mon, MonSpriteView textureType);
+
+/**
+ * @brief Loads monster data from JSON file
+ *
+ * @param mon Pointer to the monster to populate
+ * @return Result indicating success or error
+ */
+Result load_mon_data_from_json(Mon *mon);

@@ -1,0 +1,19 @@
+{
+    "name": "bob",
+    "base-stats": {
+        "hp": 100,
+        "attack": 10,
+        "defence": 10,
+        "speed": 10
+    },
+    "stats-gained-on-level": {
+        "attack": 2,
+        "defence": 2,
+        "speed": 2
+    },
+    "moves-learned-on-level": {
+        "1": "bite",
+        "2": "scratch",
+        "3": "growl"
+    }
+}
