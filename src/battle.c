@@ -219,15 +219,11 @@ static void _render_mon(Mon *mon)
     if (!mon || !IsTextureValid(mon->sprite.texture))
         return;
 
-    Rectangle dest = {
-        mon->position.x,
-        mon->position.y,
-        mon->sprite.source.width * cfg.mon_scale,
-        mon->sprite.source.height * cfg.mon_scale
-    };
+    Rectangle dest = {mon->position.x, mon->position.y, mon->sprite.source.width * cfg.mon_scale,
+                      mon->sprite.source.height * cfg.mon_scale};
 
-    DrawTexturePro(mon->sprite.texture, mon->sprite.source, dest,
-                   (Vector2){0, 0}, cfg.mon_rotation, cfg.mon_tint);
+    DrawTexturePro(mon->sprite.texture, mon->sprite.source, dest, (Vector2){0, 0}, cfg.mon_rotation,
+                   cfg.mon_tint);
 }
 
 /**

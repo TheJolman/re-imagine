@@ -62,7 +62,8 @@ void game_init(void)
     create_player_sprite_animation();
 
     const char *file_path = "assets/maps/twinleaf/map.csv";
-    Result res = map_load_from_csv(file_path);
+    const char *tileset_path = "assets/maps/twinleaf/sprite.png";
+    Result res = map_load_from_csv(file_path, tileset_path);
     if (res.err)
     {
         error_exit(1, "%s", res.err);
