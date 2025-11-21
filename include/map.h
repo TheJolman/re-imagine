@@ -31,7 +31,7 @@ typedef struct
  * @param tileset_path Path to the tileset texture file
  * @return Result containing the loaded map or error information
  */
-Result map_load_from_csv(const char *file_path, const char *tileset_path);
+Result map_load(const char *map_name);
 
 /**
  * @brief Frees resources held by a map object
