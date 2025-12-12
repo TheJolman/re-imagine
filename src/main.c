@@ -94,9 +94,8 @@ int main(int argc, const char **argv)
         error_exit(1, "failed to initialize window");
     }
 
-    debug_log("Game initiated with screen dimensions %dx%d",
-              VideoDisplaySettings.screen_width_initial,
-              VideoDisplaySettings.screen_height_initial);
+    TraceLog(LOG_INFO, "Game initiated with screen dimensions %dx%d",
+             VideoDisplaySettings.screen_width_initial, VideoDisplaySettings.screen_height_initial);
     ToggleFullscreen();
     SetTargetFPS(VideoDisplaySettings.fps_target);
     SetExitKey(KEY_NULL);

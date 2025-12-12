@@ -7,7 +7,6 @@
 #include <raymath.h>
 
 #include "battle.h"
-#include "debug.h"
 #include "game.h"
 #include "map.h"
 #include "pause.h"
@@ -68,7 +67,7 @@ void game_init(void)
         error_exit(1, "%s", res.err);
     }
     Game_ctx.map = (Map *)res.value;
-    debug_log("Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);
+    TraceLog(LOG_DEBUG, "Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);
 
     Game_ctx.state = FREE_ROAM;
 

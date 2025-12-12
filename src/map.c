@@ -73,7 +73,7 @@ Result map_load(const char *map_name)
             map->data[y * max_cols + x] = temp_data[y][x];
         }
     }
-    debug_log("copied data successfully");
+    TraceLog(LOG_DEBUG, "copied data successfully");
 
     map->height = row;
     map->width = max_cols;
