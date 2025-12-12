@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "debug.h"
 #include "game.h"
 #include "utils.h"
 

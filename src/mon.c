@@ -1,5 +1,4 @@
 #include "mon.h"
-#include "debug.h"
 #include "raylib.h"
 #include "utils.h"
 #include <cjson/cJSON.h>
