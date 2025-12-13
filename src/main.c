@@ -53,6 +53,12 @@ static bool _match_arg(const char *target, const char *short_arg, const char *lo
 
 int main(int argc, const char **argv)
 {
+#ifdef DEBUG
+    SetTraceLogLevel(LOG_DEBUG);
+#else
+    SetTraceLogLevel(LOG_INFO);
+#endif
+
     // ----------- Command line argument parsing -----------
     for (int i = 1; i < argc; i++)
     {
