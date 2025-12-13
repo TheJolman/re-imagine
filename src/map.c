@@ -6,17 +6,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-Result map_load_from_csv(const char *file_path)
+Result map_load(const char *map_name)
 {
-    FILE *file = fopen(file_path, "r");
+    char csv_path[256];
+    snprintf(csv_path, sizeof(csv_path), "assets/maps/%s/map.csv", map_name);
+    FILE *file = fopen(csv_path, "r");
     if (!file)
     {
         char err[256];
-        snprintf(err, sizeof(err), "could not open file: %s", file_path);
+        snprintf(err, sizeof(err), "could not open file: %s", csv_path);
         return (Result){.value = nullptr, .err = err};
     }
 
-    debug_log("Map file %s opened successfully", file_path);
+    debug_log("Map file %s opened successfully", csv_path);
+
+    char tileset_path[256];
+    snprintf(tileset_path, sizeof(tileset_path), "assets/maps/%s/sprite.png", map_name);
+    Texture2D tileset = LoadTexture(tileset_path);
+    if (tileset.id == 0)
+    {
+        fclose(file);
+        char err[256];
+        snprintf(err, sizeof(err), "could not load tileset: %s", tileset_path);
+        return (Result){.value = nullptr, .err = err};
+    }
+    debug_log("Tileset %s loaded successfully", tileset_path);
 
     int16_t temp_data[MAP_MAX_ROWS][MAP_MAX_COLS] = {};
     char line[1024];
@@ -38,7 +52,7 @@ Result map_load_from_csv(const char *file_path)
     }
 
     fclose(file);
-    debug_log("File %s read from and closed.", file_path);
+    debug_log("File %s read from and closed.", csv_path);
 
     Map *map = heap_list.malloc(sizeof(Map *));
 
@@ -63,12 +77,14 @@ Result map_load_from_csv(const char *file_path)
 
     map->height = row;
     map->width = max_cols;
+    map->tileset = tileset;
 
     return (Result){.value = map, .err = nullptr};
 }
 
 void map_destroy(Map *map)
 {
+    UnloadTexture(map->tileset);
     heap_list.free(map->data);
     heap_list.free(map);
     map = nullptr;
@@ -76,6 +92,8 @@ void map_destroy(Map *map)
 
 void map_draw(Map *map)
 {
+    constexpr uint32_t TILE_SIZE_IN_TEXTURE = 16;
+
     for (uint32_t y = 0; y < map->height; y++)
     {
 #ifdef DEBUG // debug grid
@@ -86,31 +104,19 @@ void map_draw(Map *map)
 #ifdef DEBUG // debug grid
             DrawLine(x * MAP_TILE_SIZE, 0, x * MAP_TILE_SIZE, map->height * MAP_TILE_SIZE, RED);
 #endif
-            Color color = {};
-            // TODO: Replace this with a tileset
-            switch (map->data[y * map->width + x])
-            {
-            case 0:
-                color = BROWN;
-                break;
-            case 1:
-                color = GREEN;
-                break;
-            case 2:
-                color = BLUE;
-                break;
-            case 3:
-                color = RED;
-                break;
-            default:
-                color = WHITE;
-                break;
-            }
-            Rectangle rec = (Rectangle){.x = x * MAP_TILE_SIZE,
-                                        .y = y * MAP_TILE_SIZE,
-                                        .width = MAP_TILE_SIZE,
-                                        .height = MAP_TILE_SIZE};
-            DrawRectangleRec(rec, color);
+            int16_t tile_id = map->data[y * map->width + x];
+
+            Rectangle source = {.x = tile_id * TILE_SIZE_IN_TEXTURE,
+                                .y = 0,
+                                .width = TILE_SIZE_IN_TEXTURE,
+                                .height = TILE_SIZE_IN_TEXTURE};
+
+            Rectangle dest = {.x = x * MAP_TILE_SIZE,
+                              .y = y * MAP_TILE_SIZE,
+                              .width = MAP_TILE_SIZE,
+                              .height = MAP_TILE_SIZE};
+
+            DrawTexturePro(map->tileset, source, dest, (Vector2){0, 0}, 0.0f, WHITE);
         }
     }
 }

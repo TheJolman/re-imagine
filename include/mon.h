@@ -52,7 +52,7 @@ typedef struct
  */
 typedef struct
 {
-    const char *name;          ///< Monster's name
+    const char *name; ///< Monster's name
     unsigned level;
     Sprite sprite;             ///< Monster's sprite
     Position position;         ///< Position to render sprite
@@ -60,7 +60,7 @@ typedef struct
     Move moves[4];             ///< Array of up to 4 moves
     Health health;             ///< Max and current HP
     MonType type;
-    Stats base_stats;          ///< Base stats (hp handled separately in health)
+    Stats base_stats;            ///< Base stats (hp handled separately in health)
     Stats stats_gained_on_level; ///< Stats gained per level up
 } Mon;
 
