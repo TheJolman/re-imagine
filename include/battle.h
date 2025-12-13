@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "menu.h"
 #include "mon.h"
 #include "raylib.h"
 #include "types/stack.h"
