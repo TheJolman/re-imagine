@@ -76,10 +76,11 @@ int main(int argc, const char **argv)
         }
         else
         {
-            error_exit(1,
-                       "Unrecognized argument. "
-                       "Try '%s --help' for usage information.",
-                       argv[0]);
+            fprintf(stderr,
+                    "Unrecognized argument. "
+                    "Try '%s --help' for usage information.",
+                    argv[0]);
+            exit(1);
         }
     }
 
@@ -96,7 +97,8 @@ int main(int argc, const char **argv)
 
     if (!IsWindowReady())
     {
-        error_exit(1, "failed to initialize window");
+        TraceLog(LOG_FATAL, "failed to initialize window");
+        exit(1);
     }
 
     TraceLog(LOG_INFO, "Game initiated with screen dimensions %dx%d",

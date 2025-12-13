@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "raylib.h"
 #include "types/list.h"
 
 #include <stdarg.h>
@@ -12,27 +13,6 @@ float clamp_float(float value, float min, float max)
 {
     const float res = value < min ? min : value;
     return res > max ? max : res;
-}
-
-void error_log(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    fprintf(stderr, "[ERROR] ");
-    vfprintf(stderr, format, args);
-    fputc('\n', stderr);
-    va_end(args);
-}
-
-void error_exit(int code, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    fprintf(stderr, "[ERROR] ");
-    vfprintf(stderr, format, args);
-    fputc('\n', stderr);
-    va_end(args);
-    exit(code);
 }
 
 /**
@@ -56,7 +36,8 @@ static void *my_malloc(size_t size)
 
     if (!ptr)
     {
-        error_exit(1, "could not allocate memory");
+        TraceLog(LOG_FATAL, "could not allocate memory");
+        exit(1);
     }
 
     list_push_front(&heap_list.list, &ptr);
@@ -72,7 +53,7 @@ static void my_free(void *ptr)
 
     if (!list_delete(&heap_list.list, &ptr))
     {
-        error_log("Attempted to free non-tracked pointer or double free: %p", ptr);
+        TraceLog(LOG_ERROR, "Attempted to free non-tracked pointer or double free: %p", ptr);
     }
 }
 

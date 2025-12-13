@@ -64,7 +64,8 @@ void game_init(void)
     Result res = map_load(map_name);
     if (res.err)
     {
-        error_exit(1, "%s", res.err);
+        TraceLog(LOG_FATAL, "%s", res.err);
+        exit(1);
     }
     Game_ctx.map = (Map *)res.value;
     TraceLog(LOG_DEBUG, "Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);
