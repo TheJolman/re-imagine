@@ -60,11 +60,12 @@ void game_init(void)
 {
     create_player_sprite_animation();
 
-    const char *map_name = "twinleaf";
-    Result res = map_load(map_name);
+    const char *file_path = "assets/map.csv";
+    Result res = map_load_from_csv(file_path);
     if (res.err)
     {
-        error_exit(1, "%s", res.err);
+        TraceLog(LOG_FATAL, "%s", res.err);
+        exit(1);
     }
     Game_ctx.map = (Map *)res.value;
     TraceLog(LOG_DEBUG, "Map loaded with %u rows and %u cols", Game_ctx.map->height, Game_ctx.map->width);

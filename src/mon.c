@@ -10,7 +10,8 @@ void load_mon_texture(Mon *mon, MonSpriteView textureType)
     char imagePath[256];
     if (!mon->name)
     {
-        error_exit(1, "attempted to load texture of mon with no name");
+        TraceLog(LOG_FATAL, "attempted to load texture of mon with no name");
+        exit(1);
     }
     snprintf(imagePath, sizeof(imagePath), "assets/monsters/%s/sprite.png", mon->name);
 

@@ -146,7 +146,7 @@ static void _create_and_push_menu(const char *title, const char **item_texts,
     Result res = menu_create(&menu_config, item_texts, select_callbacks, num_items);
     if (res.err)
     {
-        error_log(res.err);
+        TraceLog(LOG_ERROR, "%s", res.err);
         return;
     }
     stack_push(ctx.menu_stack, (Menu *)res.value);
@@ -171,17 +171,7 @@ static void _destroy_all_menus()
 static void _init_battle_state(void)
 {
     ctx.battle_ui = heap_list.malloc(sizeof(BattleUILayout));
-    if (!ctx.battle_ui)
-    {
-        error_exit(1, "Could not allocate memory for BattleUI");
-    }
-
     ctx.menu_stack = stack_create(cfg.battle_menu_stack_size);
-    if (!ctx.menu_stack)
-    {
-        error_exit(1, "Could not allocate memory for menu stack");
-    }
-
     ctx.state = BATTLE_MENU;
 
     // Initialize monsters (here bob is hardcoded in)
@@ -189,7 +179,10 @@ static void _init_battle_state(void)
     {
         Result res = create_mon("bob", 10);
         if (res.err)
-            error_exit(1, "%s", res.err);
+        {
+            TraceLog(LOG_FATAL, "%s", res.err);
+            exit(1);
+        }
 
         ctx.player_mon = (Mon *)res.value;
         ctx.player_mon->health = (Health){100, 100};
@@ -200,7 +193,10 @@ static void _init_battle_state(void)
     {
         Result res = create_mon("bob", 10);
         if (res.err)
-            error_exit(1, "%s", res.err);
+        {
+            TraceLog(LOG_FATAL, "%s", res.err);
+            exit(1);
+        }
 
         ctx.enemy_mon = (Mon *)res.value;
         ctx.enemy_mon->health = (Health){100, 100};

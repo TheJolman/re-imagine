@@ -29,7 +29,7 @@ static void pause_menu_create()
     Result res = menu_create(&config, item_texts, select_callbacks, 3);
     if (res.err)
     {
-        error_log(res.err);
+        TraceLog(LOG_ERROR, "%s", res.err);
         return;
     }
     pause_menu = (Menu *)res.value;

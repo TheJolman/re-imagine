@@ -37,23 +37,6 @@ typedef struct
  */
 float clamp_float(float value, float min, float max);
 
-/**
- * @brief Logs an error message to stderr
- *
- * @param format Printf-style format string
- * @param ... Variable arguments for the format string
- */
-void error_log(const char *format, ...);
-
-/**
- * @brief Logs an error message and exits the program
- *
- * @param code Exit code to return
- * @param format Printf-style format string
- * @param ... Variable arguments for the format string
- */
-void error_exit(int code, const char *format, ...);
-
 typedef struct
 {
     List list;
