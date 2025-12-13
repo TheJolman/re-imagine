@@ -8,7 +8,7 @@
 #include "menu.h"
 #include "mon.h"
 #include "raylib.h"
-#include "stack.h"
+#include "types/stack.h"
 #include <stdint.h>
 
 /**

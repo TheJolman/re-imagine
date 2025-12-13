@@ -1,7 +1,6 @@
 #include "player.h"
 #include "collision.h"
 #include "components.h"
-#include "debug.h"
 #include "game.h"
 #include "spritesheet_reader.h"
 #include <raylib.h>

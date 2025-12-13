@@ -45,7 +45,6 @@ assets/           # Game assets
 
 - **main.c**: Entry point with command line argument parsing and main game loop
 - **game.c**: Contains `InitGame()`, `UpdateGame()`, `DrawGame()` functions
-- **include/debug.h**: Contains `debug_log`. Useful for printf debugging
 
 ### Testing
 

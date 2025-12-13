@@ -10,7 +10,7 @@
 #include "game.h"
 #include "menu.h"
 #include "raylib.h"
-#include "stack.h"
+#include "types/stack.h"
 
 // TODO: Enforce a minimum screen size
 static constexpr BattleUIConfig cfg = {

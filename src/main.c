@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "debug.h"
 #include "game.h"
 #include "utils.h"
 
@@ -54,6 +53,12 @@ static bool _match_arg(const char *target, const char *short_arg, const char *lo
 
 int main(int argc, const char **argv)
 {
+#ifdef DEBUG
+    SetTraceLogLevel(LOG_DEBUG);
+#else
+    SetTraceLogLevel(LOG_INFO);
+#endif
+
     // ----------- Command line argument parsing -----------
     for (int i = 1; i < argc; i++)
     {
@@ -94,9 +99,8 @@ int main(int argc, const char **argv)
         error_exit(1, "failed to initialize window");
     }
 
-    debug_log("Game initiated with screen dimensions %dx%d",
-              VideoDisplaySettings.screen_width_initial,
-              VideoDisplaySettings.screen_height_initial);
+    TraceLog(LOG_INFO, "Game initiated with screen dimensions %dx%d",
+             VideoDisplaySettings.screen_width_initial, VideoDisplaySettings.screen_height_initial);
     ToggleFullscreen();
     SetTargetFPS(VideoDisplaySettings.fps_target);
     SetExitKey(KEY_NULL);

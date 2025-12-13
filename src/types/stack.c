@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "types/stack.h"
 #include "utils.h"
 
 #include <stddef.h>

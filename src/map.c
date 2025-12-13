@@ -1,5 +1,4 @@
 #include "map.h"
-#include "debug.h"
 #include "raylib.h"
 #include "utils.h"
 #include <stdio.h>
@@ -18,7 +17,7 @@ Result map_load(const char *map_name)
         return (Result){.value = nullptr, .err = err};
     }
 
-    debug_log("Map file %s opened successfully", csv_path);
+    TraceLog(LOG_DEBUG, "Map file %s opened successfully", csv_path);
 
     char tileset_path[256];
     snprintf(tileset_path, sizeof(tileset_path), "assets/maps/%s/sprite.png", map_name);
@@ -30,7 +29,7 @@ Result map_load(const char *map_name)
         snprintf(err, sizeof(err), "could not load tileset: %s", tileset_path);
         return (Result){.value = nullptr, .err = err};
     }
-    debug_log("Tileset %s loaded successfully", tileset_path);
+    TraceLog(LOG_DEBUG, "Tileset %s loaded successfully", tileset_path);
 
     int16_t temp_data[MAP_MAX_ROWS][MAP_MAX_COLS] = {};
     char line[1024];
@@ -52,7 +51,7 @@ Result map_load(const char *map_name)
     }
 
     fclose(file);
-    debug_log("File %s read from and closed.", csv_path);
+    TraceLog(LOG_DEBUG, "File %s read from and closed.", csv_path);
 
     Map *map = heap_list.malloc(sizeof(Map *));
 
@@ -73,7 +72,7 @@ Result map_load(const char *map_name)
             map->data[y * max_cols + x] = temp_data[y][x];
         }
     }
-    debug_log("copied data successfully");
+    TraceLog(LOG_DEBUG, "copied data successfully");
 
     map->height = row;
     map->width = max_cols;

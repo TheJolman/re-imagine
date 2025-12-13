@@ -65,7 +65,7 @@ This project follows specific naming conventions and code style. Please review [
 ### Code Quality
 - Write clear, descriptive function and variable names
 - Add comments for complex logic, not obvious code
-- Use `debug_log()` from `include/debug.h` for debugging output
+- Use `TraceLog()`
 - Follow the existing project structure in `src/` and `include/`
 - Try to document public functions and types with doxygen comments. See
   [`doxygen.md`](./doxygen.md) for details.
@@ -94,7 +94,6 @@ The game uses a state machine with these states:
 ### Debugging Tools
 - Use `lldb` or `gdb` for debugging (included in Nix environment)
 - `valgrind` available on Linux systems
-- `debug_log()` function for printf-style debugging
 
 ### Running Checks
 - Static analysis: `cmake --build build --target check`

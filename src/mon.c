@@ -1,5 +1,4 @@
 #include "mon.h"
-#include "debug.h"
 #include "raylib.h"
 #include "utils.h"
 #include <cjson/cJSON.h>
@@ -77,7 +76,7 @@ Result load_mon_data_from_json(Mon *mon)
     if (!root)
     {
         const char *error_ptr = cJSON_GetErrorPtr();
-        debug_log("JSON parse error: %s\n", error_ptr ? error_ptr : "unknown error");
+        TraceLog(LOG_ERROR, "JSON parse error: %s\n", error_ptr ? error_ptr : "unknown error");
         return (Result){.value = nullptr, .err = "Failed to parse JSON"};
     }
 
@@ -163,7 +162,8 @@ Result create_mon(char *name, unsigned level)
     Result jsonResult = load_mon_data_from_json(mon);
     if (jsonResult.err)
     {
-        debug_log("Warning: Failed to load JSON data for %s: %s\n", name, jsonResult.err);
+        TraceLog(LOG_WARNING, "Warning: Failed to load JSON data for %s: %s\n", name,
+                 jsonResult.err);
         // Continue with default values rather than failing completely
     }
 
