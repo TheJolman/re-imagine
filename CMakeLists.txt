@@ -23,20 +23,7 @@ if(NOT GIT_RESULT EQUAL "0")
 endif()
 
 # ----------  Dependencies ----------
-set(SOURCES
-    src/main.c
-    src/utils.c
-    src/types/list.c
-    src/types/stack.c
-    src/game.c
-    src/pause.c
-    src/battle.c
-    src/map.c
-    src/mon.c
-    src/menu.c
-    src/collision.c
-    src/player.c
-    src/spritesheet_reader.c)
+set(SOURCES src/main.c)
 
 # Raylib graphics library
 find_package(raylib 5.5 QUIET)
@@ -91,8 +78,12 @@ if(NOT cJSON_FOUND)
     GIT_SHALLOW ON
     GIT_PROGRESS TRUE)
 
-  set(ENABLE_CJSON_TEST OFF CACHE BOOL "" FORCE)
-  set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+  set(ENABLE_CJSON_TEST
+      OFF
+      CACHE BOOL "" FORCE)
+  set(BUILD_SHARED_LIBS
+      OFF
+      CACHE BOOL "" FORCE)
 
   FetchContent_MakeAvailable(cjson)
 endif()

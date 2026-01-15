@@ -7,7 +7,6 @@ build/
 .pre-commit-config.yaml
 result
 CMakeFiles/
-.claude
 vgcore.*
 docs/html
 docs/latex
