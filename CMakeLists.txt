@@ -23,7 +23,7 @@ if(NOT GIT_RESULT EQUAL "0")
 endif()
 
 # ----------  Dependencies ----------
-set(SOURCES src/main.c src/game.c src/player.c src/spritesheet.c)
+set(SOURCES src/main.c src/game.c src/player.c src/spritesheet.c src/arena.c)
 
 # Raylib graphics library
 find_package(raylib 5.5 QUIET)
