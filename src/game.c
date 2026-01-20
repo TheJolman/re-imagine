@@ -24,9 +24,11 @@ static void _game_init() {
     player_init();
     g_ctx.camera.target = g_ctx.player.position;
     g_ctx.camera.zoom = camera_base_zoom;
+    // only called once since window doesn't resize
+    g_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 }
 
-/** Registered with atexit()
+/** Stuff cleaned up before CloseWindow() is called
  */
 static void _game_cleanup() {
     player_cleanup();
@@ -65,8 +67,6 @@ static void _input_handler() {
 static void _game_draw() {
     BeginDrawing();
     ClearBackground(BLACK);
-
-    g_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
     switch (g_ctx.state) {
     case FREE_ROAM:
@@ -107,7 +107,6 @@ int game_run() {
     SetExitKey(KEY_NULL);
 
     _game_init();
-    atexit(_game_cleanup);
 
     while (!WindowShouldClose()) {
         arena_reset(&g_ctx.frame_arena);
@@ -115,6 +114,7 @@ int game_run() {
         _game_draw();
     }
 
+    _game_cleanup();
     CloseWindow();
 
     return EXIT_SUCCESS;
