@@ -34,13 +34,11 @@ static const Rectangle anim_frames_idle[] = {
 static const Rectangle anim_frames_right[] = {
     {SPRITE_FRAME_0, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
     {SPRITE_FRAME_1, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
-    {SPRITE_FRAME_2, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
 };
 
 static const Rectangle anim_frames_left[] = {
     {SPRITE_FRAME_0, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
     {SPRITE_FRAME_1, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
-    {SPRITE_FRAME_2, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
 };
 
 static const Rectangle anim_frames_up[] = {
@@ -62,10 +60,10 @@ void _player_sprite_animation_create() {
                                           anim_frames_idle, 1);
 
     anims->right = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                           anim_frames_right, 3);
+                                           anim_frames_right, 2);
 
     anims->left = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                          anim_frames_left, 3);
+                                          anim_frames_left, 2);
 
     anims->up = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
                                         anim_frames_up, 3);
