@@ -16,8 +16,7 @@ constexpr float camera_base_zoom = 1.0f;
 // Global game context
 GameContext g_ctx = {};
 
-/**
- * Initializes game objects and memory
+/** Initializes game objects and memory
  */
 static void _game_init() {
     g_ctx.frame_arena = arena_init(1024 * 1024); // 1MB
@@ -25,6 +24,13 @@ static void _game_init() {
     player_init();
     g_ctx.camera.target = g_ctx.player.position;
     g_ctx.camera.zoom = camera_base_zoom;
+}
+
+/** Registered with atexit()
+ */
+static void _game_cleanup() {
+    player_cleanup();
+    arena_free(&g_ctx.frame_arena);
 }
 
 static void _input_handler() {
@@ -101,6 +107,7 @@ int game_run() {
     SetExitKey(KEY_NULL);
 
     _game_init();
+    atexit(_game_cleanup);
 
     while (!WindowShouldClose()) {
         arena_reset(&g_ctx.frame_arena);
@@ -108,7 +115,6 @@ int game_run() {
         _game_draw();
     }
 
-    arena_free(&g_ctx.frame_arena);
     CloseWindow();
 
     return EXIT_SUCCESS;

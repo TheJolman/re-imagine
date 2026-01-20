@@ -28,3 +28,4 @@ typedef struct {
 void player_init();
 void player_draw();
 void player_move();
+void player_cleanup();

@@ -134,3 +134,5 @@ void player_move() {
 
     g_ctx.camera.target = g_ctx.player.position;
 }
+
+void player_cleanup() { UnloadTexture(g_ctx.player.sprite_sheet); }
