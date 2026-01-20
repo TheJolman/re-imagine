@@ -3,6 +3,7 @@
 
 #include "components.h"
 #include "game.h"
+#include "spritesheet.h"
 
 constexpr PlayerConfig cfg = {
     .base_speed = 5.0f,
@@ -94,4 +95,40 @@ void player_move() {
     g_ctx.camera.target = g_ctx.player.position;
 }
 
-void _player_sprite_animation_create() {}
+void _player_sprite_animation_create() {
+    auto anims = &g_ctx.player.anims;
+
+    anims->idle = sprite_animation_create(g_ctx.player.sprite_sheet, 1,
+                                          (Rectangle[]){
+                                              (Rectangle){32, 0, 32, 32},
+                                          },
+                                          1);
+    anims->right = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
+                                           (Rectangle[]){
+                                               (Rectangle){0, 96, 32, 32},
+                                               (Rectangle){32, 96, 32, 32},
+                                               (Rectangle){64, 96, 32, 32},
+                                           },
+                                           2);
+    anims->left = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
+                                          (Rectangle[]){
+                                              (Rectangle){0, 64, 32, 32},
+                                              (Rectangle){32, 64, 32, 32},
+                                              (Rectangle){64, 64, 32, 32},
+                                          },
+                                          2);
+    anims->up = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
+                                        (Rectangle[]){
+                                            (Rectangle){0, 32, 32, 32},
+                                            (Rectangle){32, 32, 32, 32},
+                                            (Rectangle){64, 32, 32, 32},
+                                        },
+                                        3);
+    anims->down = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
+                                          (Rectangle[]){
+                                              (Rectangle){0, 0, 32, 32},
+                                              (Rectangle){32, 0, 32, 32},
+                                              (Rectangle){64, 0, 32, 32},
+                                          },
+                                          3);
+}

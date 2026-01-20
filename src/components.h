@@ -26,12 +26,12 @@ typedef struct {
 
 typedef struct SpriteAnimation {
     Texture2D atlas;
-    Texture2D currentFrame;
-    int framesPerSecond;
-    float timeStarted;
+    Texture2D current_frame;
+    int frames_per_second;
+    float time_started;
 
     Rectangle *rectangles;
-    int rectanglesLength;
+    int rectangles_length;
 } SpriteAnimation;
 
 /**
