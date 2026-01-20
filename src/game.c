@@ -11,18 +11,22 @@ constexpr uint32_t window_width = 960;
 constexpr uint32_t window_height = 540;
 constexpr char window_title[] = "Re-Imagine";
 constexpr uint32_t fps_target = 60;
+constexpr float camera_base_zoom = 1.0f;
 
 // Global game context
-g_ctx = {};
+GameContext g_ctx = {};
 
 static void _game_init() {
     g_ctx.state = FREE_ROAM;
+    player_init();
+    g_ctx.camera.target = g_ctx.player.position;
+    g_ctx.camera.zoom = camera_base_zoom;
 }
 
 static void _input_handler() {
     switch (g_ctx.state) {
     case FREE_ROAM:
-        // player_move();
+        player_move();
         if (IsKeyPressed(KEY_B))
             g_ctx.state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
@@ -51,17 +55,14 @@ static void _input_handler() {
 static void _game_draw() {
     BeginDrawing();
     ClearBackground(BLACK);
-#ifdef DEBUG
-    DrawFPS(10, 10);
-#endif
+
+    g_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 
     switch (g_ctx.state) {
-
     case FREE_ROAM:
         BeginMode2D(g_ctx.camera);
-        // UpdatePlayerDrawFrame();
         // map_draw(g_ctx.map);
-        // player_draw();
+        player_draw();
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, RAYWHITE);
@@ -76,6 +77,9 @@ static void _game_draw() {
         break;
     }
 
+#ifdef DEBUG
+    DrawFPS(10, 10);
+#endif
     EndDrawing();
 }
 

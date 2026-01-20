@@ -25,5 +25,6 @@ typedef struct {
     uint32_t size;
 } PlayerConfig;
 
+void player_init();
 void player_draw();
 void player_move();
