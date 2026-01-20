@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "player.h"
 
 // ==== Configuration ====
 // Window
@@ -12,9 +13,13 @@ constexpr char window_title[] = "Re-Imagine";
 constexpr uint32_t fps_target = 60;
 
 // Global game context
-GameContext g_ctx = {};
+g_ctx = {};
 
-void _input_handler() {
+static void _game_init() {
+    g_ctx.state = FREE_ROAM;
+}
+
+static void _input_handler() {
     switch (g_ctx.state) {
     case FREE_ROAM:
         // player_move();
@@ -43,7 +48,7 @@ void _input_handler() {
     }
 }
 
-void _game_draw() {
+static void _game_draw() {
     BeginDrawing();
     ClearBackground(BLACK);
 #ifdef DEBUG
@@ -83,6 +88,8 @@ int game_run() {
     }
     SetTargetFPS(fps_target);
     SetExitKey(KEY_NULL);
+
+    _game_init();
 
     while (!WindowShouldClose()) {
         _input_handler();

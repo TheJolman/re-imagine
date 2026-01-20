@@ -25,6 +25,8 @@ typedef struct {
     Map *map;
 } GameContext;
 
+extern GameContext g_ctx;
+
 /**
  * Sets up window and runs main game loop
  */
