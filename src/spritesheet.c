@@ -29,7 +29,7 @@ void sprite_animation_destroy(SpriteAnimation anim) { free(anim.rectangles); }
 
 void sprite_animation_draw(SpriteAnimation animation, Rectangle dest, Vector2 origin,
                            float rotation, Color tint, float scale) {
-    int index = (int)((GetTime() - animation.time_started) * animation.frames_per_second) &
+    int index = (int)((GetTime() - animation.time_started) * animation.frames_per_second) %
                 animation.rectangles_length;
 
     auto source = animation.rectangles[index];
