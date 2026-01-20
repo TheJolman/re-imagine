@@ -1,6 +1,8 @@
 #include <raylib.h>
 #include <stdlib.h>
 
+#include "arena.h"
+#include "game.h"
 #include "spritesheet.h"
 
 SpriteAnimation sprite_animation_create(Texture2D atlas, int frames_per_second,
@@ -13,11 +15,7 @@ SpriteAnimation sprite_animation_create(Texture2D atlas, int frames_per_second,
         .rectangles_length = length,
     };
 
-    auto *rec = (Rectangle *)malloc(sizeof(Rectangle) * length);
-    if (!rec) {
-        TraceLog(LOG_FATAL, "Error: couldn't allocate sprite animation");
-        exit(1);
-    }
+    auto *rec = (Rectangle *)arena_alloc(&g_ctx.frame_arena, sizeof(Rectangle) * length);
     sprite_anim.rectangles = rec;
 
     for (int i = 0; i < length; i++) {

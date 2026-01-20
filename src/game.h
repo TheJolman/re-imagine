@@ -2,6 +2,7 @@
 
 #include "map.h"
 #include "player.h"
+#include "arena.h"
 
 /**
  * @brief Game state enumeration
@@ -23,6 +24,7 @@ typedef struct {
     Camera2D camera;
     GameState state;
     Map *map;
+    Arena frame_arena;
 } GameContext;
 
 extern GameContext g_ctx;
