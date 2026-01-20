@@ -5,9 +5,7 @@
 #include "components.h"
 
 SpriteAnimation sprite_animation_create(Texture2D atlas, int frames_per_second,
-                                        Rectangle rectangles[], int length);
-
-void sprite_animation_destroy(SpriteAnimation animation);
+                                        const Rectangle *rectangles, int length);
 
 void sprite_animation_draw(SpriteAnimation animation, Rectangle dest, Vector2 origin,
                                float rotation, Color tint, float scale);

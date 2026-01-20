@@ -5,6 +5,20 @@
 #include "game.h"
 #include "spritesheet.h"
 
+// Sprite sheet constants
+constexpr int SPRITE_TILE_SIZE = 32;
+constexpr int SPRITE_ROW_DOWN = 0;
+constexpr int SPRITE_ROW_UP = 32;
+constexpr int SPRITE_ROW_LEFT = 64;
+constexpr int SPRITE_ROW_RIGHT = 96;
+
+constexpr int SPRITE_FRAME_0 = 0;
+constexpr int SPRITE_FRAME_1 = 32;
+constexpr int SPRITE_FRAME_2 = 64;
+
+constexpr int WALK_ANIMATION_FPS = 6;
+constexpr int IDLE_ANIMATION_FPS = 1;
+
 constexpr PlayerConfig cfg = {
     .base_speed = 5.0f,
     .sprint_modifier = 2.0f,
@@ -12,42 +26,52 @@ constexpr PlayerConfig cfg = {
     .size = 30, // collider size
 };
 
+// Static animation frame data (persistent, not allocated)
+static const Rectangle anim_frames_idle[] = {
+    {SPRITE_FRAME_1, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+};
+
+static const Rectangle anim_frames_right[] = {
+    {SPRITE_FRAME_0, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_1, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_2, SPRITE_ROW_RIGHT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+};
+
+static const Rectangle anim_frames_left[] = {
+    {SPRITE_FRAME_0, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_1, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_2, SPRITE_ROW_LEFT, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+};
+
+static const Rectangle anim_frames_up[] = {
+    {SPRITE_FRAME_0, SPRITE_ROW_UP, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_1, SPRITE_ROW_UP, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_2, SPRITE_ROW_UP, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+};
+
+static const Rectangle anim_frames_down[] = {
+    {SPRITE_FRAME_0, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_1, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+    {SPRITE_FRAME_2, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
+};
+
 void _player_sprite_animation_create() {
     auto anims = &g_ctx.player.anims;
 
-    anims->idle = sprite_animation_create(g_ctx.player.sprite_sheet, 1,
-                                          (Rectangle[]){
-                                              (Rectangle){32, 0, 32, 32},
-                                          },
-                                          1);
-    anims->right = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
-                                           (Rectangle[]){
-                                               (Rectangle){0, 96, 32, 32},
-                                               (Rectangle){32, 96, 32, 32},
-                                               (Rectangle){64, 96, 32, 32},
-                                           },
-                                           2);
-    anims->left = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
-                                          (Rectangle[]){
-                                              (Rectangle){0, 64, 32, 32},
-                                              (Rectangle){32, 64, 32, 32},
-                                              (Rectangle){64, 64, 32, 32},
-                                          },
-                                          2);
-    anims->up = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
-                                        (Rectangle[]){
-                                            (Rectangle){0, 32, 32, 32},
-                                            (Rectangle){32, 32, 32, 32},
-                                            (Rectangle){64, 32, 32, 32},
-                                        },
-                                        3);
-    anims->down = sprite_animation_create(g_ctx.player.sprite_sheet, 6,
-                                          (Rectangle[]){
-                                              (Rectangle){0, 0, 32, 32},
-                                              (Rectangle){32, 0, 32, 32},
-                                              (Rectangle){64, 0, 32, 32},
-                                          },
-                                          3);
+    anims->idle = sprite_animation_create(g_ctx.player.sprite_sheet, IDLE_ANIMATION_FPS,
+                                          anim_frames_idle, 1);
+
+    anims->right = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
+                                           anim_frames_right, 3);
+
+    anims->left = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
+                                          anim_frames_left, 3);
+
+    anims->up = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
+                                        anim_frames_up, 3);
+
+    anims->down = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
+                                          anim_frames_down, 3);
 }
 
 void player_init() {
@@ -66,10 +90,8 @@ void player_init() {
 }
 
 void player_draw() {
-    Vector2 sprite_center = {
-        32.0f / 2,
-        32.0f / 2,
-    };
+    constexpr float SPRITE_CENTER_OFFSET = SPRITE_TILE_SIZE / 2.0f;
+    Vector2 sprite_center = {SPRITE_CENTER_OFFSET, SPRITE_CENTER_OFFSET};
 
     Rectangle src = {};
     Texture2D atlas = sprite_animation_get_frame(g_ctx.player.anims.current, &src);

@@ -25,12 +25,12 @@ typedef struct {
 } Health;
 
 typedef struct SpriteAnimation {
-    Texture2D atlas;         ///< Sprite sheet texture
-    Texture2D current_frame; ///< Currently displayed frame
-    int frames_per_second;   ///< Animation speed (1-6 FPS)
-    float time_started;      ///< Timestamp for frame timing
-    Rectangle *rectangles;   ///< Array of frame source rects
-    int rectangles_length;   ///< Num frames
+    Texture2D atlas;               ///< Sprite sheet texture
+    Texture2D current_frame;       ///< Currently displayed frame
+    int frames_per_second;         ///< Animation speed (1-6 FPS)
+    float time_started;            ///< Timestamp for frame timing
+    const Rectangle *rectangles;   ///< Array of frame source rects (points to static data)
+    int rectangles_length;         ///< Num frames
 } SpriteAnimation;
 
 /**

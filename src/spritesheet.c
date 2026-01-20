@@ -1,35 +1,20 @@
 #include <raylib.h>
-#include <stdlib.h>
 
-#include "arena.h"
-#include "game.h"
 #include "spritesheet.h"
 
 SpriteAnimation sprite_animation_create(Texture2D atlas, int frames_per_second,
-                                        Rectangle rectangles[], int length) {
+                                        const Rectangle *rectangles, int length) {
+    // Animation frame data is expected to be static/persistent (not allocated)
     SpriteAnimation sprite_anim = {
         .atlas = atlas,
         .frames_per_second = frames_per_second,
         .time_started = GetTime(),
-        .rectangles = NULL,
+        .rectangles = rectangles, // Store pointer to static data
         .rectangles_length = length,
     };
 
-    auto *rec = (Rectangle *)arena_alloc(&g_ctx.frame_arena, sizeof(Rectangle) * length);
-    if (!rec) {
-        TraceLog(LOG_ERROR, "Failed to allocate animation rectangles");
-        return (SpriteAnimation){0};
-    }
-    sprite_anim.rectangles = rec;
-
-    for (int i = 0; i < length; i++) {
-        sprite_anim.rectangles[i] = rectangles[i];
-    }
-
     return sprite_anim;
 }
-
-void sprite_animation_destroy(SpriteAnimation anim) { free(anim.rectangles); }
 
 void sprite_animation_draw(SpriteAnimation animation, Rectangle dest, Vector2 origin,
                            float rotation, Color tint, float scale) {
