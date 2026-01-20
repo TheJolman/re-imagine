@@ -16,6 +16,10 @@ SpriteAnimation sprite_animation_create(Texture2D atlas, int frames_per_second,
     };
 
     auto *rec = (Rectangle *)arena_alloc(&g_ctx.frame_arena, sizeof(Rectangle) * length);
+    if (!rec) {
+        TraceLog(LOG_ERROR, "Failed to allocate animation rectangles");
+        return (SpriteAnimation){0};
+    }
     sprite_anim.rectangles = rec;
 
     for (int i = 0; i < length; i++) {
