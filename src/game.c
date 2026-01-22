@@ -18,44 +18,44 @@ GameContext g_ctx = {};
 
 /** Initializes game objects and memory
  */
-static void _game_init() {
-    g_ctx.frame_arena = arena_init(1024 * 1024); // 1MB
-    g_ctx.state = FREE_ROAM;
-    player_init();
-    g_ctx.camera.target = g_ctx.player.position;
-    g_ctx.camera.zoom = camera_base_zoom;
+static void _game_init(GameContext *ctx) {
+    ctx->frame_arena = arena_init(1024 * 1024); // 1MB
+    ctx->state = FREE_ROAM;
+    player_init(&ctx->player);
+    ctx->camera.target = ctx->player.position;
+    ctx->camera.zoom = camera_base_zoom;
     // only called once since window doesn't resize
-    g_ctx.camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
+    ctx->camera.offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
 }
 
 /** Stuff cleaned up before CloseWindow() is called
  */
-static void _game_cleanup() {
-    player_cleanup();
-    arena_free(&g_ctx.frame_arena);
+static void _game_cleanup(GameContext *ctx) {
+    player_cleanup(&ctx->player);
+    arena_free(&ctx->frame_arena);
 }
 
-static void _input_handler() {
-    switch (g_ctx.state) {
+static void _input_handler(GameContext *ctx) {
+    switch (ctx->state) {
     case FREE_ROAM:
-        player_move();
+        player_move(&ctx->player, &ctx->camera);
         if (IsKeyPressed(KEY_B))
-            g_ctx.state = BATTLE_SCENE;
+            ctx->state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))
-            g_ctx.state = PAUSED;
+            ctx->state = PAUSED;
         break;
 
     case BATTLE_SCENE:
         if (IsKeyPressed(KEY_B)) {
             // battle_scene_end();
-            g_ctx.state = FREE_ROAM;
+            ctx->state = FREE_ROAM;
         }
         break;
 
     case PAUSED:
         if (IsKeyPressed(KEY_ESCAPE)) {
             // pause_menu_end();
-            g_ctx.state = FREE_ROAM;
+            ctx->state = FREE_ROAM;
         }
         break;
 
@@ -64,15 +64,15 @@ static void _input_handler() {
     }
 }
 
-static void _game_draw() {
+static void _game_draw(const GameContext *ctx) {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    switch (g_ctx.state) {
+    switch (ctx->state) {
     case FREE_ROAM:
-        BeginMode2D(g_ctx.camera);
+        BeginMode2D(ctx->camera);
         // map_draw(g_ctx.map);
-        player_draw();
+        player_draw(&ctx->player);
 
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, RAYWHITE);
@@ -106,15 +106,15 @@ int game_run() {
     SetTargetFPS(fps_target);
     SetExitKey(KEY_NULL);
 
-    _game_init();
+    _game_init(&g_ctx);
 
     while (!WindowShouldClose()) {
         arena_reset(&g_ctx.frame_arena);
-        _input_handler();
-        _game_draw();
+        _input_handler(&g_ctx);
+        _game_draw(&g_ctx);
     }
 
-    _game_cleanup();
+    _game_cleanup(&g_ctx);
     CloseWindow();
 
     return EXIT_SUCCESS;

@@ -53,106 +53,104 @@ static const Rectangle anim_frames_down[] = {
     {SPRITE_FRAME_2, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
 };
 
-void _player_sprite_animation_create() {
-    auto anims = &g_ctx.player.anims;
+void _player_sprite_animation_create(Player *player) {
+    player->anims.idle =
+        sprite_animation_create(player->sprite_sheet, IDLE_ANIMATION_FPS, anim_frames_idle, 1);
 
-    anims->idle = sprite_animation_create(g_ctx.player.sprite_sheet, IDLE_ANIMATION_FPS,
-                                          anim_frames_idle, 1);
+    player->anims.right =
+        sprite_animation_create(player->sprite_sheet, WALK_ANIMATION_FPS, anim_frames_right, 2);
 
-    anims->right = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                           anim_frames_right, 2);
+    player->anims.left =
+        sprite_animation_create(player->sprite_sheet, WALK_ANIMATION_FPS, anim_frames_left, 2);
 
-    anims->left = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                          anim_frames_left, 2);
+    player->anims.up =
+        sprite_animation_create(player->sprite_sheet, WALK_ANIMATION_FPS, anim_frames_up, 3);
 
-    anims->up = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                        anim_frames_up, 3);
-
-    anims->down = sprite_animation_create(g_ctx.player.sprite_sheet, WALK_ANIMATION_FPS,
-                                          anim_frames_down, 3);
+    player->anims.down =
+        sprite_animation_create(player->sprite_sheet, WALK_ANIMATION_FPS, anim_frames_down, 3);
 }
 
-void player_init() {
-    Player player = {};
-    player.position = cfg.init_position;
-    player.velocity.max_speed = cfg.base_speed;
-    player.size = cfg.size;
-    player.sprite.rotation = 0.0f;
-    player.sprite.tint = WHITE;
-    player.sprite.scale = 1.0f;
-    player.sprite_sheet = LoadTexture("assets/overworld/player.png");
+/** Initializes the passed in player at game start
+ */
+void player_init(Player *player) {
+    player->position = cfg.init_position;
+    player->velocity.max_speed = cfg.base_speed;
+    player->size = cfg.size;
+    player->sprite.rotation = 0.0f;
+    player->sprite.tint = WHITE;
+    player->sprite.scale = 1.0f;
+    player->sprite_sheet = LoadTexture("assets/overworld/player.png");
 
-    g_ctx.player = player;
-    _player_sprite_animation_create();
-    g_ctx.player.anims.current = &g_ctx.player.anims.idle;
+    _player_sprite_animation_create(player);
+    player->anims.current = &player->anims.idle;
 }
 
-void player_draw() {
+void player_draw(const Player *player) {
     constexpr float SPRITE_CENTER_OFFSET = SPRITE_TILE_SIZE / 2.0f;
     Vector2 sprite_center = {SPRITE_CENTER_OFFSET, SPRITE_CENTER_OFFSET};
 
     Rectangle src = {};
-    Texture2D atlas = sprite_animation_get_frame(g_ctx.player.anims.current, &src);
+    Texture2D atlas = sprite_animation_get_frame(player->anims.current, &src);
     if (atlas.id == 0) {
         return; // nothing to draw
     }
 
-    auto pos = Vector2Add(g_ctx.player.position, sprite_center);
-    auto size = (float)g_ctx.player.size;
+    auto pos = Vector2Add(player->position, sprite_center);
+    auto size = (float)player->size;
     // destination rect in world coords, centered on player.position
     auto dest = (Rectangle){pos.x - size * 0.5f, pos.y - size * 0.5f, size * 2, size * 2};
     // centered point that will be aligned with dest when drawing
     auto origin = (Vector2){dest.width * 0.5f, dest.height * 0.5f};
 
-    DrawTexturePro(atlas, src, dest, origin, g_ctx.player.sprite.rotation,
-                   g_ctx.player.sprite.tint);
+    DrawTexturePro(atlas, src, dest, origin, player->sprite.rotation, player->sprite.tint);
 }
 
-void player_input_handler(Vector2 *move_vector, Vector2 *prev_position, float *current_speed) {
-    auto anims = &g_ctx.player.anims;
+Vector2 _player_input_handler(Player *player, const Vector2 prev_position, float *current_speed) {
+    auto anims = &player->anims; // alias for convenience
+    Vector2 move_vector = {};
     if (IsKeyDown(KEY_LEFT_SHIFT)) {
         *current_speed *= cfg.sprint_modifier;
     }
     if (IsKeyDown(KEY_W)) {
-        move_vector->y -= 1.0f;
+        move_vector.y -= 1.0f;
         anims->current = &anims->up;
     }
     if (IsKeyDown(KEY_S)) {
-        move_vector->y += 1.0f;
+        move_vector.y += 1.0f;
         anims->current = &anims->down;
     }
     if (IsKeyDown(KEY_A)) {
-        move_vector->x -= 1.0f;
+        move_vector.x -= 1.0f;
         anims->current = &anims->left;
     }
     if (IsKeyDown(KEY_D)) {
-        move_vector->x += 1.0f;
+        move_vector.x += 1.0f;
         anims->current = &anims->right;
     }
+    return move_vector;
 }
 
-void player_move() {
-    Vector2 move_vector = {};
-    Vector2 prev_position = g_ctx.player.position;
+void player_move(Player *player, Camera2D *camera) {
+    Vector2 prev_position = player->position;
     float current_speed = cfg.base_speed;
-    player_input_handler(&move_vector, &prev_position, &current_speed);
+    Vector2 move_vector = _player_input_handler(player, prev_position, &current_speed);
 
     if (Vector2Length(move_vector) > 0.0f) {
         move_vector = Vector2Normalize(move_vector);
-        g_ctx.player.velocity.vec = Vector2Scale(move_vector, current_speed);
+        player->velocity.vec = Vector2Scale(move_vector, current_speed);
 
         // Solution for wall sliding: check X and Y position separately
-        g_ctx.player.position.x += g_ctx.player.velocity.vec.x;
+        player->position.x += player->velocity.vec.x;
         // TODO:  player_update_collision_box();
 
         // actual movement
-        g_ctx.player.velocity.vec = Vector2Subtract(g_ctx.player.position, prev_position);
+        player->velocity.vec = Vector2Subtract(player->position, prev_position);
     } else {
-        g_ctx.player.velocity.vec = (Vector2){};
-        g_ctx.player.anims.current = &g_ctx.player.anims.idle;
+        player->velocity.vec = (Vector2){};
+        player->anims.current = &player->anims.idle;
     }
 
-    g_ctx.camera.target = g_ctx.player.position;
+    camera->target = player->position;
 }
 
-void player_cleanup() { UnloadTexture(g_ctx.player.sprite_sheet); }
+void player_cleanup(Player *player) { UnloadTexture(player->sprite_sheet); }

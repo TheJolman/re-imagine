@@ -25,7 +25,7 @@ typedef struct {
     uint32_t size;
 } PlayerConfig;
 
-void player_init();
-void player_draw();
-void player_move();
-void player_cleanup();
+void player_init(Player *player);
+void player_draw(const Player *player);
+void player_move(Player *player, Camera2D *camera);
+void player_cleanup(Player *player);
