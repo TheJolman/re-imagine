@@ -67,7 +67,8 @@ void _player_sprite_animation_create(Player *player) {
  */
 void player_init(Player *player, const PlayerConfig *cfg) {
     player->position = cfg->init_position;
-    player->velocity.max_speed = cfg->base_speed;
+    player->speed = cfg->base_speed;
+    player->sprint_modifier = cfg->sprint_modifier;
     player->size = cfg->size;
     player->sprite.rotation = 0.0f;
     player->sprite.tint = WHITE;
@@ -98,11 +99,14 @@ void player_draw(const Player *player) {
     DrawTexturePro(atlas, src, dest, origin, player->sprite.rotation, player->sprite.tint);
 }
 
-Vector2 _player_input_handler(Player *player, const Vector2 prev_position, float *current_speed) {
-    auto anims = &player->anims; // alias for convenience
+void player_update(Player *player, Camera2D *camera) {
+    // Vector2 prev_position = player->position;
     Vector2 move_vector = {};
+    float current_speed = player->speed;
+
+    auto anims = &player->anims; // alias for convenience
     if (IsKeyDown(KEY_LEFT_SHIFT)) {
-        *current_speed *= player->sprint_modifier;
+        current_speed *= player->sprint_modifier;
     }
     if (IsKeyDown(KEY_W)) {
         move_vector.y -= 1.0f;
@@ -120,30 +124,18 @@ Vector2 _player_input_handler(Player *player, const Vector2 prev_position, float
         move_vector.x += 1.0f;
         anims->current = &anims->right;
     }
-    return move_vector;
-}
-
-void player_move(Player *player, Camera2D *camera) {
-    Vector2 prev_position = player->position;
-    float current_speed = player->velocity.max_speed;
-    Vector2 move_vector = _player_input_handler(player, prev_position, &current_speed);
 
     if (Vector2Length(move_vector) > 0.0f) {
         move_vector = Vector2Normalize(move_vector);
-        player->velocity.vec = Vector2Scale(move_vector, current_speed);
+        player->velocity = Vector2Scale(move_vector, current_speed);
 
-        // Solution for wall sliding: check X and Y position separately
-        // player->position.x += player->velocity.vec.x;
-        // TODO:  player_update_collision_box();
-        // actual movement
-        player->position = Vector2Add(player->position, player->velocity.vec);
-        player->velocity.vec = Vector2Subtract(player->position, prev_position);
+        // TODO: check X and Y position separately for wall sliding
+        player->position = Vector2Add(player->position, player->velocity);
     } else {
-        player->velocity.vec = (Vector2){};
+        player->velocity = (Vector2){};
         player->anims.current = &player->anims.idle;
     }
 
-    // TraceLog(LOG_DEBUG, "Position: (%f, %f)", player->position.x, player->position.y);
     camera->target = player->position;
 }
 

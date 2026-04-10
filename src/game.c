@@ -19,19 +19,19 @@ GameContext g_ctx = {};
 constexpr PlayerConfig player_cfg = {
     .base_speed = 5.0f,
     .sprint_modifier = 2.0f,
-    .init_position = (Position){100, 100},
+    .init_position = (Vector2){100, 100},
     .size = 30, // collider size
 };
 
 constexpr PlayerConfig npc1_cfg = {
     .base_speed = 5.0f,
-    .init_position = (Position){50, 50},
+    .init_position = (Vector2){50, 50},
     .size = 30, // collider size
 };
 
 constexpr PlayerConfig npc2_cfg = {
     .base_speed = 5.0f,
-    .init_position = (Position){200, 300},
+    .init_position = (Vector2){200, 300},
     .size = 30, // collider size
 };
 
@@ -59,7 +59,7 @@ static void _game_cleanup(GameContext *ctx) {
 static void _input_handler(GameContext *ctx) {
     switch (ctx->state) {
     case FREE_ROAM:
-        player_move(&ctx->player, &ctx->camera);
+        player_update(&ctx->player, &ctx->camera);
         if (IsKeyPressed(KEY_B))
             ctx->state = BATTLE_SCENE;
         if (IsKeyPressed(KEY_ESCAPE))

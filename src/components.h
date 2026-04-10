@@ -4,13 +4,6 @@
 #include "stdint.h"
 
 typedef struct {
-    Vector2 vec;
-    float max_speed;
-} Velocity;
-
-typedef Vector2 Position;
-
-typedef struct {
     Texture2D texture;
     Rectangle source;
     float rotation;

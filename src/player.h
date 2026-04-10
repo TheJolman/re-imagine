@@ -8,8 +8,9 @@
  * @brief Player character data structure
  */
 typedef struct {
-    Position position;       ///< Current position in world coordinates
-    Velocity velocity;       ///< Velocity vector
+    Vector2 position;       ///< Current position in world coordinates
+    Vector2 velocity;       ///< Velocity vector
+    float speed;
     float sprint_modifier;   ///< Amount to increase speed by when sprinting
     float size;              ///< Size of the player collision box
     Rectangle collision_box; ///< Calculated collision box
@@ -21,7 +22,7 @@ typedef struct {
 /** Used for creating players or npcs
  */
 typedef struct {
-    Position init_position;
+    Vector2 init_position;
     float base_speed;
     float sprint_modifier;
     uint32_t size;
@@ -29,5 +30,5 @@ typedef struct {
 
 void player_init(Player *player, const PlayerConfig *cfg);
 void player_draw(const Player *player);
-void player_move(Player *player, Camera2D *camera);
+void player_update(Player *player, Camera2D *camera);
 void player_cleanup(Player *player);
