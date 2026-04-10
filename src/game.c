@@ -16,12 +16,19 @@ constexpr float camera_base_zoom = 1.0f;
 // Global game context
 GameContext g_ctx = {};
 
+constexpr PlayerConfig player_cfg = {
+    .base_speed = 5.0f,
+    .sprint_modifier = 2.0f,
+    .init_position = (Position){100, 100},
+    .size = 30, // collider size
+};
+
 /** Initializes game objects and memory
  */
 static void _game_init(GameContext *ctx) {
     ctx->frame_arena = arena_init(1024 * 1024); // 1MB
     ctx->state = FREE_ROAM;
-    player_init(&ctx->player);
+    player_init(&ctx->player, &player_cfg);
     ctx->camera.target = ctx->player.position;
     ctx->camera.zoom = camera_base_zoom;
     // only called once since window doesn't resize

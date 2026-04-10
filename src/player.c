@@ -19,13 +19,6 @@ constexpr int SPRITE_FRAME_2 = 64;
 constexpr int WALK_ANIMATION_FPS = 6;
 constexpr int IDLE_ANIMATION_FPS = 1;
 
-constexpr PlayerConfig cfg = {
-    .base_speed = 5.0f,
-    .sprint_modifier = 2.0f,
-    .init_position = (Position){100, 100},
-    .size = 30, // collider size
-};
-
 // Static animation frame data (persistent, not allocated)
 static const Rectangle anim_frames_idle[] = {
     {SPRITE_FRAME_1, SPRITE_ROW_DOWN, SPRITE_TILE_SIZE, SPRITE_TILE_SIZE},
@@ -72,10 +65,10 @@ void _player_sprite_animation_create(Player *player) {
 
 /** Initializes the passed in player at game start
  */
-void player_init(Player *player) {
-    player->position = cfg.init_position;
-    player->velocity.max_speed = cfg.base_speed;
-    player->size = cfg.size;
+void player_init(Player *player, const PlayerConfig *cfg) {
+    player->position = cfg->init_position;
+    player->velocity.max_speed = cfg->base_speed;
+    player->size = cfg->size;
     player->sprite.rotation = 0.0f;
     player->sprite.tint = WHITE;
     player->sprite.scale = 1.0f;
@@ -109,7 +102,7 @@ Vector2 _player_input_handler(Player *player, const Vector2 prev_position, float
     auto anims = &player->anims; // alias for convenience
     Vector2 move_vector = {};
     if (IsKeyDown(KEY_LEFT_SHIFT)) {
-        *current_speed *= cfg.sprint_modifier;
+        *current_speed *= player->sprint_modifier;
     }
     if (IsKeyDown(KEY_W)) {
         move_vector.y -= 1.0f;
@@ -132,7 +125,7 @@ Vector2 _player_input_handler(Player *player, const Vector2 prev_position, float
 
 void player_move(Player *player, Camera2D *camera) {
     Vector2 prev_position = player->position;
-    float current_speed = cfg.base_speed;
+    float current_speed = player->velocity.max_speed;
     Vector2 move_vector = _player_input_handler(player, prev_position, &current_speed);
 
     if (Vector2Length(move_vector) > 0.0f) {

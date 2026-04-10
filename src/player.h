@@ -14,10 +14,12 @@ typedef struct {
     float size;              ///< Size of the player collision box
     Rectangle collision_box; ///< Calculated collision box
     Sprite sprite;
-    Texture2D sprite_sheet;  ///< Sprite sheet texture for animations
+    Texture2D sprite_sheet; ///< Sprite sheet texture for animations
     PlayerAnimations anims;
 } Player;
 
+/** Used for creating players or npcs
+ */
 typedef struct {
     Position init_position;
     float base_speed;
@@ -25,7 +27,7 @@ typedef struct {
     uint32_t size;
 } PlayerConfig;
 
-void player_init(Player *player);
+void player_init(Player *player, const PlayerConfig *cfg);
 void player_draw(const Player *player);
 void player_move(Player *player, Camera2D *camera);
 void player_cleanup(Player *player);
