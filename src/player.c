@@ -2,7 +2,7 @@
 #include <raymath.h>
 
 #include "components.h"
-#include "game.h"
+#include "player.h"
 #include "spritesheet.h"
 
 // Sprite sheet constants
