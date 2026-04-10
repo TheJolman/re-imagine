@@ -23,12 +23,26 @@ constexpr PlayerConfig player_cfg = {
     .size = 30, // collider size
 };
 
+constexpr PlayerConfig npc1_cfg = {
+    .base_speed = 5.0f,
+    .init_position = (Position){50, 50},
+    .size = 30, // collider size
+};
+
+constexpr PlayerConfig npc2_cfg = {
+    .base_speed = 5.0f,
+    .init_position = (Position){200, 300},
+    .size = 30, // collider size
+};
+
 /** Initializes game objects and memory
  */
 static void _game_init(GameContext *ctx) {
     ctx->frame_arena = arena_init(1024 * 1024); // 1MB
     ctx->state = FREE_ROAM;
     player_init(&ctx->player, &player_cfg);
+    player_init(&ctx->npcs[0], &npc1_cfg);
+    player_init(&ctx->npcs[1], &npc2_cfg);
     ctx->camera.target = ctx->player.position;
     ctx->camera.zoom = camera_base_zoom;
     // only called once since window doesn't resize
@@ -80,7 +94,9 @@ static void _game_draw(const GameContext *ctx) {
         BeginMode2D(ctx->camera);
         // map_draw(g_ctx.map);
         player_draw(&ctx->player);
-
+        for (int i = 0; i < 10; i++) {
+            player_draw(&ctx->npcs[i]);
+        }
         EndMode2D();
         DrawText("Press B to enter the Battle Scene!", 50, 50, 20, RAYWHITE);
         break;

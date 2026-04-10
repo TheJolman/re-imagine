@@ -21,6 +21,7 @@ typedef enum {
  */
 typedef struct {
     Player player;
+    Player npcs[10];
     Camera2D camera;
     GameState state;
     Map *map;

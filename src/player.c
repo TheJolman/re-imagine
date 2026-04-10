@@ -133,16 +133,17 @@ void player_move(Player *player, Camera2D *camera) {
         player->velocity.vec = Vector2Scale(move_vector, current_speed);
 
         // Solution for wall sliding: check X and Y position separately
-        player->position.x += player->velocity.vec.x;
+        // player->position.x += player->velocity.vec.x;
         // TODO:  player_update_collision_box();
-
         // actual movement
+        player->position = Vector2Add(player->position, player->velocity.vec);
         player->velocity.vec = Vector2Subtract(player->position, prev_position);
     } else {
         player->velocity.vec = (Vector2){};
         player->anims.current = &player->anims.idle;
     }
 
+    // TraceLog(LOG_DEBUG, "Position: (%f, %f)", player->position.x, player->position.y);
     camera->target = player->position;
 }
 
